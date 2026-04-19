@@ -15,8 +15,6 @@ Framework: Flutter (Mobile & Web)
 
 Language: Dart
 
-Backend-as-a-Service: Supabase (Auth & Real-time Database) / ASP.NET Core API.
-
 State Management: Flutter BLoC & Cubit.
 
 Local Storage: Hydrated BLoC & Path Provider.
