@@ -6,14 +6,14 @@ import 'package:familyapp/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+class StartScreen extends StatefulWidget {
+  const StartScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<StartScreen> createState() => _StartScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _StartScreenState extends State<StartScreen> {
   @override
   Widget build(BuildContext context) {
     Responsive.init(context);
@@ -135,6 +135,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 30.h),
                 ],
               ),
             ),

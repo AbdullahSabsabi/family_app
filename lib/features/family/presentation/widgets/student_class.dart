@@ -20,7 +20,7 @@ class Student {
   });
 }
 
-//************************************************************************************* */
+//**************************************************************************************/
 
 class DynamicStudentScroll extends StatefulWidget {
   final List<Student> students;
@@ -128,7 +128,7 @@ class StudentCard extends StatelessWidget {
               radius: 24.r,
               backgroundColor: secondary,
               child: (imageUrl.isEmpty)
-                  ? Icon(Icons.person, color: primary, size: 18.s)
+                  ? Icon(Icons.person, color: primary, size: 20.s)
                   : ClipOval(
                       child: CachedNetworkImage(
                         imageUrl: imageUrl,
@@ -136,7 +136,7 @@ class StudentCard extends StatelessWidget {
                         height: 60.r,
                         fit: BoxFit.cover,
                         errorWidget: (context, url, error) =>
-                            Icon(Icons.person, color: grey1, size: 30.s),
+                            Icon(Icons.person, color: primary, size: 20.s),
                       ),
                     ),
             ),

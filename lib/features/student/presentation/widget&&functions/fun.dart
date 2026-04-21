@@ -2,15 +2,18 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:familyapp/core/helper/constant.dart';
 import 'package:familyapp/core/helper/responsive.dart';
 import 'package:familyapp/features/student/domain/models/student_models.dart';
+import 'package:familyapp/features/student/presentation/screens/exams_screen.dart';
+import 'package:familyapp/features/student/presentation/screens/payments_screen.dart';
 import 'package:familyapp/features/student/presentation/widget&&functions/animations_class.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class MyFunS {
   //************************************************************************************* */
 
-  Widget exams(ExamData? exams) {
+  Widget exams(BuildContext context, ExamData? exams) {
     final list = exams?.currentWeek ?? [];
 
     return Column(
@@ -20,21 +23,35 @@ class MyFunS {
           children: [
             title("العلامات"),
             const Spacer(),
-            Text(
-              'رؤية المزيد',
-              style: TextStyle(
-                color: primary,
-                fontSize: 10.s,
-                fontWeight: FontWeight.w700,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ExamsScreen(exams: exams!),
+                  ),
+                );
+              },
+              child: Text(
+                'رؤية المزيد',
+                style: TextStyle(
+                  color: primary,
+                  fontSize: 10.s,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ],
         ),
         const SizedBox(height: 10),
+
         if (list.isEmpty)
           empty("لا يوجد مذاكرات حالياً")
         else
-          ...list.map((e) => examCard(e)),
+          ...list.map((e) {
+            print("بيانات المذاكرة: ${e.toJson()}");
+            return examCard(e);
+          }),
       ],
     );
   }
@@ -49,12 +66,12 @@ class MyFunS {
         children: [
           SizedBox(width: 18.w),
           Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 e.subject ?? 'اسم المادة',
                 style: TextStyle(
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.bold,
                   fontSize: 14.s,
                   color: black,
                 ),
@@ -65,7 +82,11 @@ class MyFunS {
                   Icon(Icons.calendar_month_outlined, size: 12.s, color: grey),
                   SizedBox(width: 5.w),
                   Text(
-                    e.date ?? '2024-01-01',
+                    e.date != null
+                        ? DateFormat(
+                            'yyyy-MM-dd',
+                          ).format(DateTime.parse(e.date!))
+                        : '2024-01-01',
                     style: TextStyle(fontSize: 12.s, color: grey),
                   ),
                 ],
@@ -74,7 +95,7 @@ class MyFunS {
           ),
           const Spacer(),
 
-          e.isPassed == true
+          e.isPassed == 1
               ? SvgPicture.asset('assets/svgs/top.svg')
               : SvgPicture.asset('assets/svgs/down.svg'),
           SizedBox(width: 10.w),
@@ -92,7 +113,7 @@ class MyFunS {
   }
   //************************************************************************************* */
 
-  Widget payments(FinancialData? finance) {
+  Widget payments(FinancialData? finance, BuildContext context) {
     final payments = List<PaymentItem>.from(finance?.payments ?? []);
     final contract = finance?.enrollmentContract;
 
@@ -103,12 +124,23 @@ class MyFunS {
           children: [
             title("الدفعات"),
             const Spacer(),
-            Text(
-              'رؤية المزيد',
-              style: TextStyle(
-                color: primary,
-                fontSize: 10.s,
-                fontWeight: FontWeight.w700,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        StudentPaymentScreen(financeData: finance!),
+                  ),
+                );
+              },
+              child: Text(
+                'رؤية المزيد',
+                style: TextStyle(
+                  color: primary,
+                  fontSize: 10.s,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ],
@@ -242,74 +274,82 @@ class MyFunS {
         SizedBox(height: 1.h),
         SizedBox(
           height: 180.h,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: displayMonths.map((month) {
-              dynamic rawValue = data[month];
-              double v = double.tryParse(rawValue?.toString() ?? '0') ?? 0;
-              double h = (v / 100) * 120.h;
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              Positioned(
+                bottom: 55.h,
+                left: 0,
+                right: 0,
+                child: Container(height: 1.h, color: Color(0xffE6E6E6)),
+              ),
 
-              return Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Stack(
-                      alignment: Alignment.bottomCenter,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: displayMonths.map((month) {
+                  dynamic rawValue = data[month];
+                  double v = double.tryParse(rawValue?.toString() ?? '0') ?? 0;
+                  double h = (v / 100) * 120.h;
+
+                  return Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          height: 120.h,
-                          margin: EdgeInsets.symmetric(horizontal: 4.w),
-                          decoration: BoxDecoration(
-                            color: Color(0xffE6E6E6),
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(6.r),
-                              topRight: Radius.circular(6.r),
+                        Stack(
+                          alignment: Alignment.bottomCenter,
+                          children: [
+                            Container(
+                              height: 120.h,
+                              margin: EdgeInsets.symmetric(horizontal: 4.w),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.withOpacity(0.2),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(6.r),
+                                  topRight: Radius.circular(6.r),
+                                ),
+                              ),
                             ),
-                          ),
+                            Container(
+                              height: (v == 0) ? 5.h : h.clamp(1.h, 120.h),
+                              margin: EdgeInsets.symmetric(horizontal: 4.w),
+                              decoration: BoxDecoration(
+                                gradient: (v == 0)
+                                    ? null
+                                    : LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [primary, primary1],
+                                      ),
+                                color: (v == 0) ? primary : null,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(6.r),
+                                  topRight: Radius.circular(6.r),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        Container(
-                          height: (v == 0) ? 2.h : h.clamp(5.h, 120.h),
-                          margin: EdgeInsets.symmetric(horizontal: 4.w),
-                          decoration: BoxDecoration(
-                            gradient: (v == 0)
-                                ? null
-                                : LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [primary, primary1],
-                                  ),
-                            color: (v == 0)
-                                ? Colors.grey.withOpacity(0.2)
-                                : null,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(6.r),
-                              topRight: Radius.circular(6.r),
+                        SizedBox(height: 10.h),
+                        SizedBox(
+                          height: 45.h,
+                          child: Text(
+                            month,
+                            textAlign: TextAlign.center,
+                            maxLines: 3,
+                            style: TextStyle(
+                              fontSize: 10.s,
+                              color: Colors.black,
+                              height: 1.1,
                             ),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 10.h),
-                    SizedBox(
-                      height: 45.h,
-                      child: Text(
-                        month,
-                        textAlign: TextAlign.center,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 10.s,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black,
-                          height: 1.1,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
+                  );
+                }).toList(),
+              ),
+            ],
           ),
         ),
       ],
@@ -317,35 +357,50 @@ class MyFunS {
   }
   //************************************************************************************* */
 
-  Widget menu(Color primary) {
+  Widget menu(BuildContext context, FinancialData? f, ExamData? e) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          menuItem('علامات\n', 'assets/svgs/marks.svg'),
-          menuItem('برنامج\nالدوام', 'assets/svgs/program.svg'),
-          menuItem('الدفعات\nالمالية', 'assets/svgs/finance.svg'),
-          menuItem('غياب/\nحضور', 'assets/svgs/gh.svg'),
+          menuItem('علامات\n', 'assets/svgs/marks.svg', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ExamsScreen(exams: e!)),
+            );
+          }),
+          menuItem('برنامج\nالدوام', 'assets/svgs/program.svg', () {}),
+          menuItem('الدفعات\nالمالية', 'assets/svgs/finance.svg', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => StudentPaymentScreen(financeData: f!),
+              ),
+            );
+          }),
+          menuItem('غياب/\nحضور', 'assets/svgs/gh.svg', () {}),
         ],
       ),
     );
   }
   //************************************************************************************* */
 
-  Widget menuItem(String t, String url) {
+  Widget menuItem(String t, String url, VoidCallback ontap) {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: white,
-            borderRadius: BorderRadius.circular(5.r),
-            boxShadow: [
-              BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8),
-            ],
+        GestureDetector(
+          onTap: ontap,
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: white,
+              borderRadius: BorderRadius.circular(5.r),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8),
+              ],
+            ),
+            child: SvgPicture.asset(url),
           ),
-          child: SvgPicture.asset(url),
         ),
         const SizedBox(height: 6),
         Text(

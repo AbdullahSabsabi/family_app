@@ -3256,10 +3256,7 @@ as List<ExamModel>?,
 /// @nodoc
 mixin _$ExamModel {
 
- int? get id;@JsonKey(name: 'exam_id') int? get examId;@JsonKey(name: 'student_id') int? get studentId;@JsonKey(name: 'obtained_marks') String? get mark;// تم ربطها بـ obtained_marks
-@JsonKey(name: 'is_passed') bool? get isPassed; String? get remarks;@JsonKey(name: 'subject_name') String? get subject;// تم ربطها بـ subject_name
-@JsonKey(name: 'created_at') String? get date;// تم ربطها بـ created_at لتعمل كـ تاريخ
-@JsonKey(name: 'updated_at') String? get updatedAt;
+ int? get id;@JsonKey(name: 'exam_id') int? get examId;@JsonKey(name: 'student_id') int? get studentId;@JsonKey(name: 'obtained_marks') String? get mark;@JsonKey(name: 'is_passed') int? get isPassed; String? get remarks;@JsonKey(name: 'subject_name') String? get subject;@JsonKey(name: 'created_at') String? get date;@JsonKey(name: 'updated_at') String? get updatedAt;
 /// Create a copy of ExamModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -3292,7 +3289,7 @@ abstract mixin class $ExamModelCopyWith<$Res>  {
   factory $ExamModelCopyWith(ExamModel value, $Res Function(ExamModel) _then) = _$ExamModelCopyWithImpl;
 @useResult
 $Res call({
- int? id,@JsonKey(name: 'exam_id') int? examId,@JsonKey(name: 'student_id') int? studentId,@JsonKey(name: 'obtained_marks') String? mark,@JsonKey(name: 'is_passed') bool? isPassed, String? remarks,@JsonKey(name: 'subject_name') String? subject,@JsonKey(name: 'created_at') String? date,@JsonKey(name: 'updated_at') String? updatedAt
+ int? id,@JsonKey(name: 'exam_id') int? examId,@JsonKey(name: 'student_id') int? studentId,@JsonKey(name: 'obtained_marks') String? mark,@JsonKey(name: 'is_passed') int? isPassed, String? remarks,@JsonKey(name: 'subject_name') String? subject,@JsonKey(name: 'created_at') String? date,@JsonKey(name: 'updated_at') String? updatedAt
 });
 
 
@@ -3316,7 +3313,7 @@ as int?,examId: freezed == examId ? _self.examId : examId // ignore: cast_nullab
 as int?,studentId: freezed == studentId ? _self.studentId : studentId // ignore: cast_nullable_to_non_nullable
 as int?,mark: freezed == mark ? _self.mark : mark // ignore: cast_nullable_to_non_nullable
 as String?,isPassed: freezed == isPassed ? _self.isPassed : isPassed // ignore: cast_nullable_to_non_nullable
-as bool?,remarks: freezed == remarks ? _self.remarks : remarks // ignore: cast_nullable_to_non_nullable
+as int?,remarks: freezed == remarks ? _self.remarks : remarks // ignore: cast_nullable_to_non_nullable
 as String?,subject: freezed == subject ? _self.subject : subject // ignore: cast_nullable_to_non_nullable
 as String?,date: freezed == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as String?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
@@ -3405,7 +3402,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id, @JsonKey(name: 'exam_id')  int? examId, @JsonKey(name: 'student_id')  int? studentId, @JsonKey(name: 'obtained_marks')  String? mark, @JsonKey(name: 'is_passed')  bool? isPassed,  String? remarks, @JsonKey(name: 'subject_name')  String? subject, @JsonKey(name: 'created_at')  String? date, @JsonKey(name: 'updated_at')  String? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id, @JsonKey(name: 'exam_id')  int? examId, @JsonKey(name: 'student_id')  int? studentId, @JsonKey(name: 'obtained_marks')  String? mark, @JsonKey(name: 'is_passed')  int? isPassed,  String? remarks, @JsonKey(name: 'subject_name')  String? subject, @JsonKey(name: 'created_at')  String? date, @JsonKey(name: 'updated_at')  String? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ExamModel() when $default != null:
 return $default(_that.id,_that.examId,_that.studentId,_that.mark,_that.isPassed,_that.remarks,_that.subject,_that.date,_that.updatedAt);case _:
@@ -3426,7 +3423,7 @@ return $default(_that.id,_that.examId,_that.studentId,_that.mark,_that.isPassed,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id, @JsonKey(name: 'exam_id')  int? examId, @JsonKey(name: 'student_id')  int? studentId, @JsonKey(name: 'obtained_marks')  String? mark, @JsonKey(name: 'is_passed')  bool? isPassed,  String? remarks, @JsonKey(name: 'subject_name')  String? subject, @JsonKey(name: 'created_at')  String? date, @JsonKey(name: 'updated_at')  String? updatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id, @JsonKey(name: 'exam_id')  int? examId, @JsonKey(name: 'student_id')  int? studentId, @JsonKey(name: 'obtained_marks')  String? mark, @JsonKey(name: 'is_passed')  int? isPassed,  String? remarks, @JsonKey(name: 'subject_name')  String? subject, @JsonKey(name: 'created_at')  String? date, @JsonKey(name: 'updated_at')  String? updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _ExamModel():
 return $default(_that.id,_that.examId,_that.studentId,_that.mark,_that.isPassed,_that.remarks,_that.subject,_that.date,_that.updatedAt);case _:
@@ -3446,7 +3443,7 @@ return $default(_that.id,_that.examId,_that.studentId,_that.mark,_that.isPassed,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id, @JsonKey(name: 'exam_id')  int? examId, @JsonKey(name: 'student_id')  int? studentId, @JsonKey(name: 'obtained_marks')  String? mark, @JsonKey(name: 'is_passed')  bool? isPassed,  String? remarks, @JsonKey(name: 'subject_name')  String? subject, @JsonKey(name: 'created_at')  String? date, @JsonKey(name: 'updated_at')  String? updatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id, @JsonKey(name: 'exam_id')  int? examId, @JsonKey(name: 'student_id')  int? studentId, @JsonKey(name: 'obtained_marks')  String? mark, @JsonKey(name: 'is_passed')  int? isPassed,  String? remarks, @JsonKey(name: 'subject_name')  String? subject, @JsonKey(name: 'created_at')  String? date, @JsonKey(name: 'updated_at')  String? updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _ExamModel() when $default != null:
 return $default(_that.id,_that.examId,_that.studentId,_that.mark,_that.isPassed,_that.remarks,_that.subject,_that.date,_that.updatedAt);case _:
@@ -3468,13 +3465,10 @@ class _ExamModel implements ExamModel {
 @override@JsonKey(name: 'exam_id') final  int? examId;
 @override@JsonKey(name: 'student_id') final  int? studentId;
 @override@JsonKey(name: 'obtained_marks') final  String? mark;
-// تم ربطها بـ obtained_marks
-@override@JsonKey(name: 'is_passed') final  bool? isPassed;
+@override@JsonKey(name: 'is_passed') final  int? isPassed;
 @override final  String? remarks;
 @override@JsonKey(name: 'subject_name') final  String? subject;
-// تم ربطها بـ subject_name
 @override@JsonKey(name: 'created_at') final  String? date;
-// تم ربطها بـ created_at لتعمل كـ تاريخ
 @override@JsonKey(name: 'updated_at') final  String? updatedAt;
 
 /// Create a copy of ExamModel
@@ -3510,7 +3504,7 @@ abstract mixin class _$ExamModelCopyWith<$Res> implements $ExamModelCopyWith<$Re
   factory _$ExamModelCopyWith(_ExamModel value, $Res Function(_ExamModel) _then) = __$ExamModelCopyWithImpl;
 @override @useResult
 $Res call({
- int? id,@JsonKey(name: 'exam_id') int? examId,@JsonKey(name: 'student_id') int? studentId,@JsonKey(name: 'obtained_marks') String? mark,@JsonKey(name: 'is_passed') bool? isPassed, String? remarks,@JsonKey(name: 'subject_name') String? subject,@JsonKey(name: 'created_at') String? date,@JsonKey(name: 'updated_at') String? updatedAt
+ int? id,@JsonKey(name: 'exam_id') int? examId,@JsonKey(name: 'student_id') int? studentId,@JsonKey(name: 'obtained_marks') String? mark,@JsonKey(name: 'is_passed') int? isPassed, String? remarks,@JsonKey(name: 'subject_name') String? subject,@JsonKey(name: 'created_at') String? date,@JsonKey(name: 'updated_at') String? updatedAt
 });
 
 
@@ -3534,7 +3528,7 @@ as int?,examId: freezed == examId ? _self.examId : examId // ignore: cast_nullab
 as int?,studentId: freezed == studentId ? _self.studentId : studentId // ignore: cast_nullable_to_non_nullable
 as int?,mark: freezed == mark ? _self.mark : mark // ignore: cast_nullable_to_non_nullable
 as String?,isPassed: freezed == isPassed ? _self.isPassed : isPassed // ignore: cast_nullable_to_non_nullable
-as bool?,remarks: freezed == remarks ? _self.remarks : remarks // ignore: cast_nullable_to_non_nullable
+as int?,remarks: freezed == remarks ? _self.remarks : remarks // ignore: cast_nullable_to_non_nullable
 as String?,subject: freezed == subject ? _self.subject : subject // ignore: cast_nullable_to_non_nullable
 as String?,date: freezed == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as String?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable

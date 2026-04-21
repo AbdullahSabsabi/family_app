@@ -1,6 +1,5 @@
 import 'package:familyapp/core/helper/constant.dart';
 import 'package:familyapp/core/helper/responsive.dart';
-import 'package:familyapp/features/family/presentation/widgets/fun.dart';
 import 'package:familyapp/features/student/presentation/cubit/student_cubit.dart';
 import 'package:familyapp/features/student/presentation/cubit/student_state.dart';
 import 'package:familyapp/features/student/presentation/widget&&functions/fun.dart';
@@ -33,11 +32,12 @@ class _StudentScreenState extends State<StudentScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [secondary, white],
+            colors: [secondary1.withOpacity(0.1), scaffoldc],
+            stops: [0.0, 0.4],
           ),
         ),
         child: BlocBuilder<StudentCubit, StudentState>(
@@ -60,12 +60,13 @@ class _StudentScreenState extends State<StudentScreen> {
             final finance = currentStudentData?.finance.data;
             final exams = currentStudentData?.exams.data;
 
-            bool showSkeleton = isLoading && currentStudentData == null;
+            bool showSkeleton = isLoading; //&& currentStudentData == null;
 
             return Stack(
               children: [
                 Skeletonizer(
-                  enabled: isLoading && currentStudentData == null,
+                  enabled: isLoading,
+                  //&& currentStudentData == null,
                   child: RefreshIndicator(
                     onRefresh: () async => _loadData(),
                     color: primary,
@@ -79,13 +80,13 @@ class _StudentScreenState extends State<StudentScreen> {
 
                           MyFunS().header(profile),
                           SizedBox(height: 50.h),
-                          MyFunS().menu(primary),
+                          MyFunS().menu(context, finance, exams),
                           SizedBox(height: 30.h),
                           MyFunS().chart(evaluations),
                           SizedBox(height: 10.h),
-                          MyFunS().payments(finance),
+                          MyFunS().payments(finance, context),
                           SizedBox(height: 20.h),
-                          MyFunS().exams(exams),
+                          MyFunS().exams(context, exams),
                           const SizedBox(height: 30),
                         ],
                       ),

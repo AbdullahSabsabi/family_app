@@ -177,7 +177,9 @@ abstract class ExamModel with _$ExamModel {
     @JsonKey(name: 'exam_id') int? examId,
     @JsonKey(name: 'student_id') int? studentId,
     @JsonKey(name: 'obtained_marks') String? mark,
-    @JsonKey(name: 'is_passed') bool? isPassed,
+
+    @JsonKey(name: 'is_passed') int? isPassed,
+
     String? remarks,
     @JsonKey(name: 'subject_name') String? subject,
     @JsonKey(name: 'created_at') String? date,
@@ -220,4 +222,51 @@ abstract class Attendance with _$Attendance {
 
   factory Attendance.fromJson(Map<String, dynamic> json) =>
       _$AttendanceFromJson(json);
+}
+
+@freezed
+abstract class FilteredExamResponse with _$FilteredExamResponse {
+  const factory FilteredExamResponse({
+    bool? status,
+    String? message,
+    List<FilteredExamModel>? data,
+  }) = _FilteredExamResponse;
+
+  factory FilteredExamResponse.fromJson(Map<String, dynamic> json) =>
+      _$FilteredExamResponseFromJson(json);
+}
+
+@freezed
+abstract class FilteredExamModel with _$FilteredExamModel {
+  const factory FilteredExamModel({
+    int? id,
+    @JsonKey(name: 'obtained_marks') dynamic obtainedMarks,
+    @JsonKey(name: 'is_passed') dynamic isPassed,
+    ExamDetails? exam,
+    SubjectDetails? subject,
+  }) = _FilteredExamModel;
+
+  factory FilteredExamModel.fromJson(Map<String, dynamic> json) =>
+      _$FilteredExamModelFromJson(json);
+}
+
+@freezed
+abstract class ExamDetails with _$ExamDetails {
+  const factory ExamDetails({
+    String? name,
+    @JsonKey(name: 'total_marks') dynamic totalMarks,
+  }) = _ExamDetails;
+
+  factory ExamDetails.fromJson(Map<String, dynamic> json) =>
+      _$ExamDetailsFromJson(json);
+}
+
+@freezed
+abstract class SubjectDetails with _$SubjectDetails {
+  const factory SubjectDetails({
+    String? name,
+  }) = _SubjectDetails;
+
+  factory SubjectDetails.fromJson(Map<String, dynamic> json) =>
+      _$SubjectDetailsFromJson(json);
 }

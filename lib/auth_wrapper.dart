@@ -3,7 +3,7 @@ import 'package:familyapp/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:familyapp/features/auth/presentation/cubit/auth_state.dart';
 import 'package:familyapp/features/family/presentation/screens/family_screen.dart';
 import 'package:familyapp/features/student/presentation/screens/student_screen.dart';
-import 'package:familyapp/splash_screen.dart';
+import 'package:familyapp/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,7 +30,7 @@ class AuthWrapper extends StatelessWidget {
           }
         }
 
-        return const SplashScreen();
+        return const StartScreen();
       },
     );
   }

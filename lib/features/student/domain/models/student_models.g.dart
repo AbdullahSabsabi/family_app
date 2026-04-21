@@ -224,7 +224,7 @@ _ExamModel _$ExamModelFromJson(Map<String, dynamic> json) => _ExamModel(
   examId: (json['exam_id'] as num?)?.toInt(),
   studentId: (json['student_id'] as num?)?.toInt(),
   mark: json['obtained_marks'] as String?,
-  isPassed: json['is_passed'] as bool?,
+  isPassed: (json['is_passed'] as num?)?.toInt(),
   remarks: json['remarks'] as String?,
   subject: json['subject_name'] as String?,
   date: json['created_at'] as String?,

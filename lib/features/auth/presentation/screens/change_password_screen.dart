@@ -37,11 +37,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [secondary, white],
+            colors: [secondary1.withOpacity(0.3), scaffoldc],
+            stops: [0.0, 0.4],
           ),
         ),
         child: BlocConsumer<AuthCubit, AuthState>(
@@ -50,7 +51,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.message),
-                  backgroundColor: Colors.green,
+                  backgroundColor: primary,
                 ),
               );
               Navigator.pushReplacement(
@@ -65,7 +66,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.message),
-                  backgroundColor: Colors.red,
+                  backgroundColor: primary,
                 ),
               );
             }

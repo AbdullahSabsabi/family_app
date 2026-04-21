@@ -36,11 +36,12 @@ class _FamilyScreenState extends State<FamilyScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [secondary, white],
+            colors: [secondary1.withOpacity(0.3), scaffoldc],
+            stops: [0.0, 0.4],
           ),
         ),
         child: RefreshIndicator(
@@ -80,7 +81,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
                                   SizedBox(width: 15.w),
                                   Expanded(
                                     child: Text(
-                                      data?.guardian.welcomeMessage ??
+                                      data?.guardian.name ??
                                           'أهلاً بكم في معهد العلماء للتعليم',
                                       style: TextStyle(
                                         fontSize: 14.s,

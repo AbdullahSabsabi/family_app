@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:familyapp/core/helper/constant.dart';
 import 'package:familyapp/core/helper/dependency_injection.dart';
+import 'package:familyapp/features/family/presentation/screens/family_screen.dart';
+import 'package:familyapp/features/student/presentation/screens/payments_screen.dart';
+import 'package:familyapp/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
@@ -48,10 +51,10 @@ class _FamilyAppState extends State<FamilyApp> {
           style: const TextStyle(
             color: Colors.white,
             fontSize: 13,
-            fontFamily: 'Cairo',
+            fontFamily: 'Tajwal',
           ),
         ),
-        backgroundColor: isOnline ? Colors.green : Colors.redAccent,
+        backgroundColor: primary,
         leading: Icon(
           isOnline ? Icons.wifi : Icons.wifi_off,
           color: Colors.white,
@@ -62,7 +65,7 @@ class _FamilyAppState extends State<FamilyApp> {
                 _messengerKey.currentState?.hideCurrentMaterialBanner(),
             child: const Text(
               "إغلاق",
-              style: TextStyle(color: Colors.white, fontFamily: 'Cairo'),
+              style: TextStyle(color: Colors.white, fontFamily: 'Tajwal'),
             ),
           ),
         ],
@@ -104,7 +107,7 @@ class _FamilyAppState extends State<FamilyApp> {
         theme: ThemeData(
           useMaterial3: true,
           fontFamily: 'Tajwal',
-          primaryColor: primary, // مثال: ضع لونك الأساسي هنا
+          primaryColor: primary,
         ),
         home: const AuthWrapper(),
       ),
