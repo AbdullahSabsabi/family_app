@@ -13,7 +13,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 class MyFunS {
   //************************************************************************************* */
 
-  Widget exams(BuildContext context, ExamData? exams) {
+  Widget exams(BuildContext context, ExamData? exams, int studentId) {
     final list = exams?.currentWeek ?? [];
 
     return Column(
@@ -28,7 +28,7 @@ class MyFunS {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ExamsScreen(exams: exams!),
+                    builder: (context) => ExamsScreen(exams: exams!, studentId: studentId),
                   ),
                 );
               },
@@ -357,7 +357,7 @@ class MyFunS {
   }
   //************************************************************************************* */
 
-  Widget menu(BuildContext context, FinancialData? f, ExamData? e) {
+  Widget menu(BuildContext context, FinancialData? f, ExamData? e, int studentId) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: Row(
@@ -366,7 +366,7 @@ class MyFunS {
           menuItem('علامات\n', 'assets/svgs/marks.svg', () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ExamsScreen(exams: e!)),
+              MaterialPageRoute(builder: (context) => ExamsScreen(exams: e!, studentId: studentId)),
             );
           }),
           menuItem('برنامج\nالدوام', 'assets/svgs/program.svg', () {}),
@@ -426,7 +426,9 @@ class MyFunS {
           child: ClipOval(
             child: profile?.profilePhoto != null
                 ? CachedNetworkImage(
-                    imageUrl: profile!.profilePhoto!,
+                    imageUrl: (profile!.profilePhoto!.startsWith('http'))
+                        ? profile!.profilePhoto!
+                        : "$baseUrl${profile!.profilePhoto!.startsWith('/') ? "" : "/"}${profile!.profilePhoto!}",
                     placeholder: (context, url) => const Skeleton.keep(
                       child: Center(
                         child: CircularProgressIndicator(strokeWidth: 1),

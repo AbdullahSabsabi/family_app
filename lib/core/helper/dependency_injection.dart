@@ -6,6 +6,7 @@ import 'package:familyapp/features/family/data/datasources/family_datasources.da
 import 'package:familyapp/features/family/presentation/cubit/family_cubit.dart';
 import 'package:familyapp/features/student/data/datasources/student_datasources.dart';
 import 'package:familyapp/features/student/presentation/cubit/student_cubit.dart';
+import 'package:familyapp/features/student/presentation/cubit/exam_filter_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -33,4 +34,5 @@ Future<void> setupGetIt() async {
   );
 
   getIt.registerFactory(() => StudentCubit(getIt<StudentRepositoryImpl>()));
+  getIt.registerFactory(() => ExamFilterCubit(getIt<StudentRepositoryImpl>()));
 }

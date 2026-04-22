@@ -105,7 +105,9 @@ class MyFunF {
           ? Icon(Icons.person, color: primary, size: 30.s)
           : ClipOval(
               child: CachedNetworkImage(
-                imageUrl: url,
+                imageUrl: (url.startsWith('http'))
+                    ? url
+                    : "$baseUrl${url.startsWith('/') ? "" : "/"}$url",
                 width: 56.r,
                 height: 56.r,
                 fit: BoxFit.cover,

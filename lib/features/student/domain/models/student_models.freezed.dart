@@ -4606,4 +4606,1703 @@ as String?,
 
 }
 
+
+/// @nodoc
+mixin _$FilteredExamResponse {
+
+ bool? get status; String? get message; List<FilteredExamModel>? get data;
+/// Create a copy of FilteredExamResponse
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$FilteredExamResponseCopyWith<FilteredExamResponse> get copyWith => _$FilteredExamResponseCopyWithImpl<FilteredExamResponse>(this as FilteredExamResponse, _$identity);
+
+  /// Serializes this FilteredExamResponse to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FilteredExamResponse&&(identical(other.status, status) || other.status == status)&&(identical(other.message, message) || other.message == message)&&const DeepCollectionEquality().equals(other.data, data));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,status,message,const DeepCollectionEquality().hash(data));
+
+@override
+String toString() {
+  return 'FilteredExamResponse(status: $status, message: $message, data: $data)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $FilteredExamResponseCopyWith<$Res>  {
+  factory $FilteredExamResponseCopyWith(FilteredExamResponse value, $Res Function(FilteredExamResponse) _then) = _$FilteredExamResponseCopyWithImpl;
+@useResult
+$Res call({
+ bool? status, String? message, List<FilteredExamModel>? data
+});
+
+
+
+
+}
+/// @nodoc
+class _$FilteredExamResponseCopyWithImpl<$Res>
+    implements $FilteredExamResponseCopyWith<$Res> {
+  _$FilteredExamResponseCopyWithImpl(this._self, this._then);
+
+  final FilteredExamResponse _self;
+  final $Res Function(FilteredExamResponse) _then;
+
+/// Create a copy of FilteredExamResponse
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? status = freezed,Object? message = freezed,Object? data = freezed,}) {
+  return _then(_self.copyWith(
+status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as bool?,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String?,data: freezed == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
+as List<FilteredExamModel>?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [FilteredExamResponse].
+extension FilteredExamResponsePatterns on FilteredExamResponse {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _FilteredExamResponse value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _FilteredExamResponse() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _FilteredExamResponse value)  $default,){
+final _that = this;
+switch (_that) {
+case _FilteredExamResponse():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _FilteredExamResponse value)?  $default,){
+final _that = this;
+switch (_that) {
+case _FilteredExamResponse() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool? status,  String? message,  List<FilteredExamModel>? data)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _FilteredExamResponse() when $default != null:
+return $default(_that.status,_that.message,_that.data);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool? status,  String? message,  List<FilteredExamModel>? data)  $default,) {final _that = this;
+switch (_that) {
+case _FilteredExamResponse():
+return $default(_that.status,_that.message,_that.data);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool? status,  String? message,  List<FilteredExamModel>? data)?  $default,) {final _that = this;
+switch (_that) {
+case _FilteredExamResponse() when $default != null:
+return $default(_that.status,_that.message,_that.data);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _FilteredExamResponse implements FilteredExamResponse {
+  const _FilteredExamResponse({this.status, this.message, final  List<FilteredExamModel>? data}): _data = data;
+  factory _FilteredExamResponse.fromJson(Map<String, dynamic> json) => _$FilteredExamResponseFromJson(json);
+
+@override final  bool? status;
+@override final  String? message;
+ final  List<FilteredExamModel>? _data;
+@override List<FilteredExamModel>? get data {
+  final value = _data;
+  if (value == null) return null;
+  if (_data is EqualUnmodifiableListView) return _data;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
+
+/// Create a copy of FilteredExamResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$FilteredExamResponseCopyWith<_FilteredExamResponse> get copyWith => __$FilteredExamResponseCopyWithImpl<_FilteredExamResponse>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$FilteredExamResponseToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FilteredExamResponse&&(identical(other.status, status) || other.status == status)&&(identical(other.message, message) || other.message == message)&&const DeepCollectionEquality().equals(other._data, _data));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,status,message,const DeepCollectionEquality().hash(_data));
+
+@override
+String toString() {
+  return 'FilteredExamResponse(status: $status, message: $message, data: $data)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$FilteredExamResponseCopyWith<$Res> implements $FilteredExamResponseCopyWith<$Res> {
+  factory _$FilteredExamResponseCopyWith(_FilteredExamResponse value, $Res Function(_FilteredExamResponse) _then) = __$FilteredExamResponseCopyWithImpl;
+@override @useResult
+$Res call({
+ bool? status, String? message, List<FilteredExamModel>? data
+});
+
+
+
+
+}
+/// @nodoc
+class __$FilteredExamResponseCopyWithImpl<$Res>
+    implements _$FilteredExamResponseCopyWith<$Res> {
+  __$FilteredExamResponseCopyWithImpl(this._self, this._then);
+
+  final _FilteredExamResponse _self;
+  final $Res Function(_FilteredExamResponse) _then;
+
+/// Create a copy of FilteredExamResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? status = freezed,Object? message = freezed,Object? data = freezed,}) {
+  return _then(_FilteredExamResponse(
+status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as bool?,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String?,data: freezed == data ? _self._data : data // ignore: cast_nullable_to_non_nullable
+as List<FilteredExamModel>?,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$FilteredExamModel {
+
+ int? get id;@JsonKey(name: 'obtained_marks') dynamic get obtainedMarks;@JsonKey(name: 'is_passed') dynamic get isPassed;@JsonKey(name: 'subject_name') String? get subjectName;@JsonKey(name: 'exam_name') String? get examName;@JsonKey(name: 'created_at') String? get createdAt; ExamDetails? get exam; SubjectDetails? get subject;
+/// Create a copy of FilteredExamModel
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$FilteredExamModelCopyWith<FilteredExamModel> get copyWith => _$FilteredExamModelCopyWithImpl<FilteredExamModel>(this as FilteredExamModel, _$identity);
+
+  /// Serializes this FilteredExamModel to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FilteredExamModel&&(identical(other.id, id) || other.id == id)&&const DeepCollectionEquality().equals(other.obtainedMarks, obtainedMarks)&&const DeepCollectionEquality().equals(other.isPassed, isPassed)&&(identical(other.subjectName, subjectName) || other.subjectName == subjectName)&&(identical(other.examName, examName) || other.examName == examName)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.exam, exam) || other.exam == exam)&&(identical(other.subject, subject) || other.subject == subject));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,const DeepCollectionEquality().hash(obtainedMarks),const DeepCollectionEquality().hash(isPassed),subjectName,examName,createdAt,exam,subject);
+
+@override
+String toString() {
+  return 'FilteredExamModel(id: $id, obtainedMarks: $obtainedMarks, isPassed: $isPassed, subjectName: $subjectName, examName: $examName, createdAt: $createdAt, exam: $exam, subject: $subject)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $FilteredExamModelCopyWith<$Res>  {
+  factory $FilteredExamModelCopyWith(FilteredExamModel value, $Res Function(FilteredExamModel) _then) = _$FilteredExamModelCopyWithImpl;
+@useResult
+$Res call({
+ int? id,@JsonKey(name: 'obtained_marks') dynamic obtainedMarks,@JsonKey(name: 'is_passed') dynamic isPassed,@JsonKey(name: 'subject_name') String? subjectName,@JsonKey(name: 'exam_name') String? examName,@JsonKey(name: 'created_at') String? createdAt, ExamDetails? exam, SubjectDetails? subject
+});
+
+
+$ExamDetailsCopyWith<$Res>? get exam;$SubjectDetailsCopyWith<$Res>? get subject;
+
+}
+/// @nodoc
+class _$FilteredExamModelCopyWithImpl<$Res>
+    implements $FilteredExamModelCopyWith<$Res> {
+  _$FilteredExamModelCopyWithImpl(this._self, this._then);
+
+  final FilteredExamModel _self;
+  final $Res Function(FilteredExamModel) _then;
+
+/// Create a copy of FilteredExamModel
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? obtainedMarks = freezed,Object? isPassed = freezed,Object? subjectName = freezed,Object? examName = freezed,Object? createdAt = freezed,Object? exam = freezed,Object? subject = freezed,}) {
+  return _then(_self.copyWith(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,obtainedMarks: freezed == obtainedMarks ? _self.obtainedMarks : obtainedMarks // ignore: cast_nullable_to_non_nullable
+as dynamic,isPassed: freezed == isPassed ? _self.isPassed : isPassed // ignore: cast_nullable_to_non_nullable
+as dynamic,subjectName: freezed == subjectName ? _self.subjectName : subjectName // ignore: cast_nullable_to_non_nullable
+as String?,examName: freezed == examName ? _self.examName : examName // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String?,exam: freezed == exam ? _self.exam : exam // ignore: cast_nullable_to_non_nullable
+as ExamDetails?,subject: freezed == subject ? _self.subject : subject // ignore: cast_nullable_to_non_nullable
+as SubjectDetails?,
+  ));
+}
+/// Create a copy of FilteredExamModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ExamDetailsCopyWith<$Res>? get exam {
+    if (_self.exam == null) {
+    return null;
+  }
+
+  return $ExamDetailsCopyWith<$Res>(_self.exam!, (value) {
+    return _then(_self.copyWith(exam: value));
+  });
+}/// Create a copy of FilteredExamModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$SubjectDetailsCopyWith<$Res>? get subject {
+    if (_self.subject == null) {
+    return null;
+  }
+
+  return $SubjectDetailsCopyWith<$Res>(_self.subject!, (value) {
+    return _then(_self.copyWith(subject: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [FilteredExamModel].
+extension FilteredExamModelPatterns on FilteredExamModel {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _FilteredExamModel value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _FilteredExamModel() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _FilteredExamModel value)  $default,){
+final _that = this;
+switch (_that) {
+case _FilteredExamModel():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _FilteredExamModel value)?  $default,){
+final _that = this;
+switch (_that) {
+case _FilteredExamModel() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id, @JsonKey(name: 'obtained_marks')  dynamic obtainedMarks, @JsonKey(name: 'is_passed')  dynamic isPassed, @JsonKey(name: 'subject_name')  String? subjectName, @JsonKey(name: 'exam_name')  String? examName, @JsonKey(name: 'created_at')  String? createdAt,  ExamDetails? exam,  SubjectDetails? subject)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _FilteredExamModel() when $default != null:
+return $default(_that.id,_that.obtainedMarks,_that.isPassed,_that.subjectName,_that.examName,_that.createdAt,_that.exam,_that.subject);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id, @JsonKey(name: 'obtained_marks')  dynamic obtainedMarks, @JsonKey(name: 'is_passed')  dynamic isPassed, @JsonKey(name: 'subject_name')  String? subjectName, @JsonKey(name: 'exam_name')  String? examName, @JsonKey(name: 'created_at')  String? createdAt,  ExamDetails? exam,  SubjectDetails? subject)  $default,) {final _that = this;
+switch (_that) {
+case _FilteredExamModel():
+return $default(_that.id,_that.obtainedMarks,_that.isPassed,_that.subjectName,_that.examName,_that.createdAt,_that.exam,_that.subject);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id, @JsonKey(name: 'obtained_marks')  dynamic obtainedMarks, @JsonKey(name: 'is_passed')  dynamic isPassed, @JsonKey(name: 'subject_name')  String? subjectName, @JsonKey(name: 'exam_name')  String? examName, @JsonKey(name: 'created_at')  String? createdAt,  ExamDetails? exam,  SubjectDetails? subject)?  $default,) {final _that = this;
+switch (_that) {
+case _FilteredExamModel() when $default != null:
+return $default(_that.id,_that.obtainedMarks,_that.isPassed,_that.subjectName,_that.examName,_that.createdAt,_that.exam,_that.subject);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _FilteredExamModel implements FilteredExamModel {
+  const _FilteredExamModel({this.id, @JsonKey(name: 'obtained_marks') this.obtainedMarks, @JsonKey(name: 'is_passed') this.isPassed, @JsonKey(name: 'subject_name') this.subjectName, @JsonKey(name: 'exam_name') this.examName, @JsonKey(name: 'created_at') this.createdAt, this.exam, this.subject});
+  factory _FilteredExamModel.fromJson(Map<String, dynamic> json) => _$FilteredExamModelFromJson(json);
+
+@override final  int? id;
+@override@JsonKey(name: 'obtained_marks') final  dynamic obtainedMarks;
+@override@JsonKey(name: 'is_passed') final  dynamic isPassed;
+@override@JsonKey(name: 'subject_name') final  String? subjectName;
+@override@JsonKey(name: 'exam_name') final  String? examName;
+@override@JsonKey(name: 'created_at') final  String? createdAt;
+@override final  ExamDetails? exam;
+@override final  SubjectDetails? subject;
+
+/// Create a copy of FilteredExamModel
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$FilteredExamModelCopyWith<_FilteredExamModel> get copyWith => __$FilteredExamModelCopyWithImpl<_FilteredExamModel>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$FilteredExamModelToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FilteredExamModel&&(identical(other.id, id) || other.id == id)&&const DeepCollectionEquality().equals(other.obtainedMarks, obtainedMarks)&&const DeepCollectionEquality().equals(other.isPassed, isPassed)&&(identical(other.subjectName, subjectName) || other.subjectName == subjectName)&&(identical(other.examName, examName) || other.examName == examName)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.exam, exam) || other.exam == exam)&&(identical(other.subject, subject) || other.subject == subject));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,const DeepCollectionEquality().hash(obtainedMarks),const DeepCollectionEquality().hash(isPassed),subjectName,examName,createdAt,exam,subject);
+
+@override
+String toString() {
+  return 'FilteredExamModel(id: $id, obtainedMarks: $obtainedMarks, isPassed: $isPassed, subjectName: $subjectName, examName: $examName, createdAt: $createdAt, exam: $exam, subject: $subject)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$FilteredExamModelCopyWith<$Res> implements $FilteredExamModelCopyWith<$Res> {
+  factory _$FilteredExamModelCopyWith(_FilteredExamModel value, $Res Function(_FilteredExamModel) _then) = __$FilteredExamModelCopyWithImpl;
+@override @useResult
+$Res call({
+ int? id,@JsonKey(name: 'obtained_marks') dynamic obtainedMarks,@JsonKey(name: 'is_passed') dynamic isPassed,@JsonKey(name: 'subject_name') String? subjectName,@JsonKey(name: 'exam_name') String? examName,@JsonKey(name: 'created_at') String? createdAt, ExamDetails? exam, SubjectDetails? subject
+});
+
+
+@override $ExamDetailsCopyWith<$Res>? get exam;@override $SubjectDetailsCopyWith<$Res>? get subject;
+
+}
+/// @nodoc
+class __$FilteredExamModelCopyWithImpl<$Res>
+    implements _$FilteredExamModelCopyWith<$Res> {
+  __$FilteredExamModelCopyWithImpl(this._self, this._then);
+
+  final _FilteredExamModel _self;
+  final $Res Function(_FilteredExamModel) _then;
+
+/// Create a copy of FilteredExamModel
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? obtainedMarks = freezed,Object? isPassed = freezed,Object? subjectName = freezed,Object? examName = freezed,Object? createdAt = freezed,Object? exam = freezed,Object? subject = freezed,}) {
+  return _then(_FilteredExamModel(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,obtainedMarks: freezed == obtainedMarks ? _self.obtainedMarks : obtainedMarks // ignore: cast_nullable_to_non_nullable
+as dynamic,isPassed: freezed == isPassed ? _self.isPassed : isPassed // ignore: cast_nullable_to_non_nullable
+as dynamic,subjectName: freezed == subjectName ? _self.subjectName : subjectName // ignore: cast_nullable_to_non_nullable
+as String?,examName: freezed == examName ? _self.examName : examName // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String?,exam: freezed == exam ? _self.exam : exam // ignore: cast_nullable_to_non_nullable
+as ExamDetails?,subject: freezed == subject ? _self.subject : subject // ignore: cast_nullable_to_non_nullable
+as SubjectDetails?,
+  ));
+}
+
+/// Create a copy of FilteredExamModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ExamDetailsCopyWith<$Res>? get exam {
+    if (_self.exam == null) {
+    return null;
+  }
+
+  return $ExamDetailsCopyWith<$Res>(_self.exam!, (value) {
+    return _then(_self.copyWith(exam: value));
+  });
+}/// Create a copy of FilteredExamModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$SubjectDetailsCopyWith<$Res>? get subject {
+    if (_self.subject == null) {
+    return null;
+  }
+
+  return $SubjectDetailsCopyWith<$Res>(_self.subject!, (value) {
+    return _then(_self.copyWith(subject: value));
+  });
+}
+}
+
+
+/// @nodoc
+mixin _$ExamDetails {
+
+ String? get name;@JsonKey(name: 'total_marks') dynamic get totalMarks;@JsonKey(name: 'exam_date') String? get examDate;
+/// Create a copy of ExamDetails
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ExamDetailsCopyWith<ExamDetails> get copyWith => _$ExamDetailsCopyWithImpl<ExamDetails>(this as ExamDetails, _$identity);
+
+  /// Serializes this ExamDetails to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ExamDetails&&(identical(other.name, name) || other.name == name)&&const DeepCollectionEquality().equals(other.totalMarks, totalMarks)&&(identical(other.examDate, examDate) || other.examDate == examDate));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,name,const DeepCollectionEquality().hash(totalMarks),examDate);
+
+@override
+String toString() {
+  return 'ExamDetails(name: $name, totalMarks: $totalMarks, examDate: $examDate)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ExamDetailsCopyWith<$Res>  {
+  factory $ExamDetailsCopyWith(ExamDetails value, $Res Function(ExamDetails) _then) = _$ExamDetailsCopyWithImpl;
+@useResult
+$Res call({
+ String? name,@JsonKey(name: 'total_marks') dynamic totalMarks,@JsonKey(name: 'exam_date') String? examDate
+});
+
+
+
+
+}
+/// @nodoc
+class _$ExamDetailsCopyWithImpl<$Res>
+    implements $ExamDetailsCopyWith<$Res> {
+  _$ExamDetailsCopyWithImpl(this._self, this._then);
+
+  final ExamDetails _self;
+  final $Res Function(ExamDetails) _then;
+
+/// Create a copy of ExamDetails
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? name = freezed,Object? totalMarks = freezed,Object? examDate = freezed,}) {
+  return _then(_self.copyWith(
+name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,totalMarks: freezed == totalMarks ? _self.totalMarks : totalMarks // ignore: cast_nullable_to_non_nullable
+as dynamic,examDate: freezed == examDate ? _self.examDate : examDate // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [ExamDetails].
+extension ExamDetailsPatterns on ExamDetails {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _ExamDetails value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _ExamDetails() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _ExamDetails value)  $default,){
+final _that = this;
+switch (_that) {
+case _ExamDetails():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _ExamDetails value)?  $default,){
+final _that = this;
+switch (_that) {
+case _ExamDetails() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? name, @JsonKey(name: 'total_marks')  dynamic totalMarks, @JsonKey(name: 'exam_date')  String? examDate)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _ExamDetails() when $default != null:
+return $default(_that.name,_that.totalMarks,_that.examDate);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? name, @JsonKey(name: 'total_marks')  dynamic totalMarks, @JsonKey(name: 'exam_date')  String? examDate)  $default,) {final _that = this;
+switch (_that) {
+case _ExamDetails():
+return $default(_that.name,_that.totalMarks,_that.examDate);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? name, @JsonKey(name: 'total_marks')  dynamic totalMarks, @JsonKey(name: 'exam_date')  String? examDate)?  $default,) {final _that = this;
+switch (_that) {
+case _ExamDetails() when $default != null:
+return $default(_that.name,_that.totalMarks,_that.examDate);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _ExamDetails implements ExamDetails {
+  const _ExamDetails({this.name, @JsonKey(name: 'total_marks') this.totalMarks, @JsonKey(name: 'exam_date') this.examDate});
+  factory _ExamDetails.fromJson(Map<String, dynamic> json) => _$ExamDetailsFromJson(json);
+
+@override final  String? name;
+@override@JsonKey(name: 'total_marks') final  dynamic totalMarks;
+@override@JsonKey(name: 'exam_date') final  String? examDate;
+
+/// Create a copy of ExamDetails
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ExamDetailsCopyWith<_ExamDetails> get copyWith => __$ExamDetailsCopyWithImpl<_ExamDetails>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$ExamDetailsToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExamDetails&&(identical(other.name, name) || other.name == name)&&const DeepCollectionEquality().equals(other.totalMarks, totalMarks)&&(identical(other.examDate, examDate) || other.examDate == examDate));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,name,const DeepCollectionEquality().hash(totalMarks),examDate);
+
+@override
+String toString() {
+  return 'ExamDetails(name: $name, totalMarks: $totalMarks, examDate: $examDate)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ExamDetailsCopyWith<$Res> implements $ExamDetailsCopyWith<$Res> {
+  factory _$ExamDetailsCopyWith(_ExamDetails value, $Res Function(_ExamDetails) _then) = __$ExamDetailsCopyWithImpl;
+@override @useResult
+$Res call({
+ String? name,@JsonKey(name: 'total_marks') dynamic totalMarks,@JsonKey(name: 'exam_date') String? examDate
+});
+
+
+
+
+}
+/// @nodoc
+class __$ExamDetailsCopyWithImpl<$Res>
+    implements _$ExamDetailsCopyWith<$Res> {
+  __$ExamDetailsCopyWithImpl(this._self, this._then);
+
+  final _ExamDetails _self;
+  final $Res Function(_ExamDetails) _then;
+
+/// Create a copy of ExamDetails
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? name = freezed,Object? totalMarks = freezed,Object? examDate = freezed,}) {
+  return _then(_ExamDetails(
+name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,totalMarks: freezed == totalMarks ? _self.totalMarks : totalMarks // ignore: cast_nullable_to_non_nullable
+as dynamic,examDate: freezed == examDate ? _self.examDate : examDate // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$SubjectDetails {
+
+ String? get name;
+/// Create a copy of SubjectDetails
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SubjectDetailsCopyWith<SubjectDetails> get copyWith => _$SubjectDetailsCopyWithImpl<SubjectDetails>(this as SubjectDetails, _$identity);
+
+  /// Serializes this SubjectDetails to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SubjectDetails&&(identical(other.name, name) || other.name == name));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,name);
+
+@override
+String toString() {
+  return 'SubjectDetails(name: $name)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SubjectDetailsCopyWith<$Res>  {
+  factory $SubjectDetailsCopyWith(SubjectDetails value, $Res Function(SubjectDetails) _then) = _$SubjectDetailsCopyWithImpl;
+@useResult
+$Res call({
+ String? name
+});
+
+
+
+
+}
+/// @nodoc
+class _$SubjectDetailsCopyWithImpl<$Res>
+    implements $SubjectDetailsCopyWith<$Res> {
+  _$SubjectDetailsCopyWithImpl(this._self, this._then);
+
+  final SubjectDetails _self;
+  final $Res Function(SubjectDetails) _then;
+
+/// Create a copy of SubjectDetails
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? name = freezed,}) {
+  return _then(_self.copyWith(
+name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [SubjectDetails].
+extension SubjectDetailsPatterns on SubjectDetails {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _SubjectDetails value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _SubjectDetails() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _SubjectDetails value)  $default,){
+final _that = this;
+switch (_that) {
+case _SubjectDetails():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _SubjectDetails value)?  $default,){
+final _that = this;
+switch (_that) {
+case _SubjectDetails() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? name)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _SubjectDetails() when $default != null:
+return $default(_that.name);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? name)  $default,) {final _that = this;
+switch (_that) {
+case _SubjectDetails():
+return $default(_that.name);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? name)?  $default,) {final _that = this;
+switch (_that) {
+case _SubjectDetails() when $default != null:
+return $default(_that.name);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _SubjectDetails implements SubjectDetails {
+  const _SubjectDetails({this.name});
+  factory _SubjectDetails.fromJson(Map<String, dynamic> json) => _$SubjectDetailsFromJson(json);
+
+@override final  String? name;
+
+/// Create a copy of SubjectDetails
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SubjectDetailsCopyWith<_SubjectDetails> get copyWith => __$SubjectDetailsCopyWithImpl<_SubjectDetails>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$SubjectDetailsToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SubjectDetails&&(identical(other.name, name) || other.name == name));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,name);
+
+@override
+String toString() {
+  return 'SubjectDetails(name: $name)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SubjectDetailsCopyWith<$Res> implements $SubjectDetailsCopyWith<$Res> {
+  factory _$SubjectDetailsCopyWith(_SubjectDetails value, $Res Function(_SubjectDetails) _then) = __$SubjectDetailsCopyWithImpl;
+@override @useResult
+$Res call({
+ String? name
+});
+
+
+
+
+}
+/// @nodoc
+class __$SubjectDetailsCopyWithImpl<$Res>
+    implements _$SubjectDetailsCopyWith<$Res> {
+  __$SubjectDetailsCopyWithImpl(this._self, this._then);
+
+  final _SubjectDetails _self;
+  final $Res Function(_SubjectDetails) _then;
+
+/// Create a copy of SubjectDetails
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? name = freezed,}) {
+  return _then(_SubjectDetails(
+name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$EnrolledSubjectsResponse {
+
+ bool? get status; String? get message; List<EnrolledSubjectModel>? get data;
+/// Create a copy of EnrolledSubjectsResponse
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$EnrolledSubjectsResponseCopyWith<EnrolledSubjectsResponse> get copyWith => _$EnrolledSubjectsResponseCopyWithImpl<EnrolledSubjectsResponse>(this as EnrolledSubjectsResponse, _$identity);
+
+  /// Serializes this EnrolledSubjectsResponse to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EnrolledSubjectsResponse&&(identical(other.status, status) || other.status == status)&&(identical(other.message, message) || other.message == message)&&const DeepCollectionEquality().equals(other.data, data));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,status,message,const DeepCollectionEquality().hash(data));
+
+@override
+String toString() {
+  return 'EnrolledSubjectsResponse(status: $status, message: $message, data: $data)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $EnrolledSubjectsResponseCopyWith<$Res>  {
+  factory $EnrolledSubjectsResponseCopyWith(EnrolledSubjectsResponse value, $Res Function(EnrolledSubjectsResponse) _then) = _$EnrolledSubjectsResponseCopyWithImpl;
+@useResult
+$Res call({
+ bool? status, String? message, List<EnrolledSubjectModel>? data
+});
+
+
+
+
+}
+/// @nodoc
+class _$EnrolledSubjectsResponseCopyWithImpl<$Res>
+    implements $EnrolledSubjectsResponseCopyWith<$Res> {
+  _$EnrolledSubjectsResponseCopyWithImpl(this._self, this._then);
+
+  final EnrolledSubjectsResponse _self;
+  final $Res Function(EnrolledSubjectsResponse) _then;
+
+/// Create a copy of EnrolledSubjectsResponse
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? status = freezed,Object? message = freezed,Object? data = freezed,}) {
+  return _then(_self.copyWith(
+status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as bool?,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String?,data: freezed == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
+as List<EnrolledSubjectModel>?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [EnrolledSubjectsResponse].
+extension EnrolledSubjectsResponsePatterns on EnrolledSubjectsResponse {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _EnrolledSubjectsResponse value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _EnrolledSubjectsResponse() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _EnrolledSubjectsResponse value)  $default,){
+final _that = this;
+switch (_that) {
+case _EnrolledSubjectsResponse():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _EnrolledSubjectsResponse value)?  $default,){
+final _that = this;
+switch (_that) {
+case _EnrolledSubjectsResponse() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool? status,  String? message,  List<EnrolledSubjectModel>? data)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _EnrolledSubjectsResponse() when $default != null:
+return $default(_that.status,_that.message,_that.data);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool? status,  String? message,  List<EnrolledSubjectModel>? data)  $default,) {final _that = this;
+switch (_that) {
+case _EnrolledSubjectsResponse():
+return $default(_that.status,_that.message,_that.data);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool? status,  String? message,  List<EnrolledSubjectModel>? data)?  $default,) {final _that = this;
+switch (_that) {
+case _EnrolledSubjectsResponse() when $default != null:
+return $default(_that.status,_that.message,_that.data);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _EnrolledSubjectsResponse implements EnrolledSubjectsResponse {
+  const _EnrolledSubjectsResponse({this.status, this.message, final  List<EnrolledSubjectModel>? data}): _data = data;
+  factory _EnrolledSubjectsResponse.fromJson(Map<String, dynamic> json) => _$EnrolledSubjectsResponseFromJson(json);
+
+@override final  bool? status;
+@override final  String? message;
+ final  List<EnrolledSubjectModel>? _data;
+@override List<EnrolledSubjectModel>? get data {
+  final value = _data;
+  if (value == null) return null;
+  if (_data is EqualUnmodifiableListView) return _data;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
+
+/// Create a copy of EnrolledSubjectsResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$EnrolledSubjectsResponseCopyWith<_EnrolledSubjectsResponse> get copyWith => __$EnrolledSubjectsResponseCopyWithImpl<_EnrolledSubjectsResponse>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$EnrolledSubjectsResponseToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EnrolledSubjectsResponse&&(identical(other.status, status) || other.status == status)&&(identical(other.message, message) || other.message == message)&&const DeepCollectionEquality().equals(other._data, _data));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,status,message,const DeepCollectionEquality().hash(_data));
+
+@override
+String toString() {
+  return 'EnrolledSubjectsResponse(status: $status, message: $message, data: $data)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$EnrolledSubjectsResponseCopyWith<$Res> implements $EnrolledSubjectsResponseCopyWith<$Res> {
+  factory _$EnrolledSubjectsResponseCopyWith(_EnrolledSubjectsResponse value, $Res Function(_EnrolledSubjectsResponse) _then) = __$EnrolledSubjectsResponseCopyWithImpl;
+@override @useResult
+$Res call({
+ bool? status, String? message, List<EnrolledSubjectModel>? data
+});
+
+
+
+
+}
+/// @nodoc
+class __$EnrolledSubjectsResponseCopyWithImpl<$Res>
+    implements _$EnrolledSubjectsResponseCopyWith<$Res> {
+  __$EnrolledSubjectsResponseCopyWithImpl(this._self, this._then);
+
+  final _EnrolledSubjectsResponse _self;
+  final $Res Function(_EnrolledSubjectsResponse) _then;
+
+/// Create a copy of EnrolledSubjectsResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? status = freezed,Object? message = freezed,Object? data = freezed,}) {
+  return _then(_EnrolledSubjectsResponse(
+status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as bool?,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String?,data: freezed == data ? _self._data : data // ignore: cast_nullable_to_non_nullable
+as List<EnrolledSubjectModel>?,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$EnrolledSubjectModel {
+
+@JsonKey(name: 'batch_subject_id') int? get batchSubjectId;@JsonKey(name: 'subject_id') int? get subjectId;@JsonKey(name: 'subject_name') String? get subjectName;@JsonKey(name: 'instructor_name') String? get instructorName;@JsonKey(name: 'weekly_lessons') int? get weeklyLessons;@JsonKey(name: 'is_active') bool? get isActive; String? get notes;
+/// Create a copy of EnrolledSubjectModel
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$EnrolledSubjectModelCopyWith<EnrolledSubjectModel> get copyWith => _$EnrolledSubjectModelCopyWithImpl<EnrolledSubjectModel>(this as EnrolledSubjectModel, _$identity);
+
+  /// Serializes this EnrolledSubjectModel to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EnrolledSubjectModel&&(identical(other.batchSubjectId, batchSubjectId) || other.batchSubjectId == batchSubjectId)&&(identical(other.subjectId, subjectId) || other.subjectId == subjectId)&&(identical(other.subjectName, subjectName) || other.subjectName == subjectName)&&(identical(other.instructorName, instructorName) || other.instructorName == instructorName)&&(identical(other.weeklyLessons, weeklyLessons) || other.weeklyLessons == weeklyLessons)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.notes, notes) || other.notes == notes));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,batchSubjectId,subjectId,subjectName,instructorName,weeklyLessons,isActive,notes);
+
+@override
+String toString() {
+  return 'EnrolledSubjectModel(batchSubjectId: $batchSubjectId, subjectId: $subjectId, subjectName: $subjectName, instructorName: $instructorName, weeklyLessons: $weeklyLessons, isActive: $isActive, notes: $notes)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $EnrolledSubjectModelCopyWith<$Res>  {
+  factory $EnrolledSubjectModelCopyWith(EnrolledSubjectModel value, $Res Function(EnrolledSubjectModel) _then) = _$EnrolledSubjectModelCopyWithImpl;
+@useResult
+$Res call({
+@JsonKey(name: 'batch_subject_id') int? batchSubjectId,@JsonKey(name: 'subject_id') int? subjectId,@JsonKey(name: 'subject_name') String? subjectName,@JsonKey(name: 'instructor_name') String? instructorName,@JsonKey(name: 'weekly_lessons') int? weeklyLessons,@JsonKey(name: 'is_active') bool? isActive, String? notes
+});
+
+
+
+
+}
+/// @nodoc
+class _$EnrolledSubjectModelCopyWithImpl<$Res>
+    implements $EnrolledSubjectModelCopyWith<$Res> {
+  _$EnrolledSubjectModelCopyWithImpl(this._self, this._then);
+
+  final EnrolledSubjectModel _self;
+  final $Res Function(EnrolledSubjectModel) _then;
+
+/// Create a copy of EnrolledSubjectModel
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? batchSubjectId = freezed,Object? subjectId = freezed,Object? subjectName = freezed,Object? instructorName = freezed,Object? weeklyLessons = freezed,Object? isActive = freezed,Object? notes = freezed,}) {
+  return _then(_self.copyWith(
+batchSubjectId: freezed == batchSubjectId ? _self.batchSubjectId : batchSubjectId // ignore: cast_nullable_to_non_nullable
+as int?,subjectId: freezed == subjectId ? _self.subjectId : subjectId // ignore: cast_nullable_to_non_nullable
+as int?,subjectName: freezed == subjectName ? _self.subjectName : subjectName // ignore: cast_nullable_to_non_nullable
+as String?,instructorName: freezed == instructorName ? _self.instructorName : instructorName // ignore: cast_nullable_to_non_nullable
+as String?,weeklyLessons: freezed == weeklyLessons ? _self.weeklyLessons : weeklyLessons // ignore: cast_nullable_to_non_nullable
+as int?,isActive: freezed == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
+as bool?,notes: freezed == notes ? _self.notes : notes // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [EnrolledSubjectModel].
+extension EnrolledSubjectModelPatterns on EnrolledSubjectModel {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _EnrolledSubjectModel value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _EnrolledSubjectModel() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _EnrolledSubjectModel value)  $default,){
+final _that = this;
+switch (_that) {
+case _EnrolledSubjectModel():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _EnrolledSubjectModel value)?  $default,){
+final _that = this;
+switch (_that) {
+case _EnrolledSubjectModel() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'batch_subject_id')  int? batchSubjectId, @JsonKey(name: 'subject_id')  int? subjectId, @JsonKey(name: 'subject_name')  String? subjectName, @JsonKey(name: 'instructor_name')  String? instructorName, @JsonKey(name: 'weekly_lessons')  int? weeklyLessons, @JsonKey(name: 'is_active')  bool? isActive,  String? notes)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _EnrolledSubjectModel() when $default != null:
+return $default(_that.batchSubjectId,_that.subjectId,_that.subjectName,_that.instructorName,_that.weeklyLessons,_that.isActive,_that.notes);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'batch_subject_id')  int? batchSubjectId, @JsonKey(name: 'subject_id')  int? subjectId, @JsonKey(name: 'subject_name')  String? subjectName, @JsonKey(name: 'instructor_name')  String? instructorName, @JsonKey(name: 'weekly_lessons')  int? weeklyLessons, @JsonKey(name: 'is_active')  bool? isActive,  String? notes)  $default,) {final _that = this;
+switch (_that) {
+case _EnrolledSubjectModel():
+return $default(_that.batchSubjectId,_that.subjectId,_that.subjectName,_that.instructorName,_that.weeklyLessons,_that.isActive,_that.notes);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'batch_subject_id')  int? batchSubjectId, @JsonKey(name: 'subject_id')  int? subjectId, @JsonKey(name: 'subject_name')  String? subjectName, @JsonKey(name: 'instructor_name')  String? instructorName, @JsonKey(name: 'weekly_lessons')  int? weeklyLessons, @JsonKey(name: 'is_active')  bool? isActive,  String? notes)?  $default,) {final _that = this;
+switch (_that) {
+case _EnrolledSubjectModel() when $default != null:
+return $default(_that.batchSubjectId,_that.subjectId,_that.subjectName,_that.instructorName,_that.weeklyLessons,_that.isActive,_that.notes);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _EnrolledSubjectModel implements EnrolledSubjectModel {
+  const _EnrolledSubjectModel({@JsonKey(name: 'batch_subject_id') this.batchSubjectId, @JsonKey(name: 'subject_id') this.subjectId, @JsonKey(name: 'subject_name') this.subjectName, @JsonKey(name: 'instructor_name') this.instructorName, @JsonKey(name: 'weekly_lessons') this.weeklyLessons, @JsonKey(name: 'is_active') this.isActive, this.notes});
+  factory _EnrolledSubjectModel.fromJson(Map<String, dynamic> json) => _$EnrolledSubjectModelFromJson(json);
+
+@override@JsonKey(name: 'batch_subject_id') final  int? batchSubjectId;
+@override@JsonKey(name: 'subject_id') final  int? subjectId;
+@override@JsonKey(name: 'subject_name') final  String? subjectName;
+@override@JsonKey(name: 'instructor_name') final  String? instructorName;
+@override@JsonKey(name: 'weekly_lessons') final  int? weeklyLessons;
+@override@JsonKey(name: 'is_active') final  bool? isActive;
+@override final  String? notes;
+
+/// Create a copy of EnrolledSubjectModel
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$EnrolledSubjectModelCopyWith<_EnrolledSubjectModel> get copyWith => __$EnrolledSubjectModelCopyWithImpl<_EnrolledSubjectModel>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$EnrolledSubjectModelToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EnrolledSubjectModel&&(identical(other.batchSubjectId, batchSubjectId) || other.batchSubjectId == batchSubjectId)&&(identical(other.subjectId, subjectId) || other.subjectId == subjectId)&&(identical(other.subjectName, subjectName) || other.subjectName == subjectName)&&(identical(other.instructorName, instructorName) || other.instructorName == instructorName)&&(identical(other.weeklyLessons, weeklyLessons) || other.weeklyLessons == weeklyLessons)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.notes, notes) || other.notes == notes));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,batchSubjectId,subjectId,subjectName,instructorName,weeklyLessons,isActive,notes);
+
+@override
+String toString() {
+  return 'EnrolledSubjectModel(batchSubjectId: $batchSubjectId, subjectId: $subjectId, subjectName: $subjectName, instructorName: $instructorName, weeklyLessons: $weeklyLessons, isActive: $isActive, notes: $notes)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$EnrolledSubjectModelCopyWith<$Res> implements $EnrolledSubjectModelCopyWith<$Res> {
+  factory _$EnrolledSubjectModelCopyWith(_EnrolledSubjectModel value, $Res Function(_EnrolledSubjectModel) _then) = __$EnrolledSubjectModelCopyWithImpl;
+@override @useResult
+$Res call({
+@JsonKey(name: 'batch_subject_id') int? batchSubjectId,@JsonKey(name: 'subject_id') int? subjectId,@JsonKey(name: 'subject_name') String? subjectName,@JsonKey(name: 'instructor_name') String? instructorName,@JsonKey(name: 'weekly_lessons') int? weeklyLessons,@JsonKey(name: 'is_active') bool? isActive, String? notes
+});
+
+
+
+
+}
+/// @nodoc
+class __$EnrolledSubjectModelCopyWithImpl<$Res>
+    implements _$EnrolledSubjectModelCopyWith<$Res> {
+  __$EnrolledSubjectModelCopyWithImpl(this._self, this._then);
+
+  final _EnrolledSubjectModel _self;
+  final $Res Function(_EnrolledSubjectModel) _then;
+
+/// Create a copy of EnrolledSubjectModel
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? batchSubjectId = freezed,Object? subjectId = freezed,Object? subjectName = freezed,Object? instructorName = freezed,Object? weeklyLessons = freezed,Object? isActive = freezed,Object? notes = freezed,}) {
+  return _then(_EnrolledSubjectModel(
+batchSubjectId: freezed == batchSubjectId ? _self.batchSubjectId : batchSubjectId // ignore: cast_nullable_to_non_nullable
+as int?,subjectId: freezed == subjectId ? _self.subjectId : subjectId // ignore: cast_nullable_to_non_nullable
+as int?,subjectName: freezed == subjectName ? _self.subjectName : subjectName // ignore: cast_nullable_to_non_nullable
+as String?,instructorName: freezed == instructorName ? _self.instructorName : instructorName // ignore: cast_nullable_to_non_nullable
+as String?,weeklyLessons: freezed == weeklyLessons ? _self.weeklyLessons : weeklyLessons // ignore: cast_nullable_to_non_nullable
+as int?,isActive: freezed == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
+as bool?,notes: freezed == notes ? _self.notes : notes // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
 // dart format on

@@ -242,6 +242,9 @@ abstract class FilteredExamModel with _$FilteredExamModel {
     int? id,
     @JsonKey(name: 'obtained_marks') dynamic obtainedMarks,
     @JsonKey(name: 'is_passed') dynamic isPassed,
+    @JsonKey(name: 'subject_name') String? subjectName,
+    @JsonKey(name: 'exam_name') String? examName,
+    @JsonKey(name: 'created_at') String? createdAt,
     ExamDetails? exam,
     SubjectDetails? subject,
   }) = _FilteredExamModel;
@@ -255,6 +258,7 @@ abstract class ExamDetails with _$ExamDetails {
   const factory ExamDetails({
     String? name,
     @JsonKey(name: 'total_marks') dynamic totalMarks,
+    @JsonKey(name: 'exam_date') String? examDate,
   }) = _ExamDetails;
 
   factory ExamDetails.fromJson(Map<String, dynamic> json) =>
@@ -269,4 +273,32 @@ abstract class SubjectDetails with _$SubjectDetails {
 
   factory SubjectDetails.fromJson(Map<String, dynamic> json) =>
       _$SubjectDetailsFromJson(json);
+}
+
+@freezed
+abstract class EnrolledSubjectsResponse with _$EnrolledSubjectsResponse {
+  const factory EnrolledSubjectsResponse({
+    bool? status,
+    String? message,
+    List<EnrolledSubjectModel>? data,
+  }) = _EnrolledSubjectsResponse;
+
+  factory EnrolledSubjectsResponse.fromJson(Map<String, dynamic> json) =>
+      _$EnrolledSubjectsResponseFromJson(json);
+}
+
+@freezed
+abstract class EnrolledSubjectModel with _$EnrolledSubjectModel {
+  const factory EnrolledSubjectModel({
+    @JsonKey(name: 'batch_subject_id') int? batchSubjectId,
+    @JsonKey(name: 'subject_id') int? subjectId,
+    @JsonKey(name: 'subject_name') String? subjectName,
+    @JsonKey(name: 'instructor_name') String? instructorName,
+    @JsonKey(name: 'weekly_lessons') int? weeklyLessons,
+    @JsonKey(name: 'is_active') bool? isActive,
+    String? notes,
+  }) = _EnrolledSubjectModel;
+
+  factory EnrolledSubjectModel.fromJson(Map<String, dynamic> json) =>
+      _$EnrolledSubjectModelFromJson(json);
 }

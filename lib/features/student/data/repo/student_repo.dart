@@ -12,4 +12,17 @@ abstract class StudentRepository {
   });
 
   Future<ExamResponse> getStudentExams({required int studentId});
+
+  Future<FilteredExamResponse> getFilteredExams({
+    required int studentId,
+    int? subjectId,
+    String? date,
+    String? dateFrom,
+    String? dateTo,
+    num? marksFrom,
+    num? marksTo,
+    int? isPassed,
+  });
+
+  Future<EnrolledSubjectsResponse> getEnrolledSubjects({required int studentId});
 }

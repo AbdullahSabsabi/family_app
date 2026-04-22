@@ -38,4 +38,39 @@ class StudentRepositoryImpl implements StudentRepository {
     );
     return ExamResponse.fromJson(res.data);
   }
+
+  @override
+  Future<FilteredExamResponse> getFilteredExams({
+    required int studentId,
+    int? subjectId,
+    String? date,
+    String? dateFrom,
+    String? dateTo,
+    num? marksFrom,
+    num? marksTo,
+    int? isPassed,
+  }) async {
+    final res = await _dio.get(
+      '/exam-results/filter',
+      queryParameters: {
+        'student_id': studentId,
+        if (subjectId != null) 'subject_id': subjectId,
+        if (date != null) 'date': date,
+        if (dateFrom != null) 'date_from': dateFrom,
+        if (dateTo != null) 'date_to': dateTo,
+        if (marksFrom != null) 'marks_from': marksFrom,
+        if (marksTo != null) 'marks_to': marksTo,
+        if (isPassed != null) 'is_passed': isPassed,
+      },
+    );
+    return FilteredExamResponse.fromJson(res.data);
+  }
+
+  @override
+  Future<EnrolledSubjectsResponse> getEnrolledSubjects({
+    required int studentId,
+  }) async {
+    final res = await _dio.get('/students/$studentId/enrolled-subjects');
+    return EnrolledSubjectsResponse.fromJson(res.data);
+  }
 }

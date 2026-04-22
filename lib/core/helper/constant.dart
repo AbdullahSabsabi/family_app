@@ -14,3 +14,5 @@ const grey1 = Color(0xff333333);
 const grey2 = Color(0xff4D4D4D);
 const grey3 = Color(0xffCCCCCC);
 const black = Color(0xff1A1A1A);
+
+const baseUrl = "http://46.225.180.151";

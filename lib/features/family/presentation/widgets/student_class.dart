@@ -131,7 +131,9 @@ class StudentCard extends StatelessWidget {
                   ? Icon(Icons.person, color: primary, size: 20.s)
                   : ClipOval(
                       child: CachedNetworkImage(
-                        imageUrl: imageUrl,
+                        imageUrl: (imageUrl.startsWith('http'))
+                            ? imageUrl
+                            : "$baseUrl${imageUrl.startsWith('/') ? "" : "/"}$imageUrl",
                         width: 60.r,
                         height: 60.r,
                         fit: BoxFit.cover,

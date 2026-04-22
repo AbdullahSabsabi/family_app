@@ -284,3 +284,110 @@ Map<String, dynamic> _$AttendanceToJson(_Attendance instance) =>
       'status': instance.status,
       'attendance_date': instance.attendanceDate,
     };
+
+_FilteredExamResponse _$FilteredExamResponseFromJson(
+  Map<String, dynamic> json,
+) => _FilteredExamResponse(
+  status: json['status'] as bool?,
+  message: json['message'] as String?,
+  data: (json['data'] as List<dynamic>?)
+      ?.map((e) => FilteredExamModel.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
+
+Map<String, dynamic> _$FilteredExamResponseToJson(
+  _FilteredExamResponse instance,
+) => <String, dynamic>{
+  'status': instance.status,
+  'message': instance.message,
+  'data': instance.data,
+};
+
+_FilteredExamModel _$FilteredExamModelFromJson(Map<String, dynamic> json) =>
+    _FilteredExamModel(
+      id: (json['id'] as num?)?.toInt(),
+      obtainedMarks: json['obtained_marks'],
+      isPassed: json['is_passed'],
+      subjectName: json['subject_name'] as String?,
+      examName: json['exam_name'] as String?,
+      createdAt: json['created_at'] as String?,
+      exam: json['exam'] == null
+          ? null
+          : ExamDetails.fromJson(json['exam'] as Map<String, dynamic>),
+      subject: json['subject'] == null
+          ? null
+          : SubjectDetails.fromJson(json['subject'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$FilteredExamModelToJson(_FilteredExamModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'obtained_marks': instance.obtainedMarks,
+      'is_passed': instance.isPassed,
+      'subject_name': instance.subjectName,
+      'exam_name': instance.examName,
+      'created_at': instance.createdAt,
+      'exam': instance.exam,
+      'subject': instance.subject,
+    };
+
+_ExamDetails _$ExamDetailsFromJson(Map<String, dynamic> json) => _ExamDetails(
+  name: json['name'] as String?,
+  totalMarks: json['total_marks'],
+  examDate: json['exam_date'] as String?,
+);
+
+Map<String, dynamic> _$ExamDetailsToJson(_ExamDetails instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'total_marks': instance.totalMarks,
+      'exam_date': instance.examDate,
+    };
+
+_SubjectDetails _$SubjectDetailsFromJson(Map<String, dynamic> json) =>
+    _SubjectDetails(name: json['name'] as String?);
+
+Map<String, dynamic> _$SubjectDetailsToJson(_SubjectDetails instance) =>
+    <String, dynamic>{'name': instance.name};
+
+_EnrolledSubjectsResponse _$EnrolledSubjectsResponseFromJson(
+  Map<String, dynamic> json,
+) => _EnrolledSubjectsResponse(
+  status: json['status'] as bool?,
+  message: json['message'] as String?,
+  data: (json['data'] as List<dynamic>?)
+      ?.map((e) => EnrolledSubjectModel.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
+
+Map<String, dynamic> _$EnrolledSubjectsResponseToJson(
+  _EnrolledSubjectsResponse instance,
+) => <String, dynamic>{
+  'status': instance.status,
+  'message': instance.message,
+  'data': instance.data,
+};
+
+_EnrolledSubjectModel _$EnrolledSubjectModelFromJson(
+  Map<String, dynamic> json,
+) => _EnrolledSubjectModel(
+  batchSubjectId: (json['batch_subject_id'] as num?)?.toInt(),
+  subjectId: (json['subject_id'] as num?)?.toInt(),
+  subjectName: json['subject_name'] as String?,
+  instructorName: json['instructor_name'] as String?,
+  weeklyLessons: (json['weekly_lessons'] as num?)?.toInt(),
+  isActive: json['is_active'] as bool?,
+  notes: json['notes'] as String?,
+);
+
+Map<String, dynamic> _$EnrolledSubjectModelToJson(
+  _EnrolledSubjectModel instance,
+) => <String, dynamic>{
+  'batch_subject_id': instance.batchSubjectId,
+  'subject_id': instance.subjectId,
+  'subject_name': instance.subjectName,
+  'instructor_name': instance.instructorName,
+  'weekly_lessons': instance.weeklyLessons,
+  'is_active': instance.isActive,
+  'notes': instance.notes,
+};
