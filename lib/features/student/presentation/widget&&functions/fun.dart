@@ -4,6 +4,7 @@ import 'package:familyapp/core/helper/responsive.dart';
 import 'package:familyapp/features/student/domain/models/student_models.dart';
 import 'package:familyapp/features/student/presentation/screens/exams_screen.dart';
 import 'package:familyapp/features/student/presentation/screens/payments_screen.dart';
+import 'package:familyapp/features/schedule/presentation/screens/schedule_screen.dart';
 import 'package:familyapp/features/student/presentation/widget&&functions/animations_class.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -369,7 +370,14 @@ class MyFunS {
               MaterialPageRoute(builder: (context) => ExamsScreen(exams: e!, studentId: studentId)),
             );
           }),
-          menuItem('برنامج\nالدوام', 'assets/svgs/program.svg', () {}),
+          menuItem('برنامج\nالدوام', 'assets/svgs/program.svg', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ScheduleScreen(studentId: studentId),
+              ),
+            );
+          }),
           menuItem('الدفعات\nالمالية', 'assets/svgs/finance.svg', () {
             Navigator.push(
               context,

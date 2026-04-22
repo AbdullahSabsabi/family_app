@@ -128,19 +128,20 @@ class _FilterScreenState extends State<FilterScreen> {
                     // --- قسم العلامة ---
                     _buildLabel("العلامة"),
                     _buildMarkSection(),
+                    SizedBox(height: 20.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 40.w),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: _buildSaveButton(),
+                      ),
+                    ),
+                    SizedBox(height: 40.h),
                   ],
                 ),
               ),
 
               // --- زر الحفظ ---
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40.w),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: _buildSaveButton(),
-                ),
-              ),
-              SizedBox(height: 40.h),
             ],
           ),
         ),

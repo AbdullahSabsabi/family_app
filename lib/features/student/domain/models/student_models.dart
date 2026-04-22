@@ -267,9 +267,7 @@ abstract class ExamDetails with _$ExamDetails {
 
 @freezed
 abstract class SubjectDetails with _$SubjectDetails {
-  const factory SubjectDetails({
-    String? name,
-  }) = _SubjectDetails;
+  const factory SubjectDetails({String? name}) = _SubjectDetails;
 
   factory SubjectDetails.fromJson(Map<String, dynamic> json) =>
       _$SubjectDetailsFromJson(json);

@@ -8,6 +8,7 @@ import 'package:familyapp/auth_wrapper.dart';
 import 'package:familyapp/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:familyapp/features/family/presentation/cubit/family_cubit.dart';
 import 'package:familyapp/features/student/presentation/cubit/student_cubit.dart';
+import 'package:familyapp/features/schedule/presentation/cubit/schedule_cubit.dart';
 
 class FamilyApp extends StatefulWidget {
   const FamilyApp({super.key});
@@ -91,6 +92,7 @@ class _FamilyAppState extends State<FamilyApp> {
           create: (context) => getIt<GuardianDashboardCubit>(),
         ),
         BlocProvider<StudentCubit>(create: (context) => getIt<StudentCubit>()),
+        BlocProvider<ScheduleCubit>(create: (context) => getIt<ScheduleCubit>()),
       ],
       child: MaterialApp(
         scaffoldMessengerKey: _messengerKey,
