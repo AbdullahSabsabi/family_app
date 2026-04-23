@@ -308,7 +308,7 @@ $ScheduleDataCopyWith<$Res>? get data {
 /// @nodoc
 mixin _$ScheduleData {
 
-@JsonKey(name: 'periods_count') int? get periodsCount; Map<String, Map<String, List<PeriodModel>>>? get periods;
+@JsonKey(name: 'periods_count') int? get periodsCount; dynamic get periods;
 /// Create a copy of ScheduleData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -341,7 +341,7 @@ abstract mixin class $ScheduleDataCopyWith<$Res>  {
   factory $ScheduleDataCopyWith(ScheduleData value, $Res Function(ScheduleData) _then) = _$ScheduleDataCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'periods_count') int? periodsCount, Map<String, Map<String, List<PeriodModel>>>? periods
+@JsonKey(name: 'periods_count') int? periodsCount, dynamic periods
 });
 
 
@@ -362,7 +362,7 @@ class _$ScheduleDataCopyWithImpl<$Res>
   return _then(_self.copyWith(
 periodsCount: freezed == periodsCount ? _self.periodsCount : periodsCount // ignore: cast_nullable_to_non_nullable
 as int?,periods: freezed == periods ? _self.periods : periods // ignore: cast_nullable_to_non_nullable
-as Map<String, Map<String, List<PeriodModel>>>?,
+as dynamic,
   ));
 }
 
@@ -447,7 +447,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'periods_count')  int? periodsCount,  Map<String, Map<String, List<PeriodModel>>>? periods)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'periods_count')  int? periodsCount,  dynamic periods)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ScheduleData() when $default != null:
 return $default(_that.periodsCount,_that.periods);case _:
@@ -468,7 +468,7 @@ return $default(_that.periodsCount,_that.periods);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'periods_count')  int? periodsCount,  Map<String, Map<String, List<PeriodModel>>>? periods)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'periods_count')  int? periodsCount,  dynamic periods)  $default,) {final _that = this;
 switch (_that) {
 case _ScheduleData():
 return $default(_that.periodsCount,_that.periods);case _:
@@ -488,7 +488,7 @@ return $default(_that.periodsCount,_that.periods);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'periods_count')  int? periodsCount,  Map<String, Map<String, List<PeriodModel>>>? periods)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'periods_count')  int? periodsCount,  dynamic periods)?  $default,) {final _that = this;
 switch (_that) {
 case _ScheduleData() when $default != null:
 return $default(_that.periodsCount,_that.periods);case _:
@@ -503,19 +503,11 @@ return $default(_that.periodsCount,_that.periods);case _:
 @JsonSerializable()
 
 class _ScheduleData implements ScheduleData {
-  const _ScheduleData({@JsonKey(name: 'periods_count') this.periodsCount, final  Map<String, Map<String, List<PeriodModel>>>? periods}): _periods = periods;
+  const _ScheduleData({@JsonKey(name: 'periods_count') this.periodsCount, this.periods});
   factory _ScheduleData.fromJson(Map<String, dynamic> json) => _$ScheduleDataFromJson(json);
 
 @override@JsonKey(name: 'periods_count') final  int? periodsCount;
- final  Map<String, Map<String, List<PeriodModel>>>? _periods;
-@override Map<String, Map<String, List<PeriodModel>>>? get periods {
-  final value = _periods;
-  if (value == null) return null;
-  if (_periods is EqualUnmodifiableMapView) return _periods;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableMapView(value);
-}
-
+@override final  dynamic periods;
 
 /// Create a copy of ScheduleData
 /// with the given fields replaced by the non-null parameter values.
@@ -530,12 +522,12 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ScheduleData&&(identical(other.periodsCount, periodsCount) || other.periodsCount == periodsCount)&&const DeepCollectionEquality().equals(other._periods, _periods));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ScheduleData&&(identical(other.periodsCount, periodsCount) || other.periodsCount == periodsCount)&&const DeepCollectionEquality().equals(other.periods, periods));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,periodsCount,const DeepCollectionEquality().hash(_periods));
+int get hashCode => Object.hash(runtimeType,periodsCount,const DeepCollectionEquality().hash(periods));
 
 @override
 String toString() {
@@ -550,7 +542,7 @@ abstract mixin class _$ScheduleDataCopyWith<$Res> implements $ScheduleDataCopyWi
   factory _$ScheduleDataCopyWith(_ScheduleData value, $Res Function(_ScheduleData) _then) = __$ScheduleDataCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'periods_count') int? periodsCount, Map<String, Map<String, List<PeriodModel>>>? periods
+@JsonKey(name: 'periods_count') int? periodsCount, dynamic periods
 });
 
 
@@ -570,41 +562,38 @@ class __$ScheduleDataCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? periodsCount = freezed,Object? periods = freezed,}) {
   return _then(_ScheduleData(
 periodsCount: freezed == periodsCount ? _self.periodsCount : periodsCount // ignore: cast_nullable_to_non_nullable
-as int?,periods: freezed == periods ? _self._periods : periods // ignore: cast_nullable_to_non_nullable
-as Map<String, Map<String, List<PeriodModel>>>?,
+as int?,periods: freezed == periods ? _self.periods : periods // ignore: cast_nullable_to_non_nullable
+as dynamic,
   ));
 }
 
 
 }
 
-
 /// @nodoc
 mixin _$PeriodModel {
 
-@JsonKey(name: 'batch_name') String? get batchName; String? get subject;@JsonKey(name: 'class_room') String? get classRoom;@JsonKey(name: 'start_time') String? get startTime;@JsonKey(name: 'end_time') String? get endTime; String? get type;
+@JsonKey(name: 'batch_name') String? get batchName; String? get subject;@JsonKey(name: 'class_room') String? get classRoom;@JsonKey(name: 'start_time') String? get startTime;@JsonKey(name: 'end_time') String? get endTime;@JsonKey(name: 'period_time') Map<String, dynamic>? get periodTime; String? get type;@JsonKey(name: 'is_default') bool? get isDefault; String? get supervisor;
 /// Create a copy of PeriodModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $PeriodModelCopyWith<PeriodModel> get copyWith => _$PeriodModelCopyWithImpl<PeriodModel>(this as PeriodModel, _$identity);
 
-  /// Serializes this PeriodModel to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PeriodModel&&(identical(other.batchName, batchName) || other.batchName == batchName)&&(identical(other.subject, subject) || other.subject == subject)&&(identical(other.classRoom, classRoom) || other.classRoom == classRoom)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.type, type) || other.type == type));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PeriodModel&&(identical(other.batchName, batchName) || other.batchName == batchName)&&(identical(other.subject, subject) || other.subject == subject)&&(identical(other.classRoom, classRoom) || other.classRoom == classRoom)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&const DeepCollectionEquality().equals(other.periodTime, periodTime)&&(identical(other.type, type) || other.type == type)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault)&&(identical(other.supervisor, supervisor) || other.supervisor == supervisor));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
-int get hashCode => Object.hash(runtimeType,batchName,subject,classRoom,startTime,endTime,type);
+int get hashCode => Object.hash(runtimeType,batchName,subject,classRoom,startTime,endTime,const DeepCollectionEquality().hash(periodTime),type,isDefault,supervisor);
 
 @override
 String toString() {
-  return 'PeriodModel(batchName: $batchName, subject: $subject, classRoom: $classRoom, startTime: $startTime, endTime: $endTime, type: $type)';
+  return 'PeriodModel(batchName: $batchName, subject: $subject, classRoom: $classRoom, startTime: $startTime, endTime: $endTime, periodTime: $periodTime, type: $type, isDefault: $isDefault, supervisor: $supervisor)';
 }
 
 
@@ -615,7 +604,7 @@ abstract mixin class $PeriodModelCopyWith<$Res>  {
   factory $PeriodModelCopyWith(PeriodModel value, $Res Function(PeriodModel) _then) = _$PeriodModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'batch_name') String? batchName, String? subject,@JsonKey(name: 'class_room') String? classRoom,@JsonKey(name: 'start_time') String? startTime,@JsonKey(name: 'end_time') String? endTime, String? type
+@JsonKey(name: 'batch_name') String? batchName, String? subject,@JsonKey(name: 'class_room') String? classRoom,@JsonKey(name: 'start_time') String? startTime,@JsonKey(name: 'end_time') String? endTime,@JsonKey(name: 'period_time') Map<String, dynamic>? periodTime, String? type,@JsonKey(name: 'is_default') bool? isDefault, String? supervisor
 });
 
 
@@ -632,14 +621,17 @@ class _$PeriodModelCopyWithImpl<$Res>
 
 /// Create a copy of PeriodModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? batchName = freezed,Object? subject = freezed,Object? classRoom = freezed,Object? startTime = freezed,Object? endTime = freezed,Object? type = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? batchName = freezed,Object? subject = freezed,Object? classRoom = freezed,Object? startTime = freezed,Object? endTime = freezed,Object? periodTime = freezed,Object? type = freezed,Object? isDefault = freezed,Object? supervisor = freezed,}) {
   return _then(_self.copyWith(
 batchName: freezed == batchName ? _self.batchName : batchName // ignore: cast_nullable_to_non_nullable
 as String?,subject: freezed == subject ? _self.subject : subject // ignore: cast_nullable_to_non_nullable
 as String?,classRoom: freezed == classRoom ? _self.classRoom : classRoom // ignore: cast_nullable_to_non_nullable
 as String?,startTime: freezed == startTime ? _self.startTime : startTime // ignore: cast_nullable_to_non_nullable
 as String?,endTime: freezed == endTime ? _self.endTime : endTime // ignore: cast_nullable_to_non_nullable
-as String?,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String?,periodTime: freezed == periodTime ? _self.periodTime : periodTime // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String?,isDefault: freezed == isDefault ? _self.isDefault : isDefault // ignore: cast_nullable_to_non_nullable
+as bool?,supervisor: freezed == supervisor ? _self.supervisor : supervisor // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -725,10 +717,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'batch_name')  String? batchName,  String? subject, @JsonKey(name: 'class_room')  String? classRoom, @JsonKey(name: 'start_time')  String? startTime, @JsonKey(name: 'end_time')  String? endTime,  String? type)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'batch_name')  String? batchName,  String? subject, @JsonKey(name: 'class_room')  String? classRoom, @JsonKey(name: 'start_time')  String? startTime, @JsonKey(name: 'end_time')  String? endTime, @JsonKey(name: 'period_time')  Map<String, dynamic>? periodTime,  String? type, @JsonKey(name: 'is_default')  bool? isDefault,  String? supervisor)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PeriodModel() when $default != null:
-return $default(_that.batchName,_that.subject,_that.classRoom,_that.startTime,_that.endTime,_that.type);case _:
+return $default(_that.batchName,_that.subject,_that.classRoom,_that.startTime,_that.endTime,_that.periodTime,_that.type,_that.isDefault,_that.supervisor);case _:
   return orElse();
 
 }
@@ -746,10 +738,10 @@ return $default(_that.batchName,_that.subject,_that.classRoom,_that.startTime,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'batch_name')  String? batchName,  String? subject, @JsonKey(name: 'class_room')  String? classRoom, @JsonKey(name: 'start_time')  String? startTime, @JsonKey(name: 'end_time')  String? endTime,  String? type)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'batch_name')  String? batchName,  String? subject, @JsonKey(name: 'class_room')  String? classRoom, @JsonKey(name: 'start_time')  String? startTime, @JsonKey(name: 'end_time')  String? endTime, @JsonKey(name: 'period_time')  Map<String, dynamic>? periodTime,  String? type, @JsonKey(name: 'is_default')  bool? isDefault,  String? supervisor)  $default,) {final _that = this;
 switch (_that) {
 case _PeriodModel():
-return $default(_that.batchName,_that.subject,_that.classRoom,_that.startTime,_that.endTime,_that.type);case _:
+return $default(_that.batchName,_that.subject,_that.classRoom,_that.startTime,_that.endTime,_that.periodTime,_that.type,_that.isDefault,_that.supervisor);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -766,10 +758,10 @@ return $default(_that.batchName,_that.subject,_that.classRoom,_that.startTime,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'batch_name')  String? batchName,  String? subject, @JsonKey(name: 'class_room')  String? classRoom, @JsonKey(name: 'start_time')  String? startTime, @JsonKey(name: 'end_time')  String? endTime,  String? type)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'batch_name')  String? batchName,  String? subject, @JsonKey(name: 'class_room')  String? classRoom, @JsonKey(name: 'start_time')  String? startTime, @JsonKey(name: 'end_time')  String? endTime, @JsonKey(name: 'period_time')  Map<String, dynamic>? periodTime,  String? type, @JsonKey(name: 'is_default')  bool? isDefault,  String? supervisor)?  $default,) {final _that = this;
 switch (_that) {
 case _PeriodModel() when $default != null:
-return $default(_that.batchName,_that.subject,_that.classRoom,_that.startTime,_that.endTime,_that.type);case _:
+return $default(_that.batchName,_that.subject,_that.classRoom,_that.startTime,_that.endTime,_that.periodTime,_that.type,_that.isDefault,_that.supervisor);case _:
   return null;
 
 }
@@ -778,18 +770,29 @@ return $default(_that.batchName,_that.subject,_that.classRoom,_that.startTime,_t
 }
 
 /// @nodoc
-@JsonSerializable()
+
 
 class _PeriodModel implements PeriodModel {
-  const _PeriodModel({@JsonKey(name: 'batch_name') this.batchName, this.subject, @JsonKey(name: 'class_room') this.classRoom, @JsonKey(name: 'start_time') this.startTime, @JsonKey(name: 'end_time') this.endTime, this.type});
-  factory _PeriodModel.fromJson(Map<String, dynamic> json) => _$PeriodModelFromJson(json);
+  const _PeriodModel({@JsonKey(name: 'batch_name') this.batchName, this.subject, @JsonKey(name: 'class_room') this.classRoom, @JsonKey(name: 'start_time') this.startTime, @JsonKey(name: 'end_time') this.endTime, @JsonKey(name: 'period_time') final  Map<String, dynamic>? periodTime, this.type, @JsonKey(name: 'is_default') this.isDefault, this.supervisor}): _periodTime = periodTime;
+  
 
 @override@JsonKey(name: 'batch_name') final  String? batchName;
 @override final  String? subject;
 @override@JsonKey(name: 'class_room') final  String? classRoom;
 @override@JsonKey(name: 'start_time') final  String? startTime;
 @override@JsonKey(name: 'end_time') final  String? endTime;
+ final  Map<String, dynamic>? _periodTime;
+@override@JsonKey(name: 'period_time') Map<String, dynamic>? get periodTime {
+  final value = _periodTime;
+  if (value == null) return null;
+  if (_periodTime is EqualUnmodifiableMapView) return _periodTime;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(value);
+}
+
 @override final  String? type;
+@override@JsonKey(name: 'is_default') final  bool? isDefault;
+@override final  String? supervisor;
 
 /// Create a copy of PeriodModel
 /// with the given fields replaced by the non-null parameter values.
@@ -797,23 +800,20 @@ class _PeriodModel implements PeriodModel {
 @pragma('vm:prefer-inline')
 _$PeriodModelCopyWith<_PeriodModel> get copyWith => __$PeriodModelCopyWithImpl<_PeriodModel>(this, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$PeriodModelToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PeriodModel&&(identical(other.batchName, batchName) || other.batchName == batchName)&&(identical(other.subject, subject) || other.subject == subject)&&(identical(other.classRoom, classRoom) || other.classRoom == classRoom)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.type, type) || other.type == type));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PeriodModel&&(identical(other.batchName, batchName) || other.batchName == batchName)&&(identical(other.subject, subject) || other.subject == subject)&&(identical(other.classRoom, classRoom) || other.classRoom == classRoom)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&const DeepCollectionEquality().equals(other._periodTime, _periodTime)&&(identical(other.type, type) || other.type == type)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault)&&(identical(other.supervisor, supervisor) || other.supervisor == supervisor));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
-int get hashCode => Object.hash(runtimeType,batchName,subject,classRoom,startTime,endTime,type);
+int get hashCode => Object.hash(runtimeType,batchName,subject,classRoom,startTime,endTime,const DeepCollectionEquality().hash(_periodTime),type,isDefault,supervisor);
 
 @override
 String toString() {
-  return 'PeriodModel(batchName: $batchName, subject: $subject, classRoom: $classRoom, startTime: $startTime, endTime: $endTime, type: $type)';
+  return 'PeriodModel(batchName: $batchName, subject: $subject, classRoom: $classRoom, startTime: $startTime, endTime: $endTime, periodTime: $periodTime, type: $type, isDefault: $isDefault, supervisor: $supervisor)';
 }
 
 
@@ -824,7 +824,7 @@ abstract mixin class _$PeriodModelCopyWith<$Res> implements $PeriodModelCopyWith
   factory _$PeriodModelCopyWith(_PeriodModel value, $Res Function(_PeriodModel) _then) = __$PeriodModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'batch_name') String? batchName, String? subject,@JsonKey(name: 'class_room') String? classRoom,@JsonKey(name: 'start_time') String? startTime,@JsonKey(name: 'end_time') String? endTime, String? type
+@JsonKey(name: 'batch_name') String? batchName, String? subject,@JsonKey(name: 'class_room') String? classRoom,@JsonKey(name: 'start_time') String? startTime,@JsonKey(name: 'end_time') String? endTime,@JsonKey(name: 'period_time') Map<String, dynamic>? periodTime, String? type,@JsonKey(name: 'is_default') bool? isDefault, String? supervisor
 });
 
 
@@ -841,14 +841,17 @@ class __$PeriodModelCopyWithImpl<$Res>
 
 /// Create a copy of PeriodModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? batchName = freezed,Object? subject = freezed,Object? classRoom = freezed,Object? startTime = freezed,Object? endTime = freezed,Object? type = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? batchName = freezed,Object? subject = freezed,Object? classRoom = freezed,Object? startTime = freezed,Object? endTime = freezed,Object? periodTime = freezed,Object? type = freezed,Object? isDefault = freezed,Object? supervisor = freezed,}) {
   return _then(_PeriodModel(
 batchName: freezed == batchName ? _self.batchName : batchName // ignore: cast_nullable_to_non_nullable
 as String?,subject: freezed == subject ? _self.subject : subject // ignore: cast_nullable_to_non_nullable
 as String?,classRoom: freezed == classRoom ? _self.classRoom : classRoom // ignore: cast_nullable_to_non_nullable
 as String?,startTime: freezed == startTime ? _self.startTime : startTime // ignore: cast_nullable_to_non_nullable
 as String?,endTime: freezed == endTime ? _self.endTime : endTime // ignore: cast_nullable_to_non_nullable
-as String?,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String?,periodTime: freezed == periodTime ? _self._periodTime : periodTime // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String?,isDefault: freezed == isDefault ? _self.isDefault : isDefault // ignore: cast_nullable_to_non_nullable
+as bool?,supervisor: freezed == supervisor ? _self.supervisor : supervisor // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

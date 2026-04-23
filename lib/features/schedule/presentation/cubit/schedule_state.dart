@@ -9,10 +9,14 @@ class ScheduleLoading extends ScheduleState {}
 class ScheduleSuccess extends ScheduleState {
   final Map<int, ScheduleData> cachedSchedules;
   final int? currentStudentId;
+  final bool isRefreshing;
+  final bool isDayLoading;
 
   ScheduleSuccess({
     required this.cachedSchedules,
     this.currentStudentId,
+    this.isRefreshing = false,
+    this.isDayLoading = false,
   });
 
   Map<String, dynamic> toMap() {
@@ -21,6 +25,8 @@ class ScheduleSuccess extends ScheduleState {
         (key, value) => MapEntry(key.toString(), value.toJson()),
       ),
       'currentStudentId': currentStudentId,
+      'isRefreshing': isRefreshing,
+      'isDayLoading': isDayLoading,
     };
   }
 
@@ -33,6 +39,22 @@ class ScheduleSuccess extends ScheduleState {
         ),
       ),
       currentStudentId: map['currentStudentId'] as int?,
+      isRefreshing: map['isRefreshing'] as bool? ?? false,
+      isDayLoading: map['isDayLoading'] as bool? ?? false,
+    );
+  }
+
+  ScheduleSuccess copyWith({
+    Map<int, ScheduleData>? cachedSchedules,
+    int? currentStudentId,
+    bool? isRefreshing,
+    bool? isDayLoading,
+  }) {
+    return ScheduleSuccess(
+      cachedSchedules: cachedSchedules ?? this.cachedSchedules,
+      currentStudentId: currentStudentId ?? this.currentStudentId,
+      isRefreshing: isRefreshing ?? this.isRefreshing,
+      isDayLoading: isDayLoading ?? this.isDayLoading,
     );
   }
 }

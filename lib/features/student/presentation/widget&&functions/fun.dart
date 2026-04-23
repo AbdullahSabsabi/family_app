@@ -29,7 +29,10 @@ class MyFunS {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ExamsScreen(exams: exams!, studentId: studentId),
+                    builder: (context) => ExamsScreen(
+                      exams: exams ?? const ExamData(currentWeek: [], lastWeek: []),
+                      studentId: studentId,
+                    ),
                   ),
                 );
               },
@@ -130,8 +133,13 @@ class MyFunS {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        StudentPaymentScreen(financeData: finance!),
+                    builder: (context) => StudentPaymentScreen(
+                      financeData: finance ??
+                          const FinancialData(
+                            payments: [],
+                            pendingInstallments: [],
+                          ),
+                    ),
                   ),
                 );
               },
@@ -183,7 +191,7 @@ class MyFunS {
                         ),
                         SizedBox(width: 5.w),
                         Text(
-                          payments.last.paidDate ?? '2024-01-01',
+                          payments.isNotEmpty ? (payments.last.paidDate ?? '2024-01-01') : '2024-01-01',
                           style: TextStyle(fontSize: 12.s, color: grey),
                         ),
                       ],
@@ -196,7 +204,7 @@ class MyFunS {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      "\$${payments.last.amountUsd ?? 0}",
+                      "\$${payments.isNotEmpty ? (payments.last.amountUsd ?? 0) : 0}",
                       style: TextStyle(
                         fontSize: 12.s,
                         fontWeight: FontWeight.w500,
@@ -367,7 +375,12 @@ class MyFunS {
           menuItem('علامات\n', 'assets/svgs/marks.svg', () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ExamsScreen(exams: e!, studentId: studentId)),
+              MaterialPageRoute(
+                builder: (context) => ExamsScreen(
+                  exams: e ?? const ExamData(currentWeek: [], lastWeek: []),
+                  studentId: studentId,
+                ),
+              ),
             );
           }),
           menuItem('برنامج\nالدوام', 'assets/svgs/program.svg', () {
@@ -382,7 +395,13 @@ class MyFunS {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => StudentPaymentScreen(financeData: f!),
+                builder: (context) => StudentPaymentScreen(
+                  financeData: f ??
+                      const FinancialData(
+                        payments: [],
+                        pendingInstallments: [],
+                      ),
+                ),
               ),
             );
           }),
@@ -425,7 +444,7 @@ class MyFunS {
   //************************************************************************************* */
 
   Widget header(StudentData? profile) {
-    bool isAttended = profile!.latestAttendance?.status == 'present' ?? false;
+    bool isAttended = profile?.latestAttendance?.status == 'present' ?? false;
     return Row(
       children: [
         CircleAvatar(
@@ -434,9 +453,9 @@ class MyFunS {
           child: ClipOval(
             child: profile?.profilePhoto != null
                 ? CachedNetworkImage(
-                    imageUrl: (profile!.profilePhoto!.startsWith('http'))
+                    imageUrl: (profile?.profilePhoto?.startsWith('http') ?? false)
                         ? profile!.profilePhoto!
-                        : "$baseUrl${profile!.profilePhoto!.startsWith('/') ? "" : "/"}${profile!.profilePhoto!}",
+                        : "$baseUrl${profile?.profilePhoto?.startsWith('/') == true ? "" : "/"}${profile?.profilePhoto ?? ""}",
                     placeholder: (context, url) => const Skeleton.keep(
                       child: Center(
                         child: CircularProgressIndicator(strokeWidth: 1),

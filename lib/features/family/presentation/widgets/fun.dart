@@ -83,7 +83,7 @@ class MyFunF {
               end: Alignment.centerRight,
             ),
             shape: BoxShape.circle,
-            border: Border.all(color: Colors.white.withOpacity(0.2)),
+            border: Border.all(color: white.withOpacity(0.2)),
           ),
           child: Icon(
             Icons.keyboard_double_arrow_right_outlined,

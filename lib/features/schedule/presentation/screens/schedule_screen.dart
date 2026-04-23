@@ -37,8 +37,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     _loadData();
   }
 
-  void _loadData() {
-    context.read<ScheduleCubit>().getSchedule(studentId: widget.studentId);
+  void _loadData({String? day}) {
+    context.read<ScheduleCubit>().getSchedule(
+      studentId: widget.studentId,
+      day: day, // Pass day if we specifically need it
+    );
   }
 
   @override
@@ -118,10 +121,14 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     }
 
                     bool isLoading = state is ScheduleLoading;
+                    bool isRefreshing = false;
+                    bool isDayLoading = false;
                     ScheduleData? scheduleData;
 
                     if (state is ScheduleSuccess) {
                       scheduleData = state.cachedSchedules[widget.studentId];
+                      isRefreshing = state.isRefreshing;
+                      isDayLoading = state.isDayLoading;
                     }
 
                     final Map<String, String> enToAr = {
@@ -134,18 +141,53 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       'Friday': 'الجمعة',
                     };
 
-                    final periodsForDay =
-                        (scheduleData?.periods?[selectedDay] ??
-                                scheduleData?.periods?[enToAr[selectedDay]] ??
-                                {})
-                            as Map<String, dynamic>;
-                    final periodEntries = periodsForDay.entries.toList();
-                    periodEntries.sort((a, b) => a.key.compareTo(b.key));
+                    final dayNameEn = selectedDay.toLowerCase();
+                    final dayNameAr = enToAr[selectedDay] ?? '';
+
+                    // --- ULTIMATE ROBUST PARSER ---
+                    final dynamic allPeriods = scheduleData?.periods;
+                    dynamic periodsForDayData;
+
+                    if (allPeriods is Map) {
+                      allPeriods.forEach((key, value) {
+                        String k = key.toString().trim().toLowerCase();
+                        if (k == dayNameEn || k == dayNameAr || k.contains(dayNameEn)) {
+                          periodsForDayData = value;
+                        }
+                      });
+                    }
+
+                    final Map<String, List<PeriodModel>> parsedPeriods = {};
+                    if (periodsForDayData != null) {
+                      if (periodsForDayData is Map) {
+                        periodsForDayData.forEach((key, value) {
+                          if (value is List) {
+                            parsedPeriods[key] = value
+                                .map((e) => PeriodModel.fromJson(Map<String, dynamic>.from(e as Map)))
+                                .toList();
+                          }
+                        });
+                      } else if (periodsForDayData is List) {
+                        parsedPeriods["الحصص"] = periodsForDayData
+                            .map((e) => PeriodModel.fromJson(Map<String, dynamic>.from(e as Map)))
+                            .toList();
+                      }
+                    }
+
+                    // Sort periods: "الحصة 1", "الحصة 2"...
+                    final periodEntries = parsedPeriods.entries.toList();
+                    try {
+                      periodEntries.sort((a, b) {
+                        int getNum(String s) => int.tryParse(s.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+                        return getNum(a.key).compareTo(getNum(b.key));
+                      });
+                    } catch (_) {}
+                    // --- END OF PARSER ---
 
                     return Skeletonizer(
-                      enabled: isLoading,
+                      enabled: isLoading || isDayLoading,
                       child: RefreshIndicator(
-                        onRefresh: () async => _loadData(),
+                        onRefresh: () async => _loadData(day: selectedDay),
                         color: primary,
                         child: periodEntries.isEmpty && !isLoading
                             ? SingleChildScrollView(
@@ -162,9 +204,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                   vertical: 10.h,
                                 ),
                                 physics: const AlwaysScrollableScrollPhysics(),
-                                itemCount: isLoading ? 5 : periodEntries.length,
+                                itemCount: (isLoading || isDayLoading) ? 5 : periodEntries.length,
                                 itemBuilder: (context, index) {
-                                  if (isLoading) {
+                                  if (isLoading || isDayLoading) {
                                     return _buildLoadingCard();
                                   }
                                   final entry = periodEntries[index];
@@ -203,7 +245,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         }
 
         int getLessonCount(String dayNameEn) {
-          if (scheduleData?.periods == null) return 0;
+          if (scheduleData?.periods == null || scheduleData?.periods is! Map) return 0;
 
           final Map<String, String> enToAr = {
             'Saturday': 'السبت',
@@ -217,11 +259,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
           final dayNameAr = enToAr[dayNameEn] ?? '';
 
-          // Flexible search: look for any key that contains the day name (EN or AR)
+          // Flexible search
           dynamic dayPeriodsData;
-          scheduleData!.periods!.forEach((key, value) {
-            if (key.toLowerCase().contains(dayNameEn.toLowerCase()) ||
-                (dayNameAr.isNotEmpty && key.contains(dayNameAr))) {
+          (scheduleData!.periods as Map).forEach((key, value) {
+            if (key.toString().toLowerCase().contains(dayNameEn.toLowerCase()) ||
+                (dayNameAr.isNotEmpty && key.toString().contains(dayNameAr))) {
               dayPeriodsData = value;
             }
           });
@@ -273,7 +315,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   int lessonCount = getLessonCount(dayName);
 
                   return GestureDetector(
-                    onTap: () => setState(() => selectedDay = dayName),
+                    onTap: () {
+                      setState(() => selectedDay = dayName);
+                      _loadData(day: dayName); // Explicitly load when day changes
+                    },
                     child: Container(
                       width: 55.w,
                       margin: EdgeInsets.symmetric(horizontal: 6.w),
@@ -336,105 +381,109 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   Widget _buildPeriodCard(PeriodModel p) {
     bool isNow = _isPeriodNow(p.startTime, p.endTime);
+    bool isQuiz = p.type == 'مذاكرة';
     bool isExam = p.type == 'مذاكرة' || p.type == 'امتحان';
 
     return Container(
-      margin: EdgeInsets.only(bottom: 15.h),
-      padding: EdgeInsets.all(15.s),
+      margin: EdgeInsets.symmetric(vertical: 10.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 18.h),
       decoration: BoxDecoration(
         color: white,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(18.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildTimeRow(p.startTime ?? "00:00", true),
-              SizedBox(height: 15.h),
-              _buildTimeRow(p.endTime ?? "00:00", false),
-            ],
-          ),
-          SizedBox(width: 15.w),
-          Container(height: 60.h, width: 1, color: grey.withOpacity(0.1)),
-          SizedBox(width: 15.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: IntrinsicHeight(
+        child: Row(
+          children: [
+            // Right Section: Times (Fixed on the right)
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if (isNow)
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 8.w,
-                          vertical: 2.h,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(4.r),
-                        ),
-                        child: Text(
-                          'الآن',
-                          style: TextStyle(
-                            color: Colors.green,
-                            fontSize: 10.s,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      )
-                    else
-                      const SizedBox(),
-                    Text(
-                      p.subject ?? 'بدون مادة',
-                      style: TextStyle(
-                        fontSize: 14.s,
-                        fontWeight: FontWeight.bold,
-                        color: black,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10.h),
-                Wrap(
-                  spacing: 8.w,
-                  runSpacing: 5.h,
-                  alignment: WrapAlignment.end,
-                  children: [
-                    _buildBadge(
-                      p.batchName ?? '',
-                      const Color(0xffFDEBD0),
-                      const Color(0xffEB984E),
-                    ),
-                    _buildBadge(
-                      p.classRoom ?? '',
-                      const Color(0xffE8F8F5),
-                      const Color(0xff1ABC9C),
-                    ),
-                    _buildBadge(
-                      p.type ?? 'درس',
-                      isExam
-                          ? const Color(0xffFBEEE6)
-                          : const Color(0xffE9F7EF),
-                      isExam
-                          ? const Color(0xffE67E22)
-                          : const Color(0xff27AE60),
-                      showDot: isExam,
-                    ),
-                  ],
-                ),
+                _buildTimeRow(p.startTime ?? p.periodTime?['start_time'] ?? "00:00", true),
+                SizedBox(height: 12.h),
+                _buildTimeRow(p.endTime ?? p.periodTime?['end_time'] ?? "00:00", false),
               ],
             ),
-          ),
-        ],
+
+            SizedBox(width: 15.w),
+
+            // Vertical Divider
+            Container(width: 1.5, color: const Color(0xffF4F6F7)),
+
+            SizedBox(width: 15.w),
+
+            // Left Section: Content (Subject + Now top, Badges bottom)
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Top Row: Subject (Right) and Now (Left)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        p.subject ?? 'بدون مادة',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 14.s,
+                          fontWeight: FontWeight.w500,
+                          color: grey2,
+                        ),
+                      ),
+                      if (isNow)
+                        Text(
+                          'الآن',
+                          style: TextStyle(
+                            color: grey,
+                            fontSize: 14.s,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        )
+                      else
+                        const SizedBox(),
+                    ],
+                  ),
+                  SizedBox(height: 15.h),
+                  // Bottom Row: All Badges in one line
+                  Wrap(
+                    spacing: 5.w,
+                    runSpacing: 5.h,
+                    children: [
+                      _buildBadge(
+                        p.type ?? 'درس',
+                        isExam
+                            ? const Color(0xffFBEEE6)
+                            : const Color(0xffE8F9EE),
+                        isExam
+                            ? const Color(0xffE67E22)
+                            : const Color(0xff27AE60),
+                        showDot: isQuiz,
+                      ),
+                      _buildBadge(
+                        p.classRoom ?? '',
+                        const Color(0xffE8F8FB),
+                        const Color(0xff3498DB),
+                      ),
+                      _buildBadge(
+                        p.batchName ?? '',
+                        const Color(0xffFDEBD0),
+                        const Color(0xffEB984E),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -443,15 +492,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     String formattedTime = time;
     try {
       final dateTime = DateFormat("HH:mm:ss").parse(time);
-      formattedTime = DateFormat("hh:mm a").format(dateTime).toLowerCase();
+      formattedTime = DateFormat("hh:mm a").format(dateTime);
     } catch (_) {}
 
     return Text(
       formattedTime,
       style: TextStyle(
-        fontSize: 12.s,
-        fontWeight: FontWeight.bold,
-        color: isStart ? black : grey,
+        fontSize: 14.s,
+        fontWeight: FontWeight.w700,
+        color: black,
       ),
     );
   }
@@ -463,21 +512,21 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     bool showDot = false,
   }) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(6.r),
+        borderRadius: BorderRadius.circular(3.r),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (showDot)
             Container(
-              width: 5.s,
-              height: 5.s,
-              margin: EdgeInsets.only(left: 5.w),
-              decoration: BoxDecoration(
-                color: textColor,
+              width: 7.s,
+              height: 7.s,
+              margin: EdgeInsets.only(left: 8.w),
+              decoration: const BoxDecoration(
+                color: Colors.red,
                 shape: BoxShape.circle,
               ),
             ),
@@ -485,8 +534,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             text,
             style: TextStyle(
               color: textColor,
-              fontSize: 10.s,
-              fontWeight: FontWeight.bold,
+              fontSize: 12.s,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
@@ -496,11 +545,41 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   Widget _buildLoadingCard() {
     return Container(
-      margin: EdgeInsets.only(bottom: 15.h),
-      height: 100.h,
+      margin: EdgeInsets.symmetric(vertical: 10.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 18.h),
       decoration: BoxDecoration(
         color: white,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(18.r),
+      ),
+      child: Row(
+        children: [
+          Column(
+            children: [
+              Container(width: 50.w, height: 15.h, color: grey3),
+              SizedBox(height: 12.h),
+              Container(width: 50.w, height: 15.h, color: grey3),
+            ],
+          ),
+          SizedBox(width: 15.w),
+          Container(width: 1.5, height: 40.h, color: const Color(0xffF4F6F7)),
+          SizedBox(width: 15.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(width: 120.w, height: 15.h, color: grey3),
+                SizedBox(height: 15.h),
+                Row(
+                  children: [
+                    Container(width: 60.w, height: 25.h, color: grey3),
+                    SizedBox(width: 5.w),
+                    Container(width: 60.w, height: 25.h, color: grey3),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

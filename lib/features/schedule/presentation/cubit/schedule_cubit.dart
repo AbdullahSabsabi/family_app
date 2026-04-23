@@ -3,6 +3,7 @@ import 'package:familyapp/features/schedule/domain/models/schedule_model.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'schedule_state.dart';
 
+
 class ScheduleCubit extends HydratedCubit<ScheduleState> {
   final ScheduleRepository _repository;
 
@@ -10,19 +11,22 @@ class ScheduleCubit extends HydratedCubit<ScheduleState> {
 
   Future<void> getSchedule({required int studentId, String? day}) async {
     Map<int, ScheduleData> currentCache = {};
+    bool hasStudent = false;
+    
     if (state is ScheduleSuccess) {
       currentCache = Map<int, ScheduleData>.from(
         (state as ScheduleSuccess).cachedSchedules,
       );
+      hasStudent = currentCache.containsKey(studentId);
     }
 
-    if (!currentCache.containsKey(studentId)) {
+    if (!hasStudent) {
       emit(ScheduleLoading());
     } else {
       emit(
-        ScheduleSuccess(
-          cachedSchedules: currentCache,
-          currentStudentId: studentId,
+        (state as ScheduleSuccess).copyWith(
+          isRefreshing: day == null,
+          isDayLoading: day != null,
         ),
       );
     }
@@ -30,7 +34,7 @@ class ScheduleCubit extends HydratedCubit<ScheduleState> {
     try {
       final response = await _repository.getSchedule(
         studentId: studentId,
-        day: day,
+        day: day ?? _getCurrentDayName(),
       );
 
       if (response.status == true && response.data != null) {
@@ -39,18 +43,38 @@ class ScheduleCubit extends HydratedCubit<ScheduleState> {
           ScheduleSuccess(
             cachedSchedules: currentCache,
             currentStudentId: studentId,
+            isRefreshing: false,
+            isDayLoading: false,
           ),
         );
       } else {
-        if (!currentCache.containsKey(studentId)) {
+        if (hasStudent) {
+          emit((state as ScheduleSuccess).copyWith(isRefreshing: false, isDayLoading: false));
+        } else {
           emit(ScheduleError(response.message ?? "فشل في جلب الجدول"));
         }
       }
     } catch (e) {
-      if (!currentCache.containsKey(studentId)) {
-        emit(ScheduleError("حدث خطأ أثناء الاتصال بالسيرفر"));
+      print("Schedule API Error: $e");
+      if (hasStudent) {
+        emit((state as ScheduleSuccess).copyWith(isRefreshing: false, isDayLoading: false));
+      } else {
+        emit(ScheduleError("حدث خطأ أثناء الاتصال بالسيرفر: $e"));
       }
     }
+  }
+
+  String _getCurrentDayName() {
+    final days = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday'
+    ];
+    return days[DateTime.now().weekday - 1];
   }
 
   @override

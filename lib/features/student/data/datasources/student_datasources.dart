@@ -19,8 +19,19 @@ class StudentRepositoryImpl implements StudentRepository {
   Future<MonthlyEvaluationResponse> getMonthlyEvaluations({
     required int studentId,
   }) async {
-    final res = await _dio.get('/students/$studentId/monthly-evaluation');
-    return MonthlyEvaluationResponse.fromJson(res.data);
+    try {
+      final res = await _dio.get('/students/$studentId/monthly-evaluation');
+      return MonthlyEvaluationResponse.fromJson(res.data);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        return const MonthlyEvaluationResponse(
+          status: true,
+          message: "لا يوجد تقييمات لهذا الطالب",
+          data: EvaluationData(evaluations: {}),
+        );
+      }
+      rethrow;
+    }
   }
 
   @override

@@ -46,7 +46,8 @@ class _StudentScreenState extends State<StudentScreen> {
               return Center(child: Text(state.message));
             }
 
-            bool isLoading = state is StudentLoading;
+            // Fix: isLoading should be true if it's the first time (Initial) or actually loading
+            bool isLoading = state is StudentLoading || state is StudentInitial;
 
             StudentDataContainer? currentStudentData;
 
@@ -54,13 +55,16 @@ class _StudentScreenState extends State<StudentScreen> {
               currentStudentData = state.cachedStudents[widget.id];
             }
 
+            // If we are in Success but the specific student isn't in cache yet, it's still loading for that student
+            if (state is StudentSuccess && currentStudentData == null) {
+              isLoading = true;
+            }
+
             final profile = currentStudentData?.profile.data;
             final evaluations =
                 currentStudentData?.evaluations.data?.evaluations ?? {};
             final finance = currentStudentData?.finance.data;
             final exams = currentStudentData?.exams.data;
-
-            bool showSkeleton = isLoading; //&& currentStudentData == null;
 
             return Stack(
               children: [
