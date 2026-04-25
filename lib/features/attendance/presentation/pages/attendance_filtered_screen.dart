@@ -206,7 +206,7 @@ class _AttendanceFilteredScreenState extends State<AttendanceFilteredScreen> {
             scrollDirection: Axis.horizontal,
             reverse: true, // RTL
             padding: EdgeInsets.symmetric(horizontal: 25.w),
-            itemCount: 14, // Show 2 weeks
+            itemCount: 7, // Show 1 week
             itemBuilder: (context, index) {
               final date = DateTime.now().subtract(Duration(days: index));
               final isSelected =
