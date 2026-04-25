@@ -20,6 +20,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _obscureOld = true;
+  bool _obscureNew = true;
+  bool _obscureConfirm = true;
+
 
   @override
   void dispose() {
@@ -138,24 +142,45 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           MyFunL().buildTextField(
                             'أدخل كلمة المرور الحالية',
                             isPassword: true,
+                            obscureText: _obscureOld,
+                            onToggleVisibility: () {
+                              setState(() {
+                                _obscureOld = !_obscureOld;
+                              });
+                            },
                             controller: _oldPasswordController,
                           ),
+
                           SizedBox(height: 20.h),
 
                           MyFunL().buildLabel('كلمة المرور الجديدة'),
                           MyFunL().buildTextField(
                             'أدخل كلمة المرور الجديدة',
                             isPassword: true,
+                            obscureText: _obscureNew,
+                            onToggleVisibility: () {
+                              setState(() {
+                                _obscureNew = !_obscureNew;
+                              });
+                            },
                             controller: _newPasswordController,
                           ),
+
                           SizedBox(height: 20.h),
 
                           MyFunL().buildLabel('تأكيد كلمة المرور'),
                           MyFunL().buildTextField(
                             'أعد كتابة كلمة المرور الجديدة',
                             isPassword: true,
+                            obscureText: _obscureConfirm,
+                            onToggleVisibility: () {
+                              setState(() {
+                                _obscureConfirm = !_obscureConfirm;
+                              });
+                            },
                             controller: _confirmPasswordController,
                           ),
+
 
                           SizedBox(height: 30.h),
 

@@ -27,6 +27,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   bool isCheck = false;
+  bool _obscurePassword = true;
+
 
   @override
   Widget build(BuildContext context) {
@@ -173,8 +175,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         buildTextField(
                           'كلمة السر',
                           isPassword: true,
+                          obscureText: _obscurePassword,
+                          onToggleVisibility: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
                           controller: _passwordController,
                         ),
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -283,6 +292,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget buildTextField(
     String hint, {
     bool isPassword = false,
+    bool obscureText = true,
+    VoidCallback? onToggleVisibility,
     required TextEditingController controller,
   }) {
     return Container(
@@ -293,14 +304,23 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       child: TextFormField(
         controller: controller,
-        obscureText: isPassword,
+        obscureText: isPassword ? obscureText : false,
         textAlign: TextAlign.right,
         decoration: InputDecoration(
           hintText: hint,
-
           hintStyle: TextStyle(color: grey, fontSize: 12.s),
-          contentPadding: EdgeInsets.symmetric(horizontal: 15.w),
+          contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 12.h),
           border: InputBorder.none,
+          prefixIcon: isPassword
+              ? IconButton(
+                  icon: Icon(
+                    obscureText ? Icons.visibility_off : Icons.visibility,
+                    color: grey,
+                    size: 20.s,
+                  ),
+                  onPressed: onToggleVisibility,
+                )
+              : null,
         ),
       ),
     );

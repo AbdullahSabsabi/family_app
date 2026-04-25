@@ -5,9 +5,10 @@
 
     <application
         android:usesCleartextTraffic="true"
-        android:label="familyapp"
+        android:label="olamaa"
+
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         
         <activity
             android:name=".MainActivity"

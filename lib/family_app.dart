@@ -4,11 +4,13 @@ import 'package:familyapp/core/helper/dependency_injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
-import 'package:familyapp/auth_wrapper.dart';
 import 'package:familyapp/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:familyapp/features/family/presentation/cubit/family_cubit.dart';
 import 'package:familyapp/features/student/presentation/cubit/student_cubit.dart';
 import 'package:familyapp/features/schedule/presentation/cubit/schedule_cubit.dart';
+import 'package:familyapp/splash_screen.dart';
+
+import 'package:familyapp/features/attendance/presentation/cubit/attendance_cubit.dart';
 
 class FamilyApp extends StatefulWidget {
   const FamilyApp({super.key});
@@ -92,10 +94,18 @@ class _FamilyAppState extends State<FamilyApp> {
           create: (context) => getIt<GuardianDashboardCubit>(),
         ),
         BlocProvider<StudentCubit>(create: (context) => getIt<StudentCubit>()),
-        BlocProvider<ScheduleCubit>(create: (context) => getIt<ScheduleCubit>()),
+        BlocProvider<ScheduleCubit>(
+          create: (context) => getIt<ScheduleCubit>(),
+        ),
+        BlocProvider<AttendanceCubit>(
+          create: (context) => getIt<AttendanceCubit>(),
+        ),
       ],
+
       child: MaterialApp(
+        title: 'olamaa',
         scaffoldMessengerKey: _messengerKey,
+
         debugShowCheckedModeBanner: false,
         builder: (context, child) {
           return Directionality(
@@ -108,7 +118,7 @@ class _FamilyAppState extends State<FamilyApp> {
           fontFamily: 'Tajwal',
           primaryColor: primary,
         ),
-        home: const AuthWrapper(),
+        home: const SplashScreen(),
       ),
     );
   }
