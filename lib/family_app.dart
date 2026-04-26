@@ -11,6 +11,7 @@ import 'package:familyapp/features/schedule/presentation/cubit/schedule_cubit.da
 import 'package:familyapp/splash_screen.dart';
 
 import 'package:familyapp/features/attendance/presentation/cubit/attendance_cubit.dart';
+import 'package:familyapp/features/exams/presentation/cubit/exams_cubit.dart';
 
 class FamilyApp extends StatefulWidget {
   const FamilyApp({super.key});
@@ -99,6 +100,9 @@ class _FamilyAppState extends State<FamilyApp> {
         ),
         BlocProvider<AttendanceCubit>(
           create: (context) => getIt<AttendanceCubit>(),
+        ),
+        BlocProvider<ExamsCubit>(
+          create: (context) => getIt<ExamsCubit>(),
         ),
       ],
 

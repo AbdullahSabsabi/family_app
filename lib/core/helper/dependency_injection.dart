@@ -13,7 +13,9 @@ import 'package:familyapp/features/schedule/data/datasources/schedule_repo_impl.
 import 'package:familyapp/features/attendance/data/repo/attendance_repo.dart';
 import 'package:familyapp/features/attendance/data/datasources/attendance_repo_impl.dart';
 import 'package:familyapp/features/attendance/presentation/cubit/attendance_cubit.dart';
-
+import 'package:familyapp/features/exams/data/repo/exams_repository.dart';
+import 'package:familyapp/features/exams/data/datasources/exams_repository_impl.dart';
+import 'package:familyapp/features/exams/presentation/cubit/exams_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -42,6 +44,9 @@ Future<void> setupGetIt() async {
     () => AttendanceRepositoryImpl(getIt()),
   );
 
+  getIt.registerLazySingleton<ExamsRepository>(
+    () => ExamsRepositoryImpl(getIt()),
+  );
 
   getIt.registerLazySingleton(() => AuthCubit(getIt<AuthRemoteDataSource>()));
 
@@ -53,5 +58,5 @@ Future<void> setupGetIt() async {
   getIt.registerFactory(() => ExamFilterCubit(getIt<StudentRepositoryImpl>()));
   getIt.registerFactory(() => ScheduleCubit(getIt<ScheduleRepository>()));
   getIt.registerFactory(() => AttendanceCubit(getIt<AttendanceRepository>()));
+  getIt.registerFactory(() => ExamsCubit(getIt<ExamsRepository>()));
 }
-

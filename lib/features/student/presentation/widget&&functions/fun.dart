@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:familyapp/core/helper/constant.dart';
 import 'package:familyapp/core/helper/responsive.dart';
+import 'package:familyapp/features/exams/presentation/screens/exams_screen.dart';
 import 'package:familyapp/features/student/domain/models/student_models.dart';
 import 'package:familyapp/features/student/presentation/screens/exams_screen.dart';
 import 'package:familyapp/features/student/presentation/screens/payments_screen.dart';
@@ -32,7 +33,9 @@ class MyFunS {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ExamsScreen(
-                      exams: exams ?? const ExamData(currentWeek: [], lastWeek: []),
+                      exams:
+                          exams ??
+                          const ExamData(currentWeek: [], lastWeek: []),
                       studentId: studentId,
                     ),
                   ),
@@ -136,7 +139,8 @@ class MyFunS {
                   context,
                   MaterialPageRoute(
                     builder: (context) => StudentPaymentScreen(
-                      financeData: finance ??
+                      financeData:
+                          finance ??
                           const FinancialData(
                             payments: [],
                             pendingInstallments: [],
@@ -193,7 +197,9 @@ class MyFunS {
                         ),
                         SizedBox(width: 5.w),
                         Text(
-                          payments.isNotEmpty ? (payments.last.paidDate ?? '2024-01-01') : '2024-01-01',
+                          payments.isNotEmpty
+                              ? (payments.last.paidDate ?? '2024-01-01')
+                              : '2024-01-01',
                           style: TextStyle(fontSize: 12.s, color: grey),
                         ),
                       ],
@@ -368,7 +374,12 @@ class MyFunS {
   }
   //************************************************************************************* */
 
-  Widget menu(BuildContext context, FinancialData? f, ExamData? e, int studentId) {
+  Widget menu(
+    BuildContext context,
+    FinancialData? f,
+    ExamData? e,
+    int studentId,
+  ) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: Row(
@@ -385,6 +396,14 @@ class MyFunS {
               ),
             );
           }),
+          menuItemE('المذاكرات\n', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ExamsScreenE(studentId: studentId),
+              ),
+            );
+          }),
           menuItem('برنامج\nالدوام', 'assets/svgs/program.svg', () {
             Navigator.push(
               context,
@@ -398,7 +417,8 @@ class MyFunS {
               context,
               MaterialPageRoute(
                 builder: (context) => StudentPaymentScreen(
-                  financeData: f ??
+                  financeData:
+                      f ??
                       const FinancialData(
                         payments: [],
                         pendingInstallments: [],
@@ -415,9 +435,40 @@ class MyFunS {
               ),
             );
           }),
-
         ],
       ),
+    );
+  }
+
+  Widget menuItemE(String t, VoidCallback ontap) {
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: ontap,
+          child: Container(
+            height: 40.h,
+            width: 40.w,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: white,
+              borderRadius: BorderRadius.circular(5.r),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8),
+              ],
+            ),
+            child: Icon(Icons.book_online, color: primary, size: 20.r),
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          t,
+          style: TextStyle(
+            fontSize: 10.s,
+            fontWeight: FontWeight.w500,
+            color: grey1,
+          ),
+        ),
+      ],
     );
   }
   //************************************************************************************* */
@@ -463,7 +514,8 @@ class MyFunS {
           child: ClipOval(
             child: profile?.profilePhoto != null
                 ? CachedNetworkImage(
-                    imageUrl: (profile?.profilePhoto?.startsWith('http') ?? false)
+                    imageUrl:
+                        (profile?.profilePhoto?.startsWith('http') ?? false)
                         ? profile!.profilePhoto!
                         : "$baseUrl${profile?.profilePhoto?.startsWith('/') == true ? "" : "/"}${profile?.profilePhoto ?? ""}",
                     placeholder: (context, url) => const Skeleton.keep(
@@ -504,6 +556,11 @@ class MyFunS {
         ),
         const Spacer(),
 
+        // IconButton(
+        //   icon: const Icon(Icons.notifications, color: primary),
+        //   onPressed: () {},
+        // ),
+        // SizedBox(width: 10.w),
         RipplingAttendancePoint(isAttended: isAttended),
       ],
     );

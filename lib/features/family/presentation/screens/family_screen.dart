@@ -94,7 +94,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
                                 ],
                               ),
 
-                              SizedBox(height: 80.h),
+                              SizedBox(height: 50.h),
 
                               Text(
                                 '${data?.financialSummary.totalRequiredUsd ?? "000.00"}\$',
@@ -117,7 +117,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
                                 ),
                               ),
 
-                              SizedBox(height: 35.h),
+                              SizedBox(height: 30.h),
 
                               MyFunF().buildAmountRow(
                                 '${data?.financialSummary.totalRemainingUsd ?? "000.00"}\$',
@@ -130,7 +130,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
                                 data?.financialSummary.paymentPercentage ?? 0,
                               ),
 
-                              SizedBox(height: 60.h),
+                              SizedBox(height: 70.h),
 
                               Text(
                                 '  اختر أحد الأبناء لتتبع حالته',

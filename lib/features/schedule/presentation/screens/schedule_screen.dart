@@ -27,21 +27,39 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     'Friday',
   ];
 
-  late String selectedDay;
+  late DateTime selectedDate;
+  late DateTime focusedDate;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    String todayStr = DateFormat('EEEE').format(DateTime.now());
-    selectedDay = days.contains(todayStr) ? todayStr : 'Saturday';
+    selectedDate = DateTime.now();
+    focusedDate = DateTime.now();
     _loadData();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelectedDay());
   }
 
-  void _loadData({String? day}) {
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToSelectedDay() {
+    if (_scrollController.hasClients) {
+      final int dayIndex = selectedDate.day - 1;
+      final double itemWidth = 55.w + 12.w; // width + horizontal margins
+      _scrollController.jumpTo(dayIndex * itemWidth);
+    }
+  }
+
+  void _loadData({DateTime? date}) {
+    final targetDate = date ?? selectedDate;
     context.read<ScheduleCubit>().getSchedule(
-      studentId: widget.studentId,
-      day: day, // Pass day if we specifically need it
-    );
+          studentId: widget.studentId,
+          day: DateFormat('EEEE', 'en_US').format(targetDate),
+        );
   }
 
   @override
@@ -141,8 +159,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       'Friday': 'الجمعة',
                     };
 
-                    final dayNameEn = selectedDay.toLowerCase();
-                    final dayNameAr = enToAr[selectedDay] ?? '';
+                    final String dayNameEnRaw = DateFormat('EEEE', 'en_US').format(selectedDate);
+                    final String dayNameEn = dayNameEnRaw.toLowerCase();
+                    final String dayNameAr = enToAr[dayNameEnRaw] ?? '';
 
                     // --- ULTIMATE ROBUST PARSER ---
                     final dynamic allPeriods = scheduleData?.periods;
@@ -155,6 +174,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                           periodsForDayData = value;
                         }
                       });
+                    } else if (allPeriods is List) {
+                      // If it's a direct list, assume it's for the requested day
+                      periodsForDayData = allPeriods;
                     }
 
                     final Map<String, List<PeriodModel>> parsedPeriods = {};
@@ -187,7 +209,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     return Skeletonizer(
                       enabled: isLoading || isDayLoading,
                       child: RefreshIndicator(
-                        onRefresh: () async => _loadData(day: selectedDay),
+                        onRefresh: () async => _loadData(date: selectedDate),
                         color: primary,
                         child: periodEntries.isEmpty && !isLoading
                             ? SingleChildScrollView(
@@ -234,9 +256,21 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     );
   }
 
-  Widget _buildDaySelector() {
-    final today = DateTime.now();
+  void _changeMonth(int offset) {
+    setState(() {
+      focusedDate = DateTime(focusedDate.year, focusedDate.month + offset, 1);
+      final now = DateTime.now();
+      if (focusedDate.year == now.year && focusedDate.month == now.month) {
+        selectedDate = now;
+      } else {
+        selectedDate = focusedDate;
+      }
+    });
+    _loadData();
+    Future.delayed(const Duration(milliseconds: 100), () => _scrollToSelectedDay());
+  }
 
+  Widget _buildDaySelector() {
     return BlocBuilder<ScheduleCubit, ScheduleState>(
       builder: (context, state) {
         ScheduleData? scheduleData;
@@ -244,9 +278,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           scheduleData = state.cachedSchedules[widget.studentId];
         }
 
-        int getLessonCount(String dayNameEn) {
-          if (scheduleData?.periods == null || scheduleData?.periods is! Map) return 0;
+        int getLessonCount(DateTime date) {
+          if (scheduleData?.periods == null || scheduleData?.periods is! Map) {
+            return 0;
+          }
 
+          final String dayNameEn = DateFormat('EEEE', 'en_US').format(date);
           final Map<String, String> enToAr = {
             'Saturday': 'السبت',
             'Sunday': 'الأحد',
@@ -256,10 +293,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             'Thursday': 'الخميس',
             'Friday': 'الجمعة',
           };
-
           final dayNameAr = enToAr[dayNameEn] ?? '';
 
-          // Flexible search
           dynamic dayPeriodsData;
           (scheduleData!.periods as Map).forEach((key, value) {
             if (key.toString().toLowerCase().contains(dayNameEn.toLowerCase()) ||
@@ -275,49 +310,70 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             dayPeriodsData.forEach((key, list) {
               if (list is List) count += list.length;
             });
+          } else if (dayPeriodsData is List) {
+            count = dayPeriodsData.length;
           }
           return count;
         }
 
-        DateTime displayedDate = today;
-        for (int i = 0; i < 7; i++) {
-          final date = today.add(Duration(days: i));
-          if (DateFormat('EEEE').format(date) == selectedDay) {
-            displayedDate = date;
-            break;
-          }
-        }
-
         return Column(
           children: [
-            Text(
-              DateFormat('MMMM d, yyyy').format(displayedDate),
-              style: TextStyle(
-                fontSize: 18.s,
-                fontWeight: FontWeight.bold,
-                color: black,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () => _changeMonth(-1),
+                    icon: Icon(Icons.arrow_back_ios, size: 18.s, color: grey),
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        DateFormat('MMMM yyyy', 'en_US').format(focusedDate),
+                        style: TextStyle(
+                          fontSize: 18.s,
+                          fontWeight: FontWeight.bold,
+                          color: black,
+                        ),
+                      ),
+                      Text(
+                        DateFormat('EEEE, d', 'en_US').format(selectedDate),
+                        style: TextStyle(
+                          fontSize: 12.s,
+                          fontWeight: FontWeight.w500,
+                          color: grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    onPressed: () => _changeMonth(1),
+                    icon: Icon(Icons.arrow_forward_ios, size: 18.s, color: grey),
+                  ),
+                ],
               ),
             ),
             SizedBox(height: 10.h),
             Container(
               height: 100.h,
               child: ListView.builder(
+                controller: _scrollController,
                 scrollDirection: Axis.horizontal,
                 reverse: true, // RTL
                 padding: EdgeInsets.symmetric(horizontal: 10.w),
-                itemCount: 7,
+                itemCount: DateTime(focusedDate.year, focusedDate.month + 1, 0).day,
                 itemBuilder: (context, index) {
-                  final date = today.add(Duration(days: index));
-                  final dayName = DateFormat('EEEE').format(date);
-                  final dayAbbr = DateFormat('E').format(date);
-                  final dayNum = DateFormat('d').format(date);
-                  bool isSelected = selectedDay == dayName;
-                  int lessonCount = getLessonCount(dayName);
+                  final date = DateTime(focusedDate.year, focusedDate.month, index + 1);
+                  final dayAbbr = DateFormat('E', 'en_US').format(date);
+                  final dayNum = DateFormat('d', 'en_US').format(date);
+                  bool isSelected = DateUtils.isSameDay(selectedDate, date);
+                  int lessonCount = getLessonCount(date);
 
                   return GestureDetector(
                     onTap: () {
-                      setState(() => selectedDay = dayName);
-                      _loadData(day: dayName); // Explicitly load when day changes
+                      setState(() => selectedDate = date);
+                      _loadData();
                     },
                     child: Container(
                       width: 55.w,
@@ -327,6 +383,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                             ? secondary.withOpacity(0.3)
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(12.r),
+                        border: isSelected ? Border.all(color: secondary.withOpacity(0.5)) : null,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -349,22 +406,29 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                           ),
                           if (isSelected)
                             Container(
-                              padding: EdgeInsets.only(top: 2.h),
                               margin: EdgeInsets.only(top: 5.h),
+                              padding: EdgeInsets.all(4.s),
                               decoration: const BoxDecoration(
                                 color: primary,
                                 shape: BoxShape.circle,
                               ),
-                              child: Center(
-                                child: Text(
-                                  lessonCount.toString(),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10.s,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
+                              child: (state is ScheduleSuccess && state.isDayLoading)
+                                  ? SizedBox(
+                                      width: 8.s,
+                                      height: 8.s,
+                                      child: const CircularProgressIndicator(
+                                        strokeWidth: 1.5,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : Text(
+                                      lessonCount.toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 8.s,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                             ),
                         ],
                       ),
@@ -457,25 +521,25 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     spacing: 5.w,
                     runSpacing: 5.h,
                     children: [
-                      _buildBadge(
-                        p.type ?? 'درس',
-                        isExam
+                      ExpandableBadge(
+                        text: p.type ?? 'درس',
+                        bgColor: isExam
                             ? const Color(0xffFBEEE6)
                             : const Color(0xffE8F9EE),
-                        isExam
+                        textColor: isExam
                             ? const Color(0xffE67E22)
                             : const Color(0xff27AE60),
                         showDot: isQuiz,
                       ),
-                      _buildBadge(
-                        p.classRoom ?? '',
-                        const Color(0xffE8F8FB),
-                        const Color(0xff3498DB),
+                      ExpandableBadge(
+                        text: p.classRoom ?? '',
+                        bgColor: const Color(0xffE8F8FB),
+                        textColor: const Color(0xff3498DB),
                       ),
-                      _buildBadge(
-                        p.batchName ?? '',
-                        const Color(0xffFDEBD0),
-                        const Color(0xffEB984E),
+                      ExpandableBadge(
+                        text: p.batchName ?? '',
+                        bgColor: const Color(0xffFDEBD0),
+                        textColor: const Color(0xffEB984E),
                       ),
                     ],
                   ),
@@ -505,43 +569,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     );
   }
 
-  Widget _buildBadge(
-    String text,
-    Color bgColor,
-    Color textColor, {
-    bool showDot = false,
-  }) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(3.r),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (showDot)
-            Container(
-              width: 7.s,
-              height: 7.s,
-              margin: EdgeInsets.only(left: 8.w),
-              decoration: const BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle,
-              ),
-            ),
-          Text(
-            text,
-            style: TextStyle(
-              color: textColor,
-              fontSize: 12.s,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildLoadingCard() {
     return Container(
@@ -630,5 +657,147 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     } catch (_) {
       return false;
     }
+  }
+}
+
+class ExpandableBadge extends StatefulWidget {
+  final String text;
+  final Color bgColor;
+  final Color textColor;
+  final bool showDot;
+
+  const ExpandableBadge({
+    super.key,
+    required this.text,
+    required this.bgColor,
+    required this.textColor,
+    this.showDot = false,
+  });
+
+  @override
+  State<ExpandableBadge> createState() => _ExpandableBadgeState();
+}
+
+class _ExpandableBadgeState extends State<ExpandableBadge> {
+  final LayerLink _layerLink = LayerLink();
+  OverlayEntry? _overlayEntry;
+  bool isExpanded = false;
+
+  @override
+  void dispose() {
+    _removeOverlay();
+    super.dispose();
+  }
+
+  void _removeOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
+  void _toggleOverlay() {
+    if (isExpanded) {
+      _removeOverlay();
+      setState(() => isExpanded = false);
+    } else {
+      _overlayEntry = _createOverlayEntry();
+      Overlay.of(context).insert(_overlayEntry!);
+      setState(() => isExpanded = true);
+    }
+  }
+
+  OverlayEntry _createOverlayEntry() {
+    RenderBox renderBox = context.findRenderObject() as RenderBox;
+    var size = renderBox.size;
+
+    return OverlayEntry(
+      builder: (context) => Stack(
+        children: [
+          // Background listener to close on tap outside
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: _toggleOverlay,
+              behavior: HitTestBehavior.translucent,
+              child: Container(color: Colors.transparent),
+            ),
+          ),
+          Positioned(
+            width: size.width * 1.5 > 150 ? size.width * 1.5 : 150, // Min width for readability
+            child: CompositedTransformFollower(
+              link: _layerLink,
+              showWhenUnlinked: false,
+              offset: Offset(0.0, size.height + 5.h),
+              child: Material(
+                elevation: 4.0,
+                borderRadius: BorderRadius.circular(8.r),
+                color: widget.bgColor,
+                shadowColor: Colors.black26,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                  child: Text(
+                    widget.text,
+                    style: TextStyle(
+                      color: widget.textColor,
+                      fontSize: 12.s,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.text.isEmpty) return const SizedBox();
+
+    final List<String> words = widget.text.trim().split(RegExp(r'\s+'));
+    // Truncate if more than 1 word AND length > 12 characters
+    final bool isLong = words.length > 1 && widget.text.length > 12;
+    final String truncatedText = isLong ? "${words[0]}..." : widget.text;
+
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: GestureDetector(
+        onTap: isLong ? _toggleOverlay : null,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
+          decoration: BoxDecoration(
+            color: widget.bgColor,
+            borderRadius: BorderRadius.circular(6.r),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (widget.showDot)
+                Container(
+                  width: 7.s,
+                  height: 7.s,
+                  margin: EdgeInsets.only(left: 8.w),
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              Flexible(
+                child: Text(
+                  isLong ? truncatedText : widget.text,
+                  style: TextStyle(
+                    color: widget.textColor,
+                    fontSize: 12.s,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
