@@ -54,7 +54,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             if (state is ChangePasswordSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(state.message),
+                  content: Text(
+                    state.message,
+                    style: const TextStyle(fontFamily: 'Tajwal'),
+                  ),
                   backgroundColor: primary,
                 ),
               );
@@ -69,7 +72,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             } else if (state is ChangePasswordError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(state.message),
+                  content: Text(
+                    state.message,
+                    style: const TextStyle(fontFamily: 'Tajwal'),
+                  ),
                   backgroundColor: primary,
                 ),
               );
@@ -200,6 +206,22 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                 onPressed: state is ChangePasswordLoading
                                     ? null
                                     : () {
+                                        if (_oldPasswordController.text ==
+                                            _newPasswordController.text) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'كلمة المرور الجديدة يجب أن تكون مختلفة عن القديمة',
+                                                style: TextStyle(
+                                                    fontFamily: 'Tajwal'),
+                                              ),
+                                              backgroundColor: primary,
+                                            ),
+                                          );
+                                          return;
+                                        }
+
                                         if (_newPasswordController.text !=
                                             _confirmPasswordController.text) {
                                           ScaffoldMessenger.of(
@@ -208,7 +230,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                             const SnackBar(
                                               content: Text(
                                                 'كلمات المرور الجديدة غير متطابقة',
+                                                style: TextStyle(
+                                                    fontFamily: 'Tajwal'),
                                               ),
+                                              backgroundColor: primary,
                                             ),
                                           );
                                           return;

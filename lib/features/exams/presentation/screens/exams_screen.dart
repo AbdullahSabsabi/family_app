@@ -38,9 +38,15 @@ class _ExamsScreenEState extends State<ExamsScreenE> {
 
   void _scrollToSelectedDay() {
     if (_scrollController.hasClients) {
-      final int dayIndex = selectedDate.day - 1;
-      final double itemWidth = 55.w + 12.w; // width + horizontal margins
-      _scrollController.jumpTo(dayIndex * itemWidth);
+      final int dayIndex = selectedDate.difference(focusedDate).inDays;
+      if (dayIndex >= 0 && dayIndex < 7) {
+        final double itemWidth = 55.w + 12.w; // width + horizontal margins
+        _scrollController.animateTo(
+          dayIndex * itemWidth,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
     }
   }
 
@@ -169,18 +175,13 @@ class _ExamsScreenEState extends State<ExamsScreenE> {
     );
   }
 
-  void _changeMonth(int offset) {
+  void _changeWeek(int offset) {
     setState(() {
-      focusedDate = DateTime(focusedDate.year, focusedDate.month + offset, 1);
-      final now = DateTime.now();
-      if (focusedDate.year == now.year && focusedDate.month == now.month) {
-        selectedDate = now;
-      } else {
-        selectedDate = focusedDate;
-      }
+      focusedDate = focusedDate.add(Duration(days: 7 * offset));
+      selectedDate = focusedDate;
     });
     _loadData();
-    Future.delayed(const Duration(milliseconds: 100), () => _scrollToSelectedDay());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelectedDay());
   }
 
   Widget _buildDateSelector() {
@@ -200,13 +201,15 @@ class _ExamsScreenEState extends State<ExamsScreenE> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  onPressed: () => _changeMonth(-1),
+                  onPressed: () => _changeWeek(1),
                   icon: Icon(Icons.arrow_back_ios, size: 18.s, color: grey),
                 ),
                 Column(
                   children: [
                     Text(
-                      DateFormat('MMMM yyyy', 'en_US').format(focusedDate),
+                      focusedDate.month == focusedDate.add(const Duration(days: 6)).month
+                          ? DateFormat('MMMM yyyy', 'en_US').format(focusedDate)
+                          : "${DateFormat('MMM', 'en_US').format(focusedDate)} - ${DateFormat('MMM yyyy', 'en_US').format(focusedDate.add(const Duration(days: 6)))}",
                       style: TextStyle(
                         fontSize: 18.s,
                         fontWeight: FontWeight.bold,
@@ -224,7 +227,7 @@ class _ExamsScreenEState extends State<ExamsScreenE> {
                   ],
                 ),
                 IconButton(
-                  onPressed: () => _changeMonth(1),
+                  onPressed: () => _changeWeek(-1),
                   icon: Icon(Icons.arrow_forward_ios, size: 18.s, color: grey),
                 ),
               ],
@@ -238,9 +241,9 @@ class _ExamsScreenEState extends State<ExamsScreenE> {
               scrollDirection: Axis.horizontal,
               reverse: true,
               padding: EdgeInsets.symmetric(horizontal: 10.w),
-              itemCount: DateTime(focusedDate.year, focusedDate.month + 1, 0).day,
+              itemCount: 7,
               itemBuilder: (context, index) {
-                final date = DateTime(focusedDate.year, focusedDate.month, index + 1);
+                final date = focusedDate.add(Duration(days: index));
                 final dayAbbr = DateFormat('E', 'en_US').format(date);
                 final dayNum = DateFormat('d', 'en_US').format(date);
                 bool isSelected = DateUtils.isSameDay(selectedDate, date);

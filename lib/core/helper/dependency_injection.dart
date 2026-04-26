@@ -16,10 +16,13 @@ import 'package:familyapp/features/attendance/presentation/cubit/attendance_cubi
 import 'package:familyapp/features/exams/data/repo/exams_repository.dart';
 import 'package:familyapp/features/exams/data/datasources/exams_repository_impl.dart';
 import 'package:familyapp/features/exams/presentation/cubit/exams_cubit.dart';
+import 'package:familyapp/core/helper/notification_service.dart';
 
 final getIt = GetIt.instance;
 
 Future<void> setupGetIt() async {
+  getIt.registerLazySingleton<DioFactory>(() => DioFactory());
+  getIt.registerLazySingleton<NotificationService>(() => NotificationService());
   final dioFactory = DioFactory();
   final dio = await dioFactory.getDio();
   getIt.registerLazySingleton(() => dio);

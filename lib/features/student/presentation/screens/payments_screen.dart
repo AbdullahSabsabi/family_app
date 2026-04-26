@@ -147,6 +147,9 @@ class StudentPaymentScreen extends StatelessWidget {
                           false,
                         ),
                       ),
+                    if ((financeData.payments == null || financeData.payments!.isEmpty) &&
+                        (financeData.pendingInstallments == null || financeData.pendingInstallments!.isEmpty))
+                      _buildEmptyPaymentsState(),
                     const SizedBox(height: 20),
                   ],
                 ),
@@ -282,6 +285,27 @@ class StudentPaymentScreen extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyPaymentsState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(height: 50.h),
+          Icon(
+            Icons.account_balance_wallet_outlined,
+            size: 60.s,
+            color: grey.withOpacity(0.3),
+          ),
+          SizedBox(height: 15.h),
+          Text(
+            'لا يوجد دفعات مالية لهذا الطالب',
+            style: TextStyle(fontSize: 14.s, color: grey),
           ),
         ],
       ),

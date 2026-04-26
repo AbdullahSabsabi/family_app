@@ -1,3 +1,5 @@
+import 'package:familyapp/core/helper/dependency_injection.dart';
+import 'package:familyapp/core/helper/notification_service.dart';
 import 'package:familyapp/core/helper/constant.dart';
 import 'package:familyapp/core/helper/responsive.dart';
 import 'package:familyapp/features/auth/presentation/cubit/auth_cubit.dart';
@@ -215,9 +217,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: state is AuthLoading
                                 ? null
                                 : () async {
+                                    final fcmToken = await getIt<NotificationService>().getFCMToken();
                                     await context.read<AuthCubit>().login(
                                       uniqueId: _uniqueIdController.text.trim(),
                                       password: _passwordController.text,
+                                      fcmToken: fcmToken,
                                     );
                                   },
                             style: ElevatedButton.styleFrom(

@@ -1,4 +1,4 @@
-package com.example.familyapp
+package com.olamma.notification
 
 import io.flutter.embedding.android.FlutterActivity
 

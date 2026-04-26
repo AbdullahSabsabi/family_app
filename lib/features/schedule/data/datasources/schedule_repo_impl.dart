@@ -29,7 +29,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
       return StudentScheduleResponse.fromJson(res.data);
     } on DioException catch (e) {
       print("DEBUG: Dio Error: ${e.response?.statusCode} - ${e.response?.data}");
-      if (e.response?.statusCode == 404) {
+      if (e.response?.statusCode == 404 || e.response?.statusCode == 400) {
         return const StudentScheduleResponse(
           status: true,
           message: "لا يوجد برنامج لهذا الطالب",
