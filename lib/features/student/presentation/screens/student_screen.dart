@@ -50,7 +50,6 @@ class _StudentScreenState extends State<StudentScreen> {
                 return Center(child: Text(state.message));
               }
 
-              // Fix: isLoading should be true if it's the first time (Initial) or actually loading
               bool isLoading =
                   state is StudentLoading || state is StudentInitial;
 
@@ -60,7 +59,6 @@ class _StudentScreenState extends State<StudentScreen> {
                 currentStudentData = state.cachedStudents[widget.id];
               }
 
-              // If we are in Success but the specific student isn't in cache yet, it's still loading for that student
               if (state is StudentSuccess && currentStudentData == null) {
                 isLoading = true;
               }
@@ -75,7 +73,6 @@ class _StudentScreenState extends State<StudentScreen> {
                 children: [
                   Skeletonizer(
                     enabled: isLoading,
-                    //&& currentStudentData == null,
                     child: RefreshIndicator(
                       onRefresh: () async => _loadData(),
                       color: primary,
