@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:familyapp/core/helper/constant.dart';
 import 'package:familyapp/core/helper/dependency_injection.dart';
 import 'package:familyapp/core/helper/responsive.dart';
+import 'package:familyapp/features/attendance/presentation/cubit/attendance_cubit.dart';
 import 'package:familyapp/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,13 +12,15 @@ import 'package:familyapp/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:familyapp/features/family/presentation/cubit/family_cubit.dart';
 import 'package:familyapp/features/student/presentation/cubit/student_cubit.dart';
 import 'package:familyapp/features/schedule/presentation/cubit/schedule_cubit.dart';
-import 'package:familyapp/splash_screen.dart';
-
-import 'package:familyapp/features/attendance/presentation/cubit/attendance_cubit.dart';
 import 'package:familyapp/features/exams/presentation/cubit/exams_cubit.dart';
+import 'package:familyapp/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:familyapp/splash_screen.dart';
 
 class FamilyApp extends StatefulWidget {
   const FamilyApp({super.key});
+
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
 
   @override
   State<FamilyApp> createState() => _FamilyAppState();
@@ -27,7 +30,6 @@ class _FamilyAppState extends State<FamilyApp> {
   late StreamSubscription<InternetStatus> _subscription;
   final GlobalKey<ScaffoldMessengerState> _messengerKey =
       GlobalKey<ScaffoldMessengerState>();
-  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   bool _isFirstCheck = true;
 
   @override
@@ -106,12 +108,15 @@ class _FamilyAppState extends State<FamilyApp> {
           create: (context) => getIt<AttendanceCubit>(),
         ),
         BlocProvider<ExamsCubit>(create: (context) => getIt<ExamsCubit>()),
+        BlocProvider<NotificationsCubit>(
+          create: (context) => getIt<NotificationsCubit>(),
+        ),
       ],
 
       child: MaterialApp(
         title: 'olamaa',
         scaffoldMessengerKey: _messengerKey,
-        navigatorKey: _navigatorKey,
+        navigatorKey: FamilyApp.navigatorKey,
 
         debugShowCheckedModeBanner: false,
         builder: (context, child) {

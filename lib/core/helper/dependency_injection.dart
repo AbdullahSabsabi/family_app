@@ -16,6 +16,9 @@ import 'package:familyapp/features/attendance/presentation/cubit/attendance_cubi
 import 'package:familyapp/features/exams/data/repo/exams_repository.dart';
 import 'package:familyapp/features/exams/data/datasources/exams_repository_impl.dart';
 import 'package:familyapp/features/exams/presentation/cubit/exams_cubit.dart';
+import 'package:familyapp/features/notifications/data/repo/notifications_repo.dart';
+import 'package:familyapp/features/notifications/data/datasources/notifications_repo_impl.dart';
+import 'package:familyapp/features/notifications/presentation/cubit/notifications_cubit.dart';
 import 'package:familyapp/core/helper/notification_service.dart';
 
 final getIt = GetIt.instance;
@@ -50,6 +53,9 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<ExamsRepository>(
     () => ExamsRepositoryImpl(getIt()),
   );
+  getIt.registerLazySingleton<NotificationsRepository>(
+    () => NotificationsRepositoryImpl(getIt()),
+  );
 
   getIt.registerLazySingleton(() => AuthCubit(getIt<AuthRemoteDataSource>()));
 
@@ -62,4 +68,5 @@ Future<void> setupGetIt() async {
   getIt.registerFactory(() => ScheduleCubit(getIt<ScheduleRepository>()));
   getIt.registerFactory(() => AttendanceCubit(getIt<AttendanceRepository>()));
   getIt.registerFactory(() => ExamsCubit(getIt<ExamsRepository>()));
+  getIt.registerFactory(() => NotificationsCubit(getIt<NotificationsRepository>()));
 }

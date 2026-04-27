@@ -140,7 +140,7 @@ class _StartScreenState extends State<StartScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 30.h),
+                    SizedBox(height: 50.h),
                   ],
                 ),
               ),

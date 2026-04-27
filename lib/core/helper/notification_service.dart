@@ -1,11 +1,16 @@
 import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:familyapp/features/notifications/data/repo/notifications_repo.dart';
+import 'package:familyapp/features/notifications/presentation/screens/notifications_list_screen.dart';
+import 'package:familyapp/family_app.dart';
+import 'package:familyapp/core/helper/dependency_injection.dart';
+import 'package:flutter/material.dart';
 
 class NotificationService {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
   Future<void> initialize() async {
-    // 1. Request Permission (Crucial for iOS and Android 13+)
+    // 1. Request Permission
     NotificationSettings settings = await _fcm.requestPermission(
       alert: true,
       badge: true,
@@ -14,26 +19,37 @@ class NotificationService {
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       log('User granted permission');
-    } else {
-      log('User declined or has not accepted permission');
     }
 
-    // 2. Handle Foreground Messages
+    // 2. Update Token on server
+    String? token = await getFCMToken();
+    if (token != null) {
+      getIt<NotificationsRepository>().updateFcmToken(token, "Android Device");
+    }
+
+    // 3. Handle Foreground Messages
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       log('Got a message whilst in the foreground!');
-      log('Message data: ${message.data}');
-
-      if (message.notification != null) {
-        log('Message also contained a notification: ${message.notification}');
-        // Here we would typically show a local notification
-      }
+      // Typically show a local notification here
     });
 
-    // 3. Handle background message clicks (when app is opened from notification)
+    // 4. Handle background message clicks
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       log('App opened from notification: ${message.data}');
-      // Navigate to specific screen based on message data
+      _navigateToNotifications();
     });
+
+    // 5. Handle terminated state clicks
+    RemoteMessage? initialMessage = await _fcm.getInitialMessage();
+    if (initialMessage != null) {
+      _navigateToNotifications();
+    }
+  }
+
+  void _navigateToNotifications() {
+    FamilyApp.navigatorKey.currentState?.push(
+      MaterialPageRoute(builder: (context) => const NotificationScreen()),
+    );
   }
 
   Future<String?> getFCMToken() async {

@@ -1,5 +1,6 @@
 import 'package:familyapp/core/helper/constant.dart';
 import 'package:familyapp/core/helper/responsive.dart';
+import 'package:familyapp/features/notifications/presentation/cubit/notifications_cubit.dart';
 import 'package:familyapp/features/student/presentation/cubit/student_cubit.dart';
 import 'package:familyapp/features/student/presentation/cubit/student_state.dart';
 import 'package:familyapp/features/student/presentation/widget&&functions/fun.dart';
@@ -25,6 +26,7 @@ class _StudentScreenState extends State<StudentScreen> {
 
   void _loadData() {
     context.read<StudentCubit>().getStudentDetails(widget.id);
+    context.read<NotificationsCubit>().getUnreadCount();
   }
 
   @override
@@ -85,7 +87,7 @@ class _StudentScreenState extends State<StudentScreen> {
                           children: [
                             SizedBox(height: 60.h),
 
-                            MyFunS().header(profile),
+                            MyFunS().header(profile, context),
                             SizedBox(height: 50.h),
                             MyFunS().menu(context, finance, exams, widget.id),
                             SizedBox(height: 30.h),

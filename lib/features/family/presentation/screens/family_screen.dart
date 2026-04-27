@@ -10,6 +10,9 @@ import 'package:familyapp/family_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:familyapp/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:familyapp/features/notifications/presentation/cubit/notifications_state.dart';
+import 'package:familyapp/features/notifications/presentation/screens/notifications_list_screen.dart';
 
 class FamilyScreen extends StatefulWidget {
   const FamilyScreen({super.key});
@@ -27,6 +30,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
 
   void loadData() {
     context.read<GuardianDashboardCubit>().getDashboardData();
+    context.read<NotificationsCubit>().getUnreadCount();
   }
 
   @override
@@ -92,6 +96,67 @@ class _FamilyScreenState extends State<FamilyScreen> {
                                           fontFamily: 'Tajwal',
                                         ),
                                       ),
+                                    ),
+                                    BlocBuilder<NotificationsCubit, NotificationsState>(
+                                      builder: (context, state) {
+                                        int unreadCount = 0;
+                                        if (state is NotificationsSuccess) {
+                                          unreadCount = state.unreadCount;
+                                        }
+                                        return Stack(
+                                          clipBehavior: Clip.none,
+                                          children: [
+                                            IconButton(
+                                              icon: const Icon(
+                                                Icons.notifications,
+                                                color: primary,
+                                              ),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const NotificationScreen(),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            if (unreadCount > 0)
+                                              Positioned(
+                                                right: 8,
+                                                top: 8,
+                                                child: Container(
+                                                  padding: const EdgeInsets.all(2),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.red,
+                                                    shape: BoxShape.circle,
+                                                    border: Border.all(
+                                                      color: Colors.white,
+                                                      width: 1.5,
+                                                    ),
+                                                  ),
+                                                  constraints: BoxConstraints(
+                                                    minWidth: 16.s,
+                                                    minHeight: 16.s,
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      unreadCount > 99
+                                                          ? '99+'
+                                                          : unreadCount.toString(),
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 8.s,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontFamily: 'Tajwal',
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),

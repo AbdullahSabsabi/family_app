@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:familyapp/core/helper/constant.dart';
 import 'package:familyapp/core/helper/responsive.dart';
 import 'package:familyapp/features/exams/presentation/screens/exams_screen.dart';
+import 'package:familyapp/features/notifications/presentation/screens/notifications_list_screen.dart';
 import 'package:familyapp/features/student/domain/models/student_models.dart';
 import 'package:familyapp/features/student/presentation/screens/exams_screen.dart';
 import 'package:familyapp/features/student/presentation/screens/payments_screen.dart';
@@ -13,6 +14,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:familyapp/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:familyapp/features/auth/presentation/cubit/auth_state.dart';
+import 'package:familyapp/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:familyapp/features/notifications/presentation/cubit/notifications_state.dart';
+import 'package:familyapp/features/student/presentation/screens/student_profile_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class MyFunS {
   //************************************************************************************* */
@@ -504,63 +512,143 @@ class MyFunS {
   }
   //************************************************************************************* */
 
-  Widget header(StudentData? profile) {
+  Widget header(StudentData? profile, BuildContext context) {
     bool isAttended = profile?.latestAttendance?.status == 'present' ?? false;
     return Row(
       children: [
-        CircleAvatar(
-          radius: 25.r,
-          backgroundColor: secondary,
-          child: ClipOval(
-            child: profile?.profilePhoto != null
-                ? CachedNetworkImage(
-                    imageUrl:
-                        (profile?.profilePhoto?.startsWith('http') ?? false)
-                        ? profile!.profilePhoto!
-                        : "$baseUrl${profile?.profilePhoto?.startsWith('/') == true ? "" : "/"}${profile?.profilePhoto ?? ""}",
-                    placeholder: (context, url) => const Skeleton.keep(
-                      child: Center(
-                        child: CircularProgressIndicator(strokeWidth: 1),
-                      ),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => StudentProfileScreen(
+                  name: profile?.fullName ?? '',
+                  imageUrl: (profile?.profilePhoto?.startsWith('http') ?? false)
+                      ? profile!.profilePhoto!
+                      : "$baseUrl${profile?.profilePhoto?.startsWith('/') == true ? "" : "/"}${profile?.profilePhoto ?? ""}",
+                  branch: profile?.branch?.name ?? '',
+                ),
+              ),
+            );
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircleAvatar(
+                radius: 25.r,
+                backgroundColor: secondary,
+                child: ClipOval(
+                  child: profile?.profilePhoto != null
+                      ? CachedNetworkImage(
+                          imageUrl: (profile?.profilePhoto?.startsWith('http') ??
+                                  false)
+                              ? profile!.profilePhoto!
+                              : "$baseUrl${profile?.profilePhoto?.startsWith('/') == true ? "" : "/"}${profile?.profilePhoto ?? ""}",
+                          placeholder: (context, url) => const Skeleton.keep(
+                            child: Center(
+                              child: CircularProgressIndicator(strokeWidth: 1),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.person, color: primary),
+                          fit: BoxFit.cover,
+                          width: 56,
+                          height: 56,
+                        )
+                      : const Icon(Icons.person, color: primary),
+                ),
+              ),
+              SizedBox(width: 16.w),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    profile?.fullName ?? 'اسم الطالب الوهمي',
+                    style: TextStyle(
+                      color: grey1,
+                      fontSize: 14.s,
+                      fontWeight: FontWeight.w500,
                     ),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.person, color: primary),
-                    fit: BoxFit.cover,
-                    width: 56,
-                    height: 56,
-                  )
-                : const Icon(Icons.person, color: primary),
+                  ),
+                  Text(
+                    profile?.branch?.name ?? 'اسم الفرع التعليمي',
+                    style: TextStyle(
+                      fontSize: 10.s,
+                      color: grey,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ),
-        SizedBox(width: 16.w),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              profile?.fullName ?? 'اسم الطالب الوهمي',
-              style: TextStyle(
-                color: grey1,
-                fontSize: 14.s,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            Text(
-              profile?.branch?.name ?? 'اسم الفرع التعليمي',
-              style: TextStyle(
-                fontSize: 10.s,
-                color: grey,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
         ),
         const Spacer(),
 
-        // IconButton(
-        //   icon: const Icon(Icons.notifications, color: primary),
-        //   onPressed: () {},
-        // ),
-        // SizedBox(width: 10.w),
+        BlocBuilder<AuthCubit, AuthState>(
+          builder: (context, authState) {
+            bool isStudent = false;
+            if (authState is AuthSuccess) {
+              isStudent = authState.authResponse.data?.user.type == 'student';
+            }
+
+            if (!isStudent) return const SizedBox.shrink();
+
+            return BlocBuilder<NotificationsCubit, NotificationsState>(
+              builder: (context, state) {
+                int unreadCount = 0;
+                if (state is NotificationsSuccess) {
+                  unreadCount = state.unreadCount;
+                }
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.notifications, color: primary),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const NotificationScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    if (unreadCount > 0)
+                      Positioned(
+                        right: 8,
+                        top: 8,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 1.5),
+                          ),
+                          constraints: BoxConstraints(
+                            minWidth: 16.s,
+                            minHeight: 16.s,
+                          ),
+                          child: Center(
+                            child: Text(
+                              unreadCount > 99 ? '99+' : unreadCount.toString(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 8.s,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Tajwal',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              },
+            );
+          },
+        ),
+        SizedBox(width: 10.w),
         RipplingAttendancePoint(isAttended: isAttended),
       ],
     );
