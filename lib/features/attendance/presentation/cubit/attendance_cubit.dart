@@ -10,26 +10,27 @@ class AttendanceCubit extends HydratedCubit<AttendanceState> {
 
   Future<void> getAttendance({required int studentId, String? date}) async {
     final dateKey = date ?? 'weekly';
-    
+
     Map<int, Map<String, AttendanceResponse>> currentCache = {};
     if (state is AttendanceSuccess) {
-      // Deep copy the cache
       currentCache = (state as AttendanceSuccess).cachedAttendance.map(
-        (key, value) => MapEntry(key, Map<String, AttendanceResponse>.from(value)),
+        (key, value) =>
+            MapEntry(key, Map<String, AttendanceResponse>.from(value)),
       );
     }
 
     final studentCache = currentCache[studentId] ?? {};
     final hasCache = studentCache.containsKey(dateKey);
 
-    // If we have cache for this specific view (weekly or specific date), show it immediately
     if (hasCache) {
-      emit(AttendanceSuccess(
-        cachedAttendance: currentCache,
-        currentStudentId: studentId,
-        currentDateKey: dateKey,
-        lastFetchedResult: studentCache[dateKey],
-      ));
+      emit(
+        AttendanceSuccess(
+          cachedAttendance: currentCache,
+          currentStudentId: studentId,
+          currentDateKey: dateKey,
+          lastFetchedResult: studentCache[dateKey],
+        ),
+      );
     } else {
       emit(AttendanceLoading());
     }
@@ -40,29 +41,35 @@ class AttendanceCubit extends HydratedCubit<AttendanceState> {
         date: date,
       );
 
-      // Update the cache for this specific student and dateKey
       if (currentCache[studentId] == null) {
         currentCache[studentId] = {};
       }
       currentCache[studentId]![dateKey] = attendance;
 
-      emit(AttendanceSuccess(
-        cachedAttendance: currentCache,
-        currentStudentId: studentId,
-        currentDateKey: dateKey,
-        lastFetchedResult: attendance,
-      ));
-    } catch (e) {
-      // If we have cache, keep showing it on error
-      if (hasCache) {
-        emit(AttendanceSuccess(
+      emit(
+        AttendanceSuccess(
           cachedAttendance: currentCache,
           currentStudentId: studentId,
           currentDateKey: dateKey,
-          lastFetchedResult: studentCache[dateKey],
-        ));
+          lastFetchedResult: attendance,
+        ),
+      );
+    } catch (e) {
+      if (hasCache) {
+        emit(
+          AttendanceSuccess(
+            cachedAttendance: currentCache,
+            currentStudentId: studentId,
+            currentDateKey: dateKey,
+            lastFetchedResult: studentCache[dateKey],
+          ),
+        );
       } else {
-        emit(AttendanceError("فشل في جلب البيانات، يرجى التحقق من الاتصال بالإنترنت"));
+        emit(
+          AttendanceError(
+            "فشل في جلب البيانات، يرجى التحقق من الاتصال بالإنترنت",
+          ),
+        );
       }
     }
   }

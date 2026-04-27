@@ -10,7 +10,6 @@ class NotificationService {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
   Future<void> initialize() async {
-    // 1. Request Permission
     NotificationSettings settings = await _fcm.requestPermission(
       alert: true,
       badge: true,
@@ -21,25 +20,20 @@ class NotificationService {
       log('User granted permission');
     }
 
-    // 2. Update Token on server
     String? token = await getFCMToken();
     if (token != null) {
       getIt<NotificationsRepository>().updateFcmToken(token, "Android Device");
     }
 
-    // 3. Handle Foreground Messages
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       log('Got a message whilst in the foreground!');
-      // Typically show a local notification here
     });
 
-    // 4. Handle background message clicks
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       log('App opened from notification: ${message.data}');
       _navigateToNotifications();
     });
 
-    // 5. Handle terminated state clicks
     RemoteMessage? initialMessage = await _fcm.getInitialMessage();
     if (initialMessage != null) {
       _navigateToNotifications();

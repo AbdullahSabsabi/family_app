@@ -464,7 +464,7 @@ class MyFunS {
                 BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8),
               ],
             ),
-            child: Icon(Icons.book_online, color: primary, size: 20.r),
+            child: Icon(Icons.edit_note_outlined, color: primary, size: 20.r),
           ),
         ),
         const SizedBox(height: 6),
@@ -540,7 +540,8 @@ class MyFunS {
                 child: ClipOval(
                   child: profile?.profilePhoto != null
                       ? CachedNetworkImage(
-                          imageUrl: (profile?.profilePhoto?.startsWith('http') ??
+                          imageUrl:
+                              (profile?.profilePhoto?.startsWith('http') ??
                                   false)
                               ? profile!.profilePhoto!
                               : "$baseUrl${profile?.profilePhoto?.startsWith('/') == true ? "" : "/"}${profile?.profilePhoto ?? ""}",

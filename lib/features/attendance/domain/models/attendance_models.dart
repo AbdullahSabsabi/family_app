@@ -22,7 +22,7 @@ abstract class AttendanceRecord with _$AttendanceRecord {
     String? date,
     @JsonKey(name: 'check_in') String? checkIn,
     @JsonKey(name: 'check_out') String? checkOut,
-    String? status, // (present | absent | late)
+    String? status,
   }) = _AttendanceRecord;
 
   factory AttendanceRecord.fromJson(Map<String, dynamic> json) =>

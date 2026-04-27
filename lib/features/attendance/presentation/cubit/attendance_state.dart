@@ -15,8 +15,6 @@ class AttendanceLoading extends AttendanceState {
 }
 
 class AttendanceSuccess extends AttendanceState {
-  // Map<studentId, Map<dateKey, AttendanceResponse>>
-  // dateKey can be 'weekly' or a specific date 'yyyy-MM-dd'
   final Map<int, Map<String, AttendanceResponse>> cachedAttendance;
   final AttendanceResponse? lastFetchedResult;
   final int currentStudentId;
@@ -30,20 +28,23 @@ class AttendanceSuccess extends AttendanceState {
   });
 
   AttendanceResponse? get currentAttendance =>
-      lastFetchedResult ?? cachedAttendance[currentStudentId]?[currentDateKey ?? 'weekly'];
+      lastFetchedResult ??
+      cachedAttendance[currentStudentId]?[currentDateKey ?? 'weekly'];
 
   @override
   Map<String, dynamic>? toJson() => {
-        'type': 'Success',
-        'currentStudentId': currentStudentId,
-        'currentDateKey': currentDateKey,
-        'cachedAttendance': cachedAttendance.map(
-          (studentId, dateMap) => MapEntry(
-            studentId.toString(),
-            dateMap.map((dateKey, response) => MapEntry(dateKey, response.toJson())),
-          ),
+    'type': 'Success',
+    'currentStudentId': currentStudentId,
+    'currentDateKey': currentDateKey,
+    'cachedAttendance': cachedAttendance.map(
+      (studentId, dateMap) => MapEntry(
+        studentId.toString(),
+        dateMap.map(
+          (dateKey, response) => MapEntry(dateKey, response.toJson()),
         ),
-      };
+      ),
+    ),
+  };
 
   factory AttendanceSuccess.fromJson(Map<String, dynamic> json) {
     final cachedData = json['cachedAttendance'] as Map? ?? {};
@@ -56,8 +57,9 @@ class AttendanceSuccess extends AttendanceState {
           final Map<String, AttendanceResponse> innerMap = {};
           dateMapRaw.forEach((dateKey, responseJson) {
             try {
-              innerMap[dateKey.toString()] =
-                  AttendanceResponse.fromJson(responseJson as Map<String, dynamic>);
+              innerMap[dateKey.toString()] = AttendanceResponse.fromJson(
+                responseJson as Map<String, dynamic>,
+              );
             } catch (_) {}
           });
           outerMap[studentId] = innerMap;
@@ -78,8 +80,5 @@ class AttendanceError extends AttendanceState {
   AttendanceError(this.message);
 
   @override
-  Map<String, dynamic>? toJson() => {
-        'type': 'Error',
-        'message': message,
-      };
+  Map<String, dynamic>? toJson() => {'type': 'Error', 'message': message};
 }

@@ -126,7 +126,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       ),
                     ],
                   ),
-                  Expanded(child: _buildContent(state)),
+                  Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: () =>
+                          context.read<NotificationsCubit>().getNotifications(),
+                      color: primary,
+                      child: _buildContent(state),
+                    ),
+                  ),
                 ],
               );
             },
@@ -142,30 +149,36 @@ class _NotificationScreenState extends State<NotificationScreen> {
     }
 
     if (state is NotificationsError) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.error_outline, size: 50.s, color: grey),
-            SizedBox(height: 10.h),
-            Text(
-              state.message,
-              style: TextStyle(
-                fontSize: 14.s,
-                fontWeight: FontWeight.w500,
-                color: grey1,
-                fontFamily: 'Tajwal',
+      return SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Container(
+          height: 500.h,
+          padding: EdgeInsets.all(20.w),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.error_outline, size: 50.s, color: grey),
+              SizedBox(height: 10.h),
+              Text(
+                state.message,
+                style: TextStyle(
+                  fontSize: 14.s,
+                  fontWeight: FontWeight.w500,
+                  color: grey1,
+                  fontFamily: 'Tajwal',
+                ),
+                textAlign: TextAlign.center,
               ),
-            ),
-            TextButton(
-              onPressed: () =>
-                  context.read<NotificationsCubit>().getNotifications(),
-              child: const Text(
-                'إعادة المحاولة',
-                style: TextStyle(fontFamily: 'Tajwal'),
+              TextButton(
+                onPressed: () =>
+                    context.read<NotificationsCubit>().getNotifications(),
+                child: const Text(
+                  'إعادة المحاولة',
+                  style: TextStyle(fontFamily: 'Tajwal', color: primary),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     }
@@ -175,27 +188,23 @@ class _NotificationScreenState extends State<NotificationScreen> {
         return _buildEmptyState();
       }
 
-      return RefreshIndicator(
-        onRefresh: () async {
-          context.read<NotificationsCubit>().getNotifications();
+      return ListView.builder(
+        controller: _scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: EdgeInsets.symmetric(vertical: 10.h),
+        itemCount: state.notifications.length + (state.isLoadingMore ? 1 : 0),
+        itemBuilder: (context, index) {
+          if (index < state.notifications.length) {
+            return _buildNotificationCard(state.notifications[index]);
+          } else {
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: CircularProgressIndicator(color: primary),
+              ),
+            );
+          }
         },
-        child: ListView.builder(
-          controller: _scrollController,
-          padding: EdgeInsets.symmetric(vertical: 10.h),
-          itemCount: state.notifications.length + (state.isLoadingMore ? 1 : 0),
-          itemBuilder: (context, index) {
-            if (index < state.notifications.length) {
-              return _buildNotificationCard(state.notifications[index]);
-            } else {
-              return const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: CircularProgressIndicator(color: primary),
-                ),
-              );
-            }
-          },
-        ),
       );
     }
 
@@ -305,28 +314,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     ],
                   ),
                 ),
-              PopupMenuItem(
-                value: 'read',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.mark_email_read_outlined,
-                      color: black,
-                      size: 20.s,
-                    ),
-                    SizedBox(width: 10.w),
-                    Text(
-                      'مقروء',
-                      style: TextStyle(
-                        color: black,
-                        fontSize: 14.s,
-                        fontFamily: 'Tajwal',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+
               PopupMenuItem(
                 value: 'delete',
                 child: Row(
@@ -338,6 +326,24 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       'حذف',
                       style: TextStyle(
                         color: Colors.red,
+                        fontSize: 14.s,
+                        fontFamily: 'Tajwal',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'read',
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.bolt_rounded, size: 20.s),
+                    SizedBox(width: 10.w),
+                    Text(
+                      'مقروء',
+                      style: TextStyle(
+                        color: black,
                         fontSize: 14.s,
                         fontFamily: 'Tajwal',
                       ),
@@ -393,27 +399,36 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.notifications_off_outlined, size: 80.s, color: grey3),
-          SizedBox(height: 20.h),
-          Text(
-            'لا توجد إشعارات حالياً',
-            style: TextStyle(
-              fontSize: 18.s,
-              color: grey,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Tajwal',
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Container(
+        height: 500.h,
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.notifications_off_outlined, size: 80.s, color: grey3),
+            SizedBox(height: 20.h),
+            Text(
+              'لا توجد إشعارات حالياً',
+              style: TextStyle(
+                fontSize: 18.s,
+                color: grey,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Tajwal',
+              ),
             ),
-          ),
-          SizedBox(height: 10.h),
-          Text(
-            'ستظهر هنا الإشعارات الجديدة التي تصلك',
-            style: TextStyle(fontSize: 14.s, color: grey, fontFamily: 'Tajwal'),
-          ),
-        ],
+            SizedBox(height: 10.h),
+            Text(
+              'ستظهر هنا الإشعارات الجديدة التي تصلك',
+              style: TextStyle(
+                fontSize: 14.s,
+                color: grey,
+                fontFamily: 'Tajwal',
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
