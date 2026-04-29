@@ -137,6 +137,7 @@ class StudentProfileScreen extends StatelessWidget {
                                       placeholder: (context, url) =>
                                           const Center(
                                             child: CircularProgressIndicator(
+                                              color: primary,
                                               strokeWidth: 2,
                                             ),
                                           ),

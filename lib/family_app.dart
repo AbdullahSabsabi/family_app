@@ -14,6 +14,7 @@ import 'package:familyapp/features/student/presentation/cubit/student_cubit.dart
 import 'package:familyapp/features/schedule/presentation/cubit/schedule_cubit.dart';
 import 'package:familyapp/features/exams/presentation/cubit/exams_cubit.dart';
 import 'package:familyapp/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:familyapp/features/qr_code/presentation/cubit/qr_code_cubit.dart';
 import 'package:familyapp/splash_screen.dart';
 
 class FamilyApp extends StatefulWidget {
@@ -111,6 +112,7 @@ class _FamilyAppState extends State<FamilyApp> {
         BlocProvider<NotificationsCubit>(
           create: (context) => getIt<NotificationsCubit>(),
         ),
+        BlocProvider<QrCodeCubit>(create: (context) => getIt<QrCodeCubit>()),
       ],
 
       child: MaterialApp(

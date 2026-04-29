@@ -49,10 +49,12 @@ class NotificationService {
   Future<String?> getFCMToken() async {
     try {
       String? token = await _fcm.getToken();
-      log('FCM Token: $token');
+      print('================ FCM TOKEN ================');
+      print(token);
+      print('===========================================');
       return token;
     } catch (e) {
-      log('Error getting FCM token: $e');
+      print('Error getting FCM token: $e');
       return null;
     }
   }

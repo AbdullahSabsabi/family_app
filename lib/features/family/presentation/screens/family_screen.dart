@@ -97,7 +97,11 @@ class _FamilyScreenState extends State<FamilyScreen> {
                                         ),
                                       ),
                                     ),
-                                    BlocBuilder<NotificationsCubit, NotificationsState>(
+
+                                    BlocBuilder<
+                                      NotificationsCubit,
+                                      NotificationsState
+                                    >(
                                       builder: (context, state) {
                                         int unreadCount = 0;
                                         if (state is NotificationsSuccess) {
@@ -108,8 +112,9 @@ class _FamilyScreenState extends State<FamilyScreen> {
                                           children: [
                                             IconButton(
                                               icon: const Icon(
-                                                Icons.notifications,
-                                                color: primary,
+                                                Icons
+                                                    .notifications_active_outlined,
+                                                color: black,
                                               ),
                                               onPressed: () {
                                                 Navigator.push(
@@ -126,7 +131,9 @@ class _FamilyScreenState extends State<FamilyScreen> {
                                                 right: 8,
                                                 top: 8,
                                                 child: Container(
-                                                  padding: const EdgeInsets.all(2),
+                                                  // padding: const EdgeInsets.all(
+                                                  //   2,
+                                                  // ),
                                                   decoration: BoxDecoration(
                                                     color: Colors.red,
                                                     shape: BoxShape.circle,
@@ -143,11 +150,13 @@ class _FamilyScreenState extends State<FamilyScreen> {
                                                     child: Text(
                                                       unreadCount > 99
                                                           ? '99+'
-                                                          : unreadCount.toString(),
+                                                          : unreadCount
+                                                                .toString(),
                                                       style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 8.s,
-                                                        fontWeight: FontWeight.bold,
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                         fontFamily: 'Tajwal',
                                                       ),
                                                     ),

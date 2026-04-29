@@ -9,6 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import 'package:familyapp/features/qr_code/domain/repo/qr_repository.dart';
+import 'package:familyapp/features/qr_code/presentation/cubit/qr_code_cubit.dart';
+import 'package:familyapp/features/qr_code/presentation/screens/scan_qr_screen.dart';
+import 'package:familyapp/features/qr_code/presentation/screens/show_qr_screen.dart';
+import 'package:familyapp/core/helper/dependency_injection.dart';
+
+import '../widget&&functions/fun.dart' show menu, header, qrButton, TooltipShape;
+
 class StudentScreen extends StatefulWidget {
   final dynamic id;
   const StudentScreen({super.key, required this.id});
@@ -18,6 +26,9 @@ class StudentScreen extends StatefulWidget {
 }
 
 class _StudentScreenState extends State<StudentScreen> {
+  Offset? _qrPosition;
+  bool _isMenuOpen = false;
+
   @override
   void initState() {
     super.initState();
@@ -84,9 +95,9 @@ class _StudentScreenState extends State<StudentScreen> {
                           children: [
                             SizedBox(height: 60.h),
 
-                            MyFunS().header(profile, context),
+                            header(profile, context),
                             SizedBox(height: 50.h),
-                            MyFunS().menu(context, finance, exams, widget.id),
+                            menu(context, finance, exams, widget.id),
                             SizedBox(height: 30.h),
                             MyFunS().chart(evaluations),
                             SizedBox(height: 10.h),
@@ -112,6 +123,134 @@ class _StudentScreenState extends State<StudentScreen> {
                         ),
                       ),
                     ),
+                  if (profile != null)
+                    if (_isMenuOpen)
+                      Positioned.fill(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _isMenuOpen = false;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            color: Colors.black.withOpacity(0.4),
+                          ),
+                        ),
+                      ),
+                  Positioned(
+                    left: _qrPosition?.dx ?? 40.w,
+                    top:
+                        _qrPosition?.dy ??
+                        (MediaQuery.of(context).size.height - 90.h),
+                    child: GestureDetector(
+                      onPanUpdate: (details) {
+                        setState(() {
+                          double newX =
+                              (_qrPosition?.dx ?? 40.w) + details.delta.dx;
+                          double newY =
+                              (_qrPosition?.dy ??
+                                  (MediaQuery.of(context).size.height - 90.h)) +
+                              details.delta.dy;
+
+                          // Get screen dimensions
+                          final Size screenSize = MediaQuery.of(context).size;
+                          final double buttonSize =
+                              60.s; // Matches the actual button size
+
+                          // Keep button within screen bounds
+                          newX = newX.clamp(
+                            10.w,
+                            screenSize.width - buttonSize - 10.w,
+                          );
+                          newY = newY.clamp(
+                            60.h,
+                            screenSize.height - buttonSize - 20.h,
+                          );
+
+                          _qrPosition = Offset(newX, newY);
+                        });
+                      },
+                      child: qrButton(
+                        profile!,
+                        context,
+                        onTap: () async {
+                          setState(() {
+                            _isMenuOpen = true;
+                          });
+
+                          final result = await showMenu<String>(
+                            context: context,
+                            shape: const TooltipShape(),
+                            position: RelativeRect.fromLTRB(
+                              _qrPosition?.dx ?? 40.w,
+                              (_qrPosition?.dy ??
+                                      (MediaQuery.of(context).size.height -
+                                          90.h)) -
+                                  110.h,
+                              (_qrPosition?.dx ?? 40.w) + 60.s,
+                              _qrPosition?.dy ??
+                                  (MediaQuery.of(context).size.height - 90.h),
+                            ),
+                            items: [
+                              PopupMenuItem(
+                                value: 'scan',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.qr_code_scanner,
+                                        color: primary, size: 20.s),
+                                    SizedBox(width: 10.w),
+                                    Text('مسح QR',
+                                        style: TextStyle(fontSize: 14.s)),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem(
+                                value: 'show',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.qr_code,
+                                        color: primary, size: 20.s),
+                                    SizedBox(width: 10.w),
+                                    Text('عرض QR',
+                                        style: TextStyle(fontSize: 14.s)),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+
+                          if (context.mounted) {
+                            setState(() {
+                              _isMenuOpen = false;
+                            });
+                          }
+
+                          if (result == 'show') {
+                            context.read<QrCodeCubit>().getQrUrl(profile.id!);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ShowQrScreen(
+                                  qrUrl: getIt<QrRepository>()
+                                      .getQrCodeUrl(profile.id!),
+                                  studentName: profile.fullName ?? '',
+                                  profilePhoto: profile.profilePhoto,
+                                  studentId: profile.id,
+                                ),
+                              ),
+                            );
+                          } else if (result == 'scan') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const ScanQrScreen()),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ),
                 ],
               );
             },

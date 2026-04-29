@@ -58,85 +58,89 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: scaffoldc,
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: scaffoldc,
 
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [secondary1.withOpacity(0.1), scaffoldc],
-            stops: const [0.0, 0.4],
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [secondary1.withOpacity(0.1), scaffoldc],
+              stops: const [0.0, 0.4],
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: BlocBuilder<NotificationsCubit, NotificationsState>(
-            builder: (context, state) {
-              return Column(
-                children: [
-                  Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 40.w,
-                          vertical: 30.h,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                InkWell(
-                                  onTap: () => Navigator.pop(context),
-                                  child: Icon(
-                                    Icons.arrow_back_ios_new,
-                                    size: 20.s,
-                                    color: black,
+          child: SafeArea(
+            child: BlocBuilder<NotificationsCubit, NotificationsState>(
+              builder: (context, state) {
+                return Column(
+                  children: [
+                    Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 40.w,
+                            vertical: 30.h,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  InkWell(
+                                    onTap: () => Navigator.pop(context),
+                                    child: Icon(
+                                      Icons.arrow_back_ios_new,
+                                      size: 20.s,
+                                      color: black,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: 10.w),
-                                Text(
-                                  'الاشعارات',
-                                  style: TextStyle(
-                                    fontSize: 18.s,
-                                    fontWeight: FontWeight.w500,
-                                    color: black,
+                                  SizedBox(width: 10.w),
+                                  Text(
+                                    'الاشعارات',
+                                    style: TextStyle(
+                                      fontSize: 18.s,
+                                      fontWeight: FontWeight.w500,
+                                      color: black,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 8.h),
-                            Text(
-                              'يمكنك الاطلاع على الاشعارات الخاصة\nبالطالب',
-                              style: TextStyle(
-                                color: grey,
-                                fontSize: 14.s,
-                                fontWeight: FontWeight.w500,
+                                ],
                               ),
-                            ),
-                          ],
+                              SizedBox(height: 8.h),
+                              Text(
+                                'يمكنك الاطلاع على الاشعارات الخاصة\nبالطالب',
+                                style: TextStyle(
+                                  color: grey,
+                                  fontSize: 14.s,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      const Divider(
-                        color: Color.fromARGB(255, 231, 231, 231),
-                        thickness: 3,
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: RefreshIndicator(
-                      onRefresh: () =>
-                          context.read<NotificationsCubit>().getNotifications(),
-                      color: primary,
-                      child: _buildContent(state),
+                        const Divider(
+                          color: Color.fromARGB(255, 231, 231, 231),
+                          thickness: 3,
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              );
-            },
+                    Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: () => context
+                            .read<NotificationsCubit>()
+                            .getNotifications(),
+                        color: primary,
+                        child: _buildContent(state),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -219,141 +223,147 @@ class _NotificationScreenState extends State<NotificationScreen> {
       color: notification.isRead
           ? Colors.transparent
           : secondary1.withOpacity(0.3),
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: () {
-                if (!notification.isRead) {
-                  context.read<NotificationsCubit>().markAsRead(
-                    notification.receptionId,
-                  );
-                }
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+      child: InkWell(
+        onTap: () async {
+          if (!notification.isRead) {
+            context.read<NotificationsCubit>().markAsRead(
+              notification.receptionId,
+            );
+          }
+          if (hasAttachments) {
+            final url = Uri.parse(notification.attachments.first.url);
+            if (await canLaunchUrl(url)) {
+              await launchUrl(url, mode: LaunchMode.externalApplication);
+            }
+          }
+        },
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      notification.body,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 14.s,
+                        color: black.withOpacity(0.8),
+                        height: 1.6,
+                        fontFamily: 'Tajwal',
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
+                  if (hasAttachments)
+                    Padding(
+                      padding: EdgeInsetsDirectional.only(start: 10.w),
+                      child: Icon(
+                        Icons.attachment,
+                        color: primary,
+                        size: 18.s,
+                      ),
+                    ),
+                  PopupMenuButton<String>(
+                    padding: EdgeInsets.zero,
+                    icon: Icon(Icons.more_vert, color: grey, size: 22.s),
+                    onSelected: (value) async {
+                      if (value == 'delete') {
+                        _showDeleteConfirmation(notification.receptionId);
+                      } else if (value == 'read') {
+                        context.read<NotificationsCubit>().markAsRead(
+                          notification.receptionId,
+                        );
+                      } else if (value == 'download') {
+                        final url = Uri.parse(notification.attachments.first.url);
+                        if (await canLaunchUrl(url)) {
+                          await launchUrl(url, mode: LaunchMode.externalApplication);
+                        }
+                      }
+                    },
+                    offset: const Offset(0, 30),
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    itemBuilder: (context) => [
                       if (hasAttachments)
-                        Padding(
-                          padding: EdgeInsets.only(left: 8.w),
-                          child: Icon(
-                            Icons.attachment,
-                            color: primary,
-                            size: 18.s,
+                        PopupMenuItem(
+                          value: 'download',
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.download_for_offline_outlined,
+                                color: primary,
+                                size: 20.s,
+                              ),
+                              SizedBox(width: 10.w),
+                              Text(
+                                'تحميل المرفق',
+                                style: TextStyle(
+                                  color: primary,
+                                  fontSize: 14.s,
+                                  fontFamily: 'Tajwal',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+                      PopupMenuItem(
+                        value: 'delete',
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(Icons.delete_outline, color: Colors.red, size: 20.s),
+                            SizedBox(width: 10.w),
+                            Text(
+                              'حذف',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 14.s,
+                                fontFamily: 'Tajwal',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: 'read',
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(Icons.bolt_rounded, size: 20.s),
+                            SizedBox(width: 10.w),
+                            Text(
+                              'مقروء',
+                              style: TextStyle(
+                                color: black,
+                                fontSize: 14.s,
+                                fontFamily: 'Tajwal',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
-                  ),
-                  SizedBox(height: 10.h),
-                  Text(
-                    notification.body,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 14.s,
-                      color: black.withOpacity(0.8),
-                      height: 1.6,
-                      fontFamily: 'Tajwal',
-                      fontWeight: FontWeight.w500,
-                    ),
-                    textAlign: TextAlign.right,
                   ),
                 ],
               ),
-            ),
-          ),
-          SizedBox(width: 10.w),
-          PopupMenuButton<String>(
-            icon: Icon(Icons.more_vert, color: grey, size: 22.s),
-            onSelected: (value) async {
-              if (value == 'delete') {
-                _showDeleteConfirmation(notification.receptionId);
-              } else if (value == 'read') {
-                context.read<NotificationsCubit>().markAsRead(
-                  notification.receptionId,
-                );
-              } else if (value == 'download') {
-                final url = Uri.parse(notification.attachments.first.url);
-                if (await canLaunchUrl(url)) {
-                  await launchUrl(url, mode: LaunchMode.externalApplication);
-                }
-              }
-            },
-            offset: const Offset(0, 30),
-            elevation: 8,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            itemBuilder: (context) => [
-              if (hasAttachments)
-                PopupMenuItem(
-                  value: 'download',
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.download_for_offline_outlined,
-                        color: primary,
-                        size: 20.s,
-                      ),
-                      SizedBox(width: 10.w),
-                      Text(
-                        'تحميل المرفق',
-                        style: TextStyle(
-                          color: primary,
-                          fontSize: 14.s,
-                          fontFamily: 'Tajwal',
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-              PopupMenuItem(
-                value: 'delete',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(Icons.delete_outline, color: Colors.red, size: 20.s),
-                    SizedBox(width: 10.w),
-                    Text(
-                      'حذف',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 14.s,
-                        fontFamily: 'Tajwal',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                value: 'read',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(Icons.bolt_rounded, size: 20.s),
-                    SizedBox(width: 10.w),
-                    Text(
-                      'مقروء',
-                      style: TextStyle(
-                        color: black,
-                        fontSize: 14.s,
-                        fontFamily: 'Tajwal',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -439,7 +449,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       builder: (context) => AlertDialog(
         title: Text(
           'تأكيد الحذف',
-          textAlign: TextAlign.right,
+          textAlign: TextAlign.start,
           style: TextStyle(
             fontFamily: 'Tajwal',
             fontSize: 18.s,
@@ -448,7 +458,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         ),
         content: Text(
           'هل أنت متأكد من حذف هذا الإشعار؟',
-          textAlign: TextAlign.right,
+          textAlign: TextAlign.start,
           style: TextStyle(fontFamily: 'Tajwal', fontSize: 14.s),
         ),
         actions: [
@@ -469,7 +479,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 const SnackBar(
                   content: Text(
                     'تم حذف الإشعار بنجاح',
-                    textAlign: TextAlign.right,
+                    textAlign: TextAlign.start,
                     style: TextStyle(fontFamily: 'Tajwal'),
                   ),
                   backgroundColor: primary,
