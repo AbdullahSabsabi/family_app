@@ -21,17 +21,6 @@ class DioFactory {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          bool hasConnection = await InternetConnection().hasInternetAccess;
-          if (!hasConnection) {
-            return handler.reject(
-              DioException(
-                requestOptions: options,
-                error: "لا يوجد اتصال بالإنترنت",
-                type: DioExceptionType.connectionError,
-              ),
-            );
-          }
-
           String? token = await _storage.getAccessToken();
           if (token != null) {
             options.headers["Authorization"] = "Bearer $token";

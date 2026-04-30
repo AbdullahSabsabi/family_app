@@ -75,7 +75,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
           ),
           child: SafeArea(
-            child: BlocBuilder<NotificationsCubit, NotificationsState>(
+            child: BlocConsumer<NotificationsCubit, NotificationsState>(
+              listener: (context, state) {
+                if (state is NotificationsSuccess && state.errorMessage != null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        state.errorMessage!,
+                        style: const TextStyle(fontFamily: 'Tajwal'),
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  context.read<NotificationsCubit>().clearError();
+                }
+              },
               builder: (context, state) {
                 return Column(
                   children: [
@@ -126,6 +140,28 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           color: Color.fromARGB(255, 231, 231, 231),
                           thickness: 3,
                         ),
+                        if (state is NotificationsSuccess && state.isOffline)
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(vertical: 8.h),
+                            color: Colors.orange.withOpacity(0.1),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.wifi_off, size: 16.s, color: Colors.orange),
+                                SizedBox(width: 8.w),
+                                Text(
+                                  'أنت في وضع عدم الاتصال - يتم عرض البيانات المخزنة',
+                                  style: TextStyle(
+                                    fontSize: 12.s,
+                                    color: Colors.orange[800],
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Tajwal',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                     Expanded(

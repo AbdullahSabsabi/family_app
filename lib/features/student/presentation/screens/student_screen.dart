@@ -55,24 +55,38 @@ class _StudentScreenState extends State<StudentScreen> {
               stops: [0.0, 0.4],
             ),
           ),
-          child: BlocBuilder<StudentCubit, StudentState>(
-            builder: (context, state) {
-              if (state is StudentError && state is! StudentSuccess) {
-                return Center(child: Text(state.message));
+          child: BlocConsumer<StudentCubit, StudentState>(
+            listener: (context, state) {
+              if (state is StudentSuccess && state.errorMessage != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      state.errorMessage!,
+                      style: const TextStyle(fontFamily: 'Tajwal'),
+                    ),
+                    backgroundColor: Colors.red,
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
               }
-
-              bool isLoading =
-                  state is StudentLoading || state is StudentInitial;
-
+            },
+            builder: (context, state) {
               StudentDataContainer? currentStudentData;
-
               if (state is StudentSuccess) {
                 currentStudentData = state.cachedStudents[widget.id];
               }
 
+              // Handle error state when no cache is available
+              if (state is StudentError && currentStudentData == null) {
+                return _buildOfflineErrorWidget(state.message);
+              }
+
+              bool isLoading = state is StudentLoading || state is StudentInitial;
               if (state is StudentSuccess && currentStudentData == null) {
                 isLoading = true;
               }
+
+              final isOffline = state is StudentSuccess && state.isOffline;
 
               final profile = currentStudentData?.profile.data;
               final evaluations =
@@ -94,6 +108,9 @@ class _StudentScreenState extends State<StudentScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(height: 60.h),
+                            
+                            if (isOffline && currentStudentData != null)
+                              _buildOfflineBanner(),
 
                             header(profile, context),
                             SizedBox(height: 50.h),
@@ -138,123 +155,219 @@ class _StudentScreenState extends State<StudentScreen> {
                           ),
                         ),
                       ),
-                  Positioned(
-                    left: _qrPosition?.dx ?? 40.w,
-                    top:
-                        _qrPosition?.dy ??
-                        (MediaQuery.of(context).size.height - 90.h),
-                    child: GestureDetector(
-                      onPanUpdate: (details) {
-                        setState(() {
-                          double newX =
-                              (_qrPosition?.dx ?? 40.w) + details.delta.dx;
-                          double newY =
-                              (_qrPosition?.dy ??
-                                  (MediaQuery.of(context).size.height - 90.h)) +
-                              details.delta.dy;
-
-                          // Get screen dimensions
-                          final Size screenSize = MediaQuery.of(context).size;
-                          final double buttonSize =
-                              60.s; // Matches the actual button size
-
-                          // Keep button within screen bounds
-                          newX = newX.clamp(
-                            10.w,
-                            screenSize.width - buttonSize - 10.w,
-                          );
-                          newY = newY.clamp(
-                            60.h,
-                            screenSize.height - buttonSize - 20.h,
-                          );
-
-                          _qrPosition = Offset(newX, newY);
-                        });
-                      },
-                      child: qrButton(
-                        profile!,
-                        context,
-                        onTap: () async {
+                  if (profile != null)
+                    Positioned(
+                      left: _qrPosition?.dx ?? 40.w,
+                      top:
+                          _qrPosition?.dy ??
+                          (MediaQuery.of(context).size.height - 90.h),
+                      child: GestureDetector(
+                        onPanUpdate: (details) {
                           setState(() {
-                            _isMenuOpen = true;
+                            double newX =
+                                (_qrPosition?.dx ?? 40.w) + details.delta.dx;
+                            double newY =
+                                (_qrPosition?.dy ??
+                                    (MediaQuery.of(context).size.height - 90.h)) +
+                                details.delta.dy;
+
+                            // Get screen dimensions
+                            final Size screenSize = MediaQuery.of(context).size;
+                            final double buttonSize =
+                                60.s; // Matches the actual button size
+
+                            // Keep button within screen bounds
+                            newX = newX.clamp(
+                              10.w,
+                              screenSize.width - buttonSize - 10.w,
+                            );
+                            newY = newY.clamp(
+                              60.h,
+                              screenSize.height - buttonSize - 20.h,
+                            );
+
+                            _qrPosition = Offset(newX, newY);
                           });
-
-                          final result = await showMenu<String>(
-                            context: context,
-                            shape: const TooltipShape(),
-                            position: RelativeRect.fromLTRB(
-                              _qrPosition?.dx ?? 40.w,
-                              (_qrPosition?.dy ??
-                                      (MediaQuery.of(context).size.height -
-                                          90.h)) -
-                                  110.h,
-                              (_qrPosition?.dx ?? 40.w) + 60.s,
-                              _qrPosition?.dy ??
-                                  (MediaQuery.of(context).size.height - 90.h),
-                            ),
-                            items: [
-                              PopupMenuItem(
-                                value: 'scan',
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.qr_code_scanner,
-                                        color: primary, size: 20.s),
-                                    SizedBox(width: 10.w),
-                                    Text('مسح QR',
-                                        style: TextStyle(fontSize: 14.s)),
-                                  ],
-                                ),
-                              ),
-                              PopupMenuItem(
-                                value: 'show',
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.qr_code,
-                                        color: primary, size: 20.s),
-                                    SizedBox(width: 10.w),
-                                    Text('عرض QR',
-                                        style: TextStyle(fontSize: 14.s)),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          );
-
-                          if (context.mounted) {
-                            setState(() {
-                              _isMenuOpen = false;
-                            });
-                          }
-
-                          if (result == 'show') {
-                            context.read<QrCodeCubit>().getQrUrl(profile.id!);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ShowQrScreen(
-                                  qrUrl: getIt<QrRepository>()
-                                      .getQrCodeUrl(profile.id!),
-                                  studentName: profile.fullName ?? '',
-                                  profilePhoto: profile.profilePhoto,
-                                  studentId: profile.id,
-                                ),
-                              ),
-                            );
-                          } else if (result == 'scan') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const ScanQrScreen()),
-                            );
-                          }
                         },
+                        child: qrButton(
+                          profile,
+                          context,
+                          onTap: () async {
+                            setState(() {
+                              _isMenuOpen = true;
+                            });
+
+                            final result = await showMenu<String>(
+                              context: context,
+                              shape: const TooltipShape(),
+                              position: RelativeRect.fromLTRB(
+                                _qrPosition?.dx ?? 40.w,
+                                (_qrPosition?.dy ??
+                                        (MediaQuery.of(context).size.height -
+                                            90.h)) -
+                                    110.h,
+                                (_qrPosition?.dx ?? 40.w) + 60.s,
+                                _qrPosition?.dy ??
+                                    (MediaQuery.of(context).size.height - 90.h),
+                              ),
+                              items: [
+                                PopupMenuItem(
+                                  value: 'scan',
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.qr_code_scanner,
+                                          color: primary, size: 20.s),
+                                      SizedBox(width: 10.w),
+                                      Text('مسح QR',
+                                          style: TextStyle(fontSize: 14.s)),
+                                    ],
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  value: 'show',
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.qr_code,
+                                          color: primary, size: 20.s),
+                                      SizedBox(width: 10.w),
+                                      Text('عرض QR',
+                                          style: TextStyle(fontSize: 14.s)),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            );
+
+                            if (context.mounted) {
+                              setState(() {
+                                _isMenuOpen = false;
+                              });
+                            }
+
+                            if (result == 'show') {
+                              context.read<QrCodeCubit>().getQrUrl(profile.id!);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ShowQrScreen(
+                                    qrUrl: getIt<QrRepository>()
+                                        .getQrCodeUrl(profile.id!),
+                                    studentName: profile.fullName ?? '',
+                                    profilePhoto: profile.profilePhoto,
+                                    studentId: profile.id,
+                                  ),
+                                ),
+                              );
+                            } else if (result == 'scan') {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const ScanQrScreen()),
+                              );
+                            }
+                          },
+                        ),
                       ),
                     ),
-                  ),
                 ],
               );
             },
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOfflineBanner() {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(bottom: 20.h),
+      padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 15.w),
+      decoration: BoxDecoration(
+        color: Colors.orange.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(10.r),
+        border: Border.all(color: Colors.orange.withOpacity(0.2)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.wifi_off_rounded, size: 16.s, color: Colors.orange[800]),
+          SizedBox(width: 10.w),
+          Text(
+            'أنت في وضع عدم الاتصال - يتم عرض البيانات المخزنة',
+            style: TextStyle(
+              fontSize: 12.s,
+              color: Colors.orange[800],
+              fontWeight: FontWeight.w600,
+              fontFamily: 'Tajwal',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOfflineErrorWidget(String message) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(40.w),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: EdgeInsets.all(20.s),
+              decoration: BoxDecoration(
+                color: primary.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.cloud_off_rounded,
+                size: 80.s,
+                color: primary,
+              ),
+            ),
+            SizedBox(height: 30.h),
+            Text(
+              'لا يوجد اتصال بالإنترنت',
+              style: TextStyle(
+                fontSize: 22.s,
+                fontWeight: FontWeight.bold,
+                color: black,
+                fontFamily: 'Tajwal',
+              ),
+            ),
+            SizedBox(height: 15.h),
+            Text(
+              'لا يمكننا الوصول إلى البيانات حالياً ولا توجد نسخة مخزنة على جهازك. يرجى التأكد من الاتصال بالشبكة.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14.s,
+                color: grey,
+                height: 1.5,
+                fontFamily: 'Tajwal',
+              ),
+            ),
+            SizedBox(height: 40.h),
+            ElevatedButton.icon(
+              onPressed: () => _loadData(),
+              icon: const Icon(Icons.refresh_rounded, color: Colors.white),
+              label: const Text(
+                'إعادة المحاولة',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Tajwal',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: primary,
+                padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 12.h),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.r),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -9,17 +9,36 @@ class StudentLoading extends StudentState {}
 class StudentSuccess extends StudentState {
   final Map<int, StudentDataContainer> cachedStudents;
   final int currentStudentId;
+  final bool isOffline;
+  final String? errorMessage;
 
   StudentSuccess({
     required this.cachedStudents,
     required this.currentStudentId,
+    this.isOffline = false,
+    this.errorMessage,
   });
 
   StudentDataContainer? get currentData => cachedStudents[currentStudentId];
 
+  StudentSuccess copyWith({
+    Map<int, StudentDataContainer>? cachedStudents,
+    int? currentStudentId,
+    bool? isOffline,
+    String? errorMessage,
+  }) {
+    return StudentSuccess(
+      cachedStudents: cachedStudents ?? this.cachedStudents,
+      currentStudentId: currentStudentId ?? this.currentStudentId,
+      isOffline: isOffline ?? this.isOffline,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'currentStudentId': currentStudentId,
+      'isOffline': isOffline,
       'cachedStudents': cachedStudents.map(
         (key, value) => MapEntry(key.toString(), value.toMap()),
       ),
@@ -29,6 +48,7 @@ class StudentSuccess extends StudentState {
   factory StudentSuccess.fromMap(Map<String, dynamic> map) {
     return StudentSuccess(
       currentStudentId: map['currentStudentId'] as int,
+      isOffline: map['isOffline'] as bool? ?? false,
       cachedStudents: (map['cachedStudents'] as Map).map(
         (key, value) => MapEntry(
           int.parse(key),

@@ -6,6 +6,7 @@ import 'package:familyapp/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:familyapp/features/student/presentation/screens/contact_us_screen.dart';
 
 class StudentProfileScreen extends StatelessWidget {
   final String name;
@@ -100,7 +101,7 @@ class StudentProfileScreen extends StatelessWidget {
                   ],
                 ),
                 // Header
-                SizedBox(height: 40.h),
+                SizedBox(height: 20.h),
 
                 // Content Card
                 Expanded(
@@ -165,7 +166,52 @@ class StudentProfileScreen extends StatelessWidget {
                             icon: Icons.school_rounded,
                           ),
 
-                          SizedBox(height: 80.h),
+                          SizedBox(height: 50.h),
+
+                          // Contact Us Button
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ContactUsScreen(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 15.h,
+                                horizontal: 25.w,
+                              ),
+                              decoration: BoxDecoration(
+                                color: primary.withOpacity(0.05),
+                                borderRadius: BorderRadius.circular(15.r),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.contact_support_rounded,
+                                    color: primary,
+                                    size: 24.s,
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Text(
+                                    'تواصل معنا',
+                                    style: TextStyle(
+                                      fontSize: 16.s,
+                                      color: primary,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Tajwal',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(height: 20.h),
 
                           // Logout Button
                           GestureDetector(

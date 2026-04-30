@@ -63,7 +63,7 @@ class _StartScreenState extends State<StartScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 500.h),
+                    SizedBox(height: 350.h),
                     Text(
                       'العلماء للتعليم طريقك للنجاح',
                       style: TextStyle(
@@ -140,7 +140,7 @@ class _StartScreenState extends State<StartScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 50.h),
+                    //SizedBox(height: 30.h),
                   ],
                 ),
               ),
