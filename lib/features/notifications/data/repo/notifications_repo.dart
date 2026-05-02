@@ -4,6 +4,7 @@ abstract class NotificationsRepository {
   Future<NotificationListResponse> getNotifications({
     bool? unread,
     int page = 1,
+    int? studentId,
   });
 
   Future<NotificationDetailResponse> getNotificationDetails(int receptionId);

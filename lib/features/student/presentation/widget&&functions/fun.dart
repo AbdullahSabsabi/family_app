@@ -4,7 +4,7 @@ import 'package:familyapp/core/helper/dependency_injection.dart';
 import 'package:familyapp/core/helper/responsive.dart';
 import 'package:familyapp/features/exams/presentation/screens/exams_screen.dart';
 import 'package:familyapp/features/notifications/presentation/screens/notifications_list_screen.dart';
-import 'package:familyapp/features/qr_code/domain/repo/qr_repository.dart';
+import 'package:familyapp/features/qr_code/data/repo/qr_repository.dart';
 import 'package:familyapp/features/student/domain/models/student_models.dart';
 import 'package:familyapp/features/student/presentation/screens/exams_screen.dart';
 import 'package:familyapp/features/student/presentation/screens/payments_screen.dart';

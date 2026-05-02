@@ -63,9 +63,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   void _loadData({DateTime? date}) {
     final targetDate = date ?? selectedDate;
     context.read<ScheduleCubit>().getSchedule(
-          studentId: widget.studentId,
-          day: DateFormat('EEEE', 'en_US').format(targetDate),
-        );
+      studentId: widget.studentId,
+      day: DateFormat('EEEE', 'en_US').format(targetDate),
+    );
   }
 
   @override
@@ -165,7 +165,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       'Friday': 'الجمعة',
                     };
 
-                    final String dayNameEnRaw = DateFormat('EEEE', 'en_US').format(selectedDate);
+                    final String dayNameEnRaw = DateFormat(
+                      'EEEE',
+                      'en_US',
+                    ).format(selectedDate);
                     final String dayNameEn = dayNameEnRaw.toLowerCase();
                     final String dayNameAr = enToAr[dayNameEnRaw] ?? '';
 
@@ -176,7 +179,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     if (allPeriods is Map) {
                       allPeriods.forEach((key, value) {
                         String k = key.toString().trim().toLowerCase();
-                        if (k == dayNameEn || k == dayNameAr || k.contains(dayNameEn)) {
+                        if (k == dayNameEn ||
+                            k == dayNameAr ||
+                            k.contains(dayNameEn)) {
                           periodsForDayData = value;
                         }
                       });
@@ -191,13 +196,21 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         periodsForDayData.forEach((key, value) {
                           if (value is List) {
                             parsedPeriods[key] = value
-                                .map((e) => PeriodModel.fromJson(Map<String, dynamic>.from(e as Map)))
+                                .map(
+                                  (e) => PeriodModel.fromJson(
+                                    Map<String, dynamic>.from(e as Map),
+                                  ),
+                                )
                                 .toList();
                           }
                         });
                       } else if (periodsForDayData is List) {
                         parsedPeriods["الحصص"] = periodsForDayData
-                            .map((e) => PeriodModel.fromJson(Map<String, dynamic>.from(e as Map)))
+                            .map(
+                              (e) => PeriodModel.fromJson(
+                                Map<String, dynamic>.from(e as Map),
+                              ),
+                            )
                             .toList();
                       }
                     }
@@ -206,7 +219,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     final periodEntries = parsedPeriods.entries.toList();
                     try {
                       periodEntries.sort((a, b) {
-                        int getNum(String s) => int.tryParse(s.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+                        int getNum(String s) =>
+                            int.tryParse(s.replaceAll(RegExp(r'[^0-9]'), '')) ??
+                            0;
                         return getNum(a.key).compareTo(getNum(b.key));
                       });
                     } catch (_) {}
@@ -232,7 +247,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                   vertical: 10.h,
                                 ),
                                 physics: const AlwaysScrollableScrollPhysics(),
-                                itemCount: (isLoading || isDayLoading) ? 5 : periodEntries.length,
+                                itemCount: (isLoading || isDayLoading)
+                                    ? 5
+                                    : periodEntries.length,
                                 itemBuilder: (context, index) {
                                   if (isLoading || isDayLoading) {
                                     return _buildLoadingCard();
@@ -261,6 +278,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       ),
     );
   }
+  //****************************************************************************** */
 
   void _changeWeek(int offset) {
     setState(() {
@@ -298,7 +316,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
           dynamic dayPeriodsData;
           (scheduleData!.periods as Map).forEach((key, value) {
-            if (key.toString().toLowerCase().contains(dayNameEn.toLowerCase()) ||
+            if (key.toString().toLowerCase().contains(
+                  dayNameEn.toLowerCase(),
+                ) ||
                 (dayNameAr.isNotEmpty && key.toString().contains(dayNameAr))) {
               dayPeriodsData = value;
             }
@@ -331,8 +351,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   Column(
                     children: [
                       Text(
-                        focusedDate.month == focusedDate.add(const Duration(days: 6)).month
-                            ? DateFormat('MMMM yyyy', 'en_US').format(focusedDate)
+                        focusedDate.month ==
+                                focusedDate.add(const Duration(days: 6)).month
+                            ? DateFormat(
+                                'MMMM yyyy',
+                                'en_US',
+                              ).format(focusedDate)
                             : "${DateFormat('MMM', 'en_US').format(focusedDate)} - ${DateFormat('MMM yyyy', 'en_US').format(focusedDate.add(const Duration(days: 6)))}",
                         style: TextStyle(
                           fontSize: 18.s,
@@ -352,7 +376,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   ),
                   IconButton(
                     onPressed: () => _changeWeek(-1),
-                    icon: Icon(Icons.arrow_forward_ios, size: 18.s, color: grey),
+                    icon: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 18.s,
+                      color: grey,
+                    ),
                   ),
                 ],
               ),
@@ -386,7 +414,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                             ? secondary.withOpacity(0.3)
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(12.r),
-                        border: isSelected ? Border.all(color: secondary.withOpacity(0.5)) : null,
+                        border: isSelected
+                            ? Border.all(color: secondary.withOpacity(0.5))
+                            : null,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -415,7 +445,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                 color: primary,
                                 shape: BoxShape.circle,
                               ),
-                              child: (state is ScheduleSuccess && state.isDayLoading)
+                              child:
+                                  (state is ScheduleSuccess &&
+                                      state.isDayLoading)
                                   ? SizedBox(
                                       width: 8.s,
                                       height: 8.s,
@@ -445,6 +477,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       },
     );
   }
+  //****************************************************************************** */
 
   Widget _buildPeriodCard(PeriodModel p) {
     bool isNow = _isPeriodNow(p.startTime, p.endTime);
@@ -473,9 +506,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                _buildTimeRow(p.startTime ?? p.periodTime?['start_time'] ?? "00:00", true),
+                _buildTimeRow(
+                  p.startTime ?? p.periodTime?['start_time'] ?? "00:00",
+                  true,
+                ),
                 SizedBox(height: 12.h),
-                _buildTimeRow(p.endTime ?? p.periodTime?['end_time'] ?? "00:00", false),
+                _buildTimeRow(
+                  p.endTime ?? p.periodTime?['end_time'] ?? "00:00",
+                  false,
+                ),
               ],
             ),
 
@@ -554,6 +593,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       ),
     );
   }
+  //****************************************************************************** */
 
   Widget _buildTimeRow(String time, bool isStart) {
     String formattedTime = time;
@@ -571,7 +611,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       ),
     );
   }
-
 
   Widget _buildLoadingCard() {
     return Container(
@@ -724,7 +763,9 @@ class _ExpandableBadgeState extends State<ExpandableBadge> {
             ),
           ),
           Positioned(
-            width: size.width * 1.5 > 150 ? size.width * 1.5 : 150, // Min width for readability
+            width: size.width * 1.5 > 150
+                ? size.width * 1.5
+                : 150, // Min width for readability
             child: CompositedTransformFollower(
               link: _layerLink,
               showWhenUnlinked: false,
@@ -735,7 +776,10 @@ class _ExpandableBadgeState extends State<ExpandableBadge> {
                 color: widget.bgColor,
                 shadowColor: Colors.black26,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 8.h,
+                  ),
                   child: Text(
                     widget.text,
                     style: TextStyle(

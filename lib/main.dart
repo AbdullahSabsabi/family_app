@@ -10,27 +10,63 @@ import 'package:familyapp/features/auth/presentation/cubit/auth_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
 
-  final storage = await HydratedStorage.build(
-    storageDirectory: HydratedStorageDirectory(
-      (await getApplicationDocumentsDirectory()).path,
-    ),
-  );
-  HydratedBloc.storage = storage;
+  try {
+    await Firebase.initializeApp();
 
-  await setupGetIt();
-  await getIt<NotificationService>().initialize();
+    final storage = await HydratedStorage.build(
+      storageDirectory: HydratedStorageDirectory(
+        (await getApplicationDocumentsDirectory()).path,
+      ),
+    );
+    HydratedBloc.storage = storage;
 
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness: Brightness.light,
-    ),
-  );
+    await setupGetIt();
 
-  await getIt<AuthCubit>().checkAuth();
+    _initServicesInBackground();
 
-  runApp(const FamilyApp());
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ),
+    );
+
+    runApp(const FamilyApp());
+  } catch (e, stack) {
+    debugPrint("CRITICAL INITIALIZATION ERROR: $e");
+    debugPrint(stack.toString());
+
+    runApp(
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          body: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Text(
+                  "حدث خطأ أثناء تشغيل التطبيق:\n$e",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.red, fontSize: 16),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+void _initServicesInBackground() async {
+  try {
+    await getIt<NotificationService>().initialize();
+
+    await getIt<AuthCubit>().checkAuth();
+  } catch (e) {
+    debugPrint("Background Initialization Error: $e");
+  }
 }

@@ -83,10 +83,7 @@ class _ScanQrScreenState extends State<ScanQrScreen> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: RadialGradient(
-                      colors: [
-                        primary.withOpacity(0.08),
-                        Colors.white.withOpacity(0),
-                      ],
+                      colors: [primary.withOpacity(0.08), white.withOpacity(0)],
                     ),
                   ),
                 ),
@@ -271,6 +268,8 @@ class _ScanQrScreenState extends State<ScanQrScreen> {
       ),
     );
   }
+
+  //****************************************************************************** */
 
   void _showResultDialog(
     BuildContext context, {

@@ -1,21 +1,27 @@
 import 'package:familyapp/core/helper/constant.dart';
 import 'package:familyapp/core/helper/responsive.dart';
+import 'package:familyapp/core/widgets/double_back_to_exit.dart';
 import 'package:familyapp/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:familyapp/features/notifications/presentation/cubit/notifications_state.dart';
 import 'package:familyapp/features/student/presentation/cubit/student_cubit.dart';
 import 'package:familyapp/features/student/presentation/cubit/student_state.dart';
 import 'package:familyapp/features/student/presentation/widget&&functions/fun.dart';
 import 'package:familyapp/family_app.dart';
+import 'package:familyapp/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:familyapp/features/auth/presentation/cubit/auth_state.dart';
+import 'package:familyapp/features/notifications/presentation/screens/notifications_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import 'package:familyapp/features/qr_code/domain/repo/qr_repository.dart';
+import 'package:familyapp/features/qr_code/data/repo/qr_repository.dart';
 import 'package:familyapp/features/qr_code/presentation/cubit/qr_code_cubit.dart';
 import 'package:familyapp/features/qr_code/presentation/screens/scan_qr_screen.dart';
 import 'package:familyapp/features/qr_code/presentation/screens/show_qr_screen.dart';
 import 'package:familyapp/core/helper/dependency_injection.dart';
 
-import '../widget&&functions/fun.dart' show menu, header, qrButton, TooltipShape;
+import '../widget&&functions/fun.dart'
+    show menu, header, qrButton, TooltipShape;
 
 class StudentScreen extends StatefulWidget {
   final dynamic id;
@@ -81,7 +87,8 @@ class _StudentScreenState extends State<StudentScreen> {
                 return _buildOfflineErrorWidget(state.message);
               }
 
-              bool isLoading = state is StudentLoading || state is StudentInitial;
+              bool isLoading =
+                  state is StudentLoading || state is StudentInitial;
               if (state is StudentSuccess && currentStudentData == null) {
                 isLoading = true;
               }
@@ -108,11 +115,110 @@ class _StudentScreenState extends State<StudentScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(height: 60.h),
-                            
-                            if (isOffline && currentStudentData != null)
-                              _buildOfflineBanner(),
 
-                            header(profile, context),
+                            // if (isOffline && currentStudentData != null)
+                            //   _buildOfflineBanner(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(child: header(profile, context)),
+                                BlocBuilder<AuthCubit, AuthState>(
+                                  builder: (context, authState) {
+                                    if (authState is AuthSuccess) {
+                                      final isFamily =
+                                          authState.authResponse.data?.user.type
+                                              .toLowerCase()
+                                              .contains('family') ??
+                                          false;
+
+                                      if (isFamily) {
+                                        return BlocBuilder<
+                                          NotificationsCubit,
+                                          NotificationsState
+                                        >(
+                                          builder: (context, notificationState) {
+                                            int unreadCount = 0;
+                                            if (notificationState
+                                                is NotificationsSuccess) {
+                                              unreadCount =
+                                                  notificationState.unreadCount;
+                                            }
+                                            return Stack(
+                                              clipBehavior: Clip.none,
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            NotificationScreen(
+                                                              studentId:
+                                                                  widget.id
+                                                                      is int
+                                                                  ? widget.id
+                                                                  : int.tryParse(
+                                                                      widget.id
+                                                                          .toString(),
+                                                                    ),
+                                                            ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  icon: Icon(
+                                                    Icons
+                                                        .notifications_active_outlined,
+                                                    color: black,
+                                                    size: 28.s,
+                                                  ),
+                                                ),
+                                                if (unreadCount > 0)
+                                                  Positioned(
+                                                    right: 8,
+                                                    top: 8,
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.red,
+                                                        shape: BoxShape.circle,
+                                                        border: Border.all(
+                                                          color: Colors.white,
+                                                          width: 1.5,
+                                                        ),
+                                                      ),
+                                                      constraints:
+                                                          BoxConstraints(
+                                                            minWidth: 16.s,
+                                                            minHeight: 16.s,
+                                                          ),
+                                                      child: Center(
+                                                        child: Text(
+                                                          unreadCount > 99
+                                                              ? '99+'
+                                                              : unreadCount
+                                                                    .toString(),
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 8.s,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                'Tajwal',
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      }
+                                    }
+                                    return const SizedBox.shrink();
+                                  },
+                                ),
+                              ],
+                            ),
                             SizedBox(height: 50.h),
                             menu(context, finance, exams, widget.id),
                             SizedBox(height: 30.h),
@@ -168,7 +274,8 @@ class _StudentScreenState extends State<StudentScreen> {
                                 (_qrPosition?.dx ?? 40.w) + details.delta.dx;
                             double newY =
                                 (_qrPosition?.dy ??
-                                    (MediaQuery.of(context).size.height - 90.h)) +
+                                    (MediaQuery.of(context).size.height -
+                                        90.h)) +
                                 details.delta.dy;
 
                             // Get screen dimensions
@@ -215,11 +322,16 @@ class _StudentScreenState extends State<StudentScreen> {
                                   value: 'scan',
                                   child: Row(
                                     children: [
-                                      Icon(Icons.qr_code_scanner,
-                                          color: primary, size: 20.s),
+                                      Icon(
+                                        Icons.qr_code_scanner,
+                                        color: primary,
+                                        size: 20.s,
+                                      ),
                                       SizedBox(width: 10.w),
-                                      Text('مسح QR',
-                                          style: TextStyle(fontSize: 14.s)),
+                                      Text(
+                                        'مسح QR',
+                                        style: TextStyle(fontSize: 14.s),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -227,11 +339,16 @@ class _StudentScreenState extends State<StudentScreen> {
                                   value: 'show',
                                   child: Row(
                                     children: [
-                                      Icon(Icons.qr_code,
-                                          color: primary, size: 20.s),
+                                      Icon(
+                                        Icons.qr_code,
+                                        color: primary,
+                                        size: 20.s,
+                                      ),
                                       SizedBox(width: 10.w),
-                                      Text('عرض QR',
-                                          style: TextStyle(fontSize: 14.s)),
+                                      Text(
+                                        'عرض QR',
+                                        style: TextStyle(fontSize: 14.s),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -250,8 +367,9 @@ class _StudentScreenState extends State<StudentScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ShowQrScreen(
-                                    qrUrl: getIt<QrRepository>()
-                                        .getQrCodeUrl(profile.id!),
+                                    qrUrl: getIt<QrRepository>().getQrCodeUrl(
+                                      profile.id!,
+                                    ),
                                     studentName: profile.fullName ?? '',
                                     profilePhoto: profile.profilePhoto,
                                     studentId: profile.id,
@@ -262,7 +380,8 @@ class _StudentScreenState extends State<StudentScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const ScanQrScreen()),
+                                  builder: (context) => const ScanQrScreen(),
+                                ),
                               );
                             }
                           },
@@ -278,34 +397,34 @@ class _StudentScreenState extends State<StudentScreen> {
     );
   }
 
-  Widget _buildOfflineBanner() {
-    return Container(
-      width: double.infinity,
-      margin: EdgeInsets.only(bottom: 20.h),
-      padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 15.w),
-      decoration: BoxDecoration(
-        color: Colors.orange.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: Colors.orange.withOpacity(0.2)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.wifi_off_rounded, size: 16.s, color: Colors.orange[800]),
-          SizedBox(width: 10.w),
-          Text(
-            'أنت في وضع عدم الاتصال - يتم عرض البيانات المخزنة',
-            style: TextStyle(
-              fontSize: 12.s,
-              color: Colors.orange[800],
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Tajwal',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildOfflineBanner() {
+  //   return Container(
+  //     width: double.infinity,
+  //     margin: EdgeInsets.only(bottom: 20.h),
+  //     padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 15.w),
+  //     decoration: BoxDecoration(
+  //       color: Colors.orange.withOpacity(0.1),
+  //       borderRadius: BorderRadius.circular(10.r),
+  //       border: Border.all(color: Colors.orange.withOpacity(0.2)),
+  //     ),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: [
+  //         Icon(Icons.wifi_off_rounded, size: 16.s, color: Colors.orange[800]),
+  //         SizedBox(width: 10.w),
+  //         Text(
+  //           'أنت في وضع عدم الاتصال - يتم عرض البيانات المخزنة',
+  //           style: TextStyle(
+  //             fontSize: 12.s,
+  //             color: Colors.orange[800],
+  //             fontWeight: FontWeight.w600,
+  //             fontFamily: 'Tajwal',
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildOfflineErrorWidget(String message) {
     return Center(
@@ -320,11 +439,7 @@ class _StudentScreenState extends State<StudentScreen> {
                 color: primary.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                Icons.cloud_off_rounded,
-                size: 80.s,
-                color: primary,
-              ),
+              child: Icon(Icons.cloud_off_rounded, size: 80.s, color: primary),
             ),
             SizedBox(height: 30.h),
             Text(

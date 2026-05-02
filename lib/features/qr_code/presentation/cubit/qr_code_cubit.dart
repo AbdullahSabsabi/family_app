@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:familyapp/features/qr_code/domain/repo/qr_repository.dart';
+import 'package:familyapp/features/qr_code/data/repo/qr_repository.dart';
 import 'package:familyapp/features/qr_code/presentation/cubit/qr_code_state.dart';
 
 class QrCodeCubit extends Cubit<QrCodeState> {

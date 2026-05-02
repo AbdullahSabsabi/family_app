@@ -7,6 +7,8 @@ import 'package:familyapp/features/auth/presentation/cubit/auth_state.dart';
 import 'package:familyapp/features/auth/presentation/screens/change_password_screen.dart';
 import 'package:familyapp/features/family/presentation/screens/family_screen.dart';
 import 'package:familyapp/features/student/presentation/screens/student_screen.dart';
+import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,6 +22,36 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _uniqueIdController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  Future<Map<String, dynamic>> _getDeviceInfo() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    Map<String, dynamic> info = {};
+
+    try {
+      if (Platform.isAndroid) {
+        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+        info = {
+          'model': androidInfo.model,
+          'brand': androidInfo.brand,
+          'version': androidInfo.version.release,
+          'sdk': androidInfo.version.sdkInt,
+          'manufacturer': androidInfo.manufacturer,
+          'isPhysicalDevice': androidInfo.isPhysicalDevice,
+        };
+      } else if (Platform.isIOS) {
+        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+        info = {
+          'model': iosInfo.model,
+          'name': iosInfo.name,
+          'version': iosInfo.systemVersion,
+          'isPhysicalDevice': iosInfo.isPhysicalDevice,
+        };
+      }
+    } catch (e) {
+      print('Error getting device info: $e');
+    }
+    return info;
+  }
 
   @override
   void dispose() {
@@ -218,10 +250,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ? null
                                 : () async {
                                     final fcmToken = await getIt<NotificationService>().getFCMToken();
+                                    final deviceInfo = await _getDeviceInfo();
                                     await context.read<AuthCubit>().login(
                                       uniqueId: _uniqueIdController.text.trim(),
                                       password: _passwordController.text,
                                       fcmToken: fcmToken,
+                                      deviceInfo: deviceInfo,
                                     );
                                   },
                             style: ElevatedButton.styleFrom(

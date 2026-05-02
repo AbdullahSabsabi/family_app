@@ -3,8 +3,6 @@ import 'package:familyapp/core/helper/constant.dart';
 import 'package:familyapp/core/helper/responsive.dart';
 import 'package:familyapp/features/attendance/domain/models/attendance_models.dart';
 
-import 'package:intl/intl.dart';
-
 class AttendanceCard extends StatelessWidget {
   final AttendanceRecord record;
 
@@ -87,6 +85,8 @@ class AttendanceCard extends StatelessWidget {
       ),
     );
   }
+
+  //******************************************************************* */
 
   Widget _buildStatusIcon() {
     Color iconColor;

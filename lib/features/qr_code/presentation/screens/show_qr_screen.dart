@@ -105,18 +105,19 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
       if (response.data != null) {
         final bytes = Uint8List.fromList(response.data!);
         final contentType = response.headers.value('content-type');
-        final isSvg = contentType?.contains('svg') == true ||
+        final isSvg =
+            contentType?.contains('svg') == true ||
             widget.qrUrl.toLowerCase().contains('.svg');
 
         // Save to cache
         try {
           final cacheFile = await _getCacheFile(isSvg);
           await cacheFile.writeAsBytes(bytes);
-          
+
           // Delete the other type if it exists to avoid confusion
           final otherFile = await _getCacheFile(!isSvg);
           if (await otherFile.exists()) await otherFile.delete();
-          
+
           if (mounted) {
             setState(() {
               _cachedFile = cacheFile;
@@ -295,6 +296,8 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
     );
   }
 
+  //****************************************************************************** */
+
   Widget _buildStudentCard() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10.w),
@@ -378,6 +381,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
       ),
     );
   }
+  //****************************************************************************** */
 
   Widget _buildQrSection() {
     return Container(
@@ -421,18 +425,18 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                 ),
               )
             : _errorMessage != null && _cachedFile == null
-                ? Center(
-                    child: Text(_errorMessage!, textAlign: TextAlign.center))
-                : _isSvg
-                    ? (_cachedFile != null
-                        ? SvgPicture.file(_cachedFile!, fit: BoxFit.contain)
-                        : SvgPicture.memory(_imageBytes!, fit: BoxFit.contain))
-                    : (_cachedFile != null
-                        ? Image.file(_cachedFile!, fit: BoxFit.contain)
-                        : Image.memory(_imageBytes!, fit: BoxFit.contain)),
+            ? Center(child: Text(_errorMessage!, textAlign: TextAlign.center))
+            : _isSvg
+            ? (_cachedFile != null
+                  ? SvgPicture.file(_cachedFile!, fit: BoxFit.contain)
+                  : SvgPicture.memory(_imageBytes!, fit: BoxFit.contain))
+            : (_cachedFile != null
+                  ? Image.file(_cachedFile!, fit: BoxFit.contain)
+                  : Image.memory(_imageBytes!, fit: BoxFit.contain)),
       ),
     );
   }
+  //****************************************************************************** */
 
   Widget _buildActionButtons() {
     return Row(

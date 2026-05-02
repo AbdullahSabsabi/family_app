@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:familyapp/core/helper/constant.dart';
 import 'package:familyapp/core/helper/responsive.dart';
+import 'package:familyapp/core/widgets/double_back_to_exit.dart';
 import 'package:familyapp/features/auth/presentation/screens/login_screen.dart';
-import 'package:familyapp/family_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

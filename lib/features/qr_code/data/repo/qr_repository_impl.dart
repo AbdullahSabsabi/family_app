@@ -1,6 +1,6 @@
 import 'package:familyapp/features/qr_code/data/datasources/qr_remote_data_source.dart';
 import 'package:familyapp/features/qr_code/domain/models/qr_models.dart';
-import 'package:familyapp/features/qr_code/domain/repo/qr_repository.dart';
+import 'package:familyapp/features/qr_code/data/repo/qr_repository.dart';
 
 class QrRepositoryImpl implements QrRepository {
   final QrCodeRemoteDataSource _remoteDataSource;

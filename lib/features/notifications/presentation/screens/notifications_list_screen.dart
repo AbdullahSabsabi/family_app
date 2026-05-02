@@ -9,7 +9,8 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NotificationScreen extends StatefulWidget {
-  const NotificationScreen({super.key});
+  final int? studentId;
+  const NotificationScreen({super.key, this.studentId});
 
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();
@@ -23,7 +24,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<NotificationsCubit>().getNotifications();
+    context.read<NotificationsCubit>().getNotifications(
+          studentId: widget.studentId,
+        );
     _scrollController.addListener(_onScroll);
   }
 
@@ -49,6 +52,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           } else {
             context.read<NotificationsCubit>().getNotifications(
               page: state.meta!.currentPage + 1,
+              studentId: widget.studentId,
             );
           }
         }
@@ -77,7 +81,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
           child: SafeArea(
             child: BlocConsumer<NotificationsCubit, NotificationsState>(
               listener: (context, state) {
-                if (state is NotificationsSuccess && state.errorMessage != null) {
+                if (state is NotificationsSuccess &&
+                    state.errorMessage != null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
@@ -140,35 +145,35 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           color: Color.fromARGB(255, 231, 231, 231),
                           thickness: 3,
                         ),
-                        if (state is NotificationsSuccess && state.isOffline)
-                          Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.symmetric(vertical: 8.h),
-                            color: Colors.orange.withOpacity(0.1),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.wifi_off, size: 16.s, color: Colors.orange),
-                                SizedBox(width: 8.w),
-                                Text(
-                                  'أنت في وضع عدم الاتصال - يتم عرض البيانات المخزنة',
-                                  style: TextStyle(
-                                    fontSize: 12.s,
-                                    color: Colors.orange[800],
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'Tajwal',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                        // if (state is NotificationsSuccess && state.isOffline)
+                        //   Container(
+                        //     width: double.infinity,
+                        //     padding: EdgeInsets.symmetric(vertical: 8.h),
+                        //     color: Colors.orange.withOpacity(0.1),
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.center,
+                        //       children: [
+                        //         Icon(Icons.wifi_off, size: 16.s, color: Colors.orange),
+                        //         SizedBox(width: 8.w),
+                        //         Text(
+                        //           'أنت في وضع عدم الاتصال - يتم عرض البيانات المخزنة',
+                        //           style: TextStyle(
+                        //             fontSize: 12.s,
+                        //             color: Colors.orange[800],
+                        //             fontWeight: FontWeight.w500,
+                        //             fontFamily: 'Tajwal',
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
                       ],
                     ),
                     Expanded(
                       child: RefreshIndicator(
                         onRefresh: () => context
                             .read<NotificationsCubit>()
-                            .getNotifications(),
+                            .getNotifications(studentId: widget.studentId),
                         color: primary,
                         child: _buildContent(state),
                       ),
@@ -211,7 +216,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ),
               TextButton(
                 onPressed: () =>
-                    context.read<NotificationsCubit>().getNotifications(),
+                    context.read<NotificationsCubit>().getNotifications(
+                          studentId: widget.studentId,
+                        ),
                 child: const Text(
                   'إعادة المحاولة',
                   style: TextStyle(fontFamily: 'Tajwal', color: primary),
@@ -304,11 +311,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   if (hasAttachments)
                     Padding(
                       padding: EdgeInsetsDirectional.only(start: 10.w),
-                      child: Icon(
-                        Icons.attachment,
-                        color: primary,
-                        size: 18.s,
-                      ),
+                      child: Icon(Icons.attachment, color: primary, size: 18.s),
                     ),
                   PopupMenuButton<String>(
                     padding: EdgeInsets.zero,
@@ -321,9 +324,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           notification.receptionId,
                         );
                       } else if (value == 'download') {
-                        final url = Uri.parse(notification.attachments.first.url);
+                        final url = Uri.parse(
+                          notification.attachments.first.url,
+                        );
                         if (await canLaunchUrl(url)) {
-                          await launchUrl(url, mode: LaunchMode.externalApplication);
+                          await launchUrl(
+                            url,
+                            mode: LaunchMode.externalApplication,
+                          );
                         }
                       }
                     },
@@ -362,7 +370,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Icon(Icons.delete_outline, color: Colors.red, size: 20.s),
+                            Icon(
+                              Icons.delete_outline,
+                              color: Colors.red,
+                              size: 20.s,
+                            ),
                             SizedBox(width: 10.w),
                             Text(
                               'حذف',

@@ -222,6 +222,22 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                           return;
                                         }
 
+                                        if (_newPasswordController.text.length <
+                                            8) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'كلمة المرور الجديدة يجب أن تكون 8 محارف على الأقل',
+                                                style: TextStyle(
+                                                    fontFamily: 'Tajwal'),
+                                              ),
+                                              backgroundColor: primary,
+                                            ),
+                                          );
+                                          return;
+                                        }
+
                                         if (_newPasswordController.text !=
                                             _confirmPasswordController.text) {
                                           ScaffoldMessenger.of(

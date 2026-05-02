@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:familyapp/features/notifications/data/repo/notifications_repo.dart';
 import 'package:familyapp/features/notifications/presentation/screens/notifications_list_screen.dart';
@@ -61,7 +63,20 @@ class NotificationService {
     // Update FCM token
     String? token = await getFCMToken();
     if (token != null) {
-      getIt<NotificationsRepository>().updateFcmToken(token, "Android Device");
+      String deviceName = "Unknown Device";
+      try {
+        final deviceInfo = DeviceInfoPlugin();
+        if (Platform.isAndroid) {
+          final androidInfo = await deviceInfo.androidInfo;
+          deviceName = "${androidInfo.brand} ${androidInfo.model}";
+        } else if (Platform.isIOS) {
+          final iosInfo = await deviceInfo.iosInfo;
+          deviceName = iosInfo.name;
+        }
+      } catch (e) {
+        log('Error getting device info for FCM: $e');
+      }
+      getIt<NotificationsRepository>().updateFcmToken(token, deviceName);
     }
 
     // Foreground notifications

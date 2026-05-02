@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:familyapp/core/helper/local_storage.dart';
 import 'package:familyapp/features/auth/data/repo/auth_repo.dart';
 import 'package:familyapp/features/auth/domain/auth_response.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'auth_state.dart';
 
-class AuthCubit extends Cubit<AuthState> {
+class AuthCubit extends HydratedCubit<AuthState> {
   final AuthRepository _authRepository;
   final AuthLocalStorage _storage = AuthLocalStorage();
 
@@ -47,6 +47,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String uniqueId,
     required String password,
     String? fcmToken,
+    Map<String, dynamic>? deviceInfo,
   }) async {
     emit(AuthLoading());
 
@@ -55,6 +56,7 @@ class AuthCubit extends Cubit<AuthState> {
         uniqueId: uniqueId,
         password: password,
         fcmToken: fcmToken,
+        deviceInfo: deviceInfo,
       );
 
       if (response.status && response.data != null) {
@@ -114,5 +116,26 @@ class AuthCubit extends Cubit<AuthState> {
     } catch (e) {
       emit(AuthError(e.toString()));
     }
+  }
+
+  @override
+  AuthState? fromJson(Map<String, dynamic> json) {
+    try {
+      if (json['status'] == 'AuthSuccess') {
+        return AuthSuccess(AuthResponse.fromJson(json['authResponse']));
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  @override
+  Map<String, dynamic>? toJson(AuthState state) {
+    if (state is AuthSuccess) {
+      return {
+        'status': 'AuthSuccess',
+        'authResponse': state.authResponse.toJson(),
+      };
+    }
+    return null;
   }
 }

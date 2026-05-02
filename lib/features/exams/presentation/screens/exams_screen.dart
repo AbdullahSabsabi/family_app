@@ -35,12 +35,13 @@ class _ExamsScreenEState extends State<ExamsScreenE> {
     _scrollController.dispose();
     super.dispose();
   }
+  //****************************************************************************** */
 
   void _scrollToSelectedDay() {
     if (_scrollController.hasClients) {
       final int dayIndex = selectedDate.difference(focusedDate).inDays;
       if (dayIndex >= 0 && dayIndex < 7) {
-        final double itemWidth = 55.w + 12.w; // width + horizontal margins
+        final double itemWidth = 55.w + 12.w;
         _scrollController.animateTo(
           dayIndex * itemWidth,
           duration: const Duration(milliseconds: 300),
@@ -50,6 +51,7 @@ class _ExamsScreenEState extends State<ExamsScreenE> {
     }
   }
 
+  //****************************************************************************** */
   void _loadData({bool isRefresh = false}) {
     final dateStr = DateFormat('yyyy-MM-dd').format(selectedDate);
     context.read<ExamsCubit>().getExams(
@@ -59,6 +61,7 @@ class _ExamsScreenEState extends State<ExamsScreenE> {
     );
   }
 
+  //****************************************************************************** */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -175,6 +178,7 @@ class _ExamsScreenEState extends State<ExamsScreenE> {
     );
   }
 
+  //****************************************************************************** */
   void _changeWeek(int offset) {
     setState(() {
       focusedDate = focusedDate.add(Duration(days: 7 * offset));
@@ -184,6 +188,7 @@ class _ExamsScreenEState extends State<ExamsScreenE> {
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelectedDay());
   }
 
+  //****************************************************************************** */
   Widget _buildDateSelector() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 15.h),
@@ -207,7 +212,8 @@ class _ExamsScreenEState extends State<ExamsScreenE> {
                 Column(
                   children: [
                     Text(
-                      focusedDate.month == focusedDate.add(const Duration(days: 6)).month
+                      focusedDate.month ==
+                              focusedDate.add(const Duration(days: 6)).month
                           ? DateFormat('MMMM yyyy', 'en_US').format(focusedDate)
                           : "${DateFormat('MMM', 'en_US').format(focusedDate)} - ${DateFormat('MMM yyyy', 'en_US').format(focusedDate.add(const Duration(days: 6)))}",
                       style: TextStyle(
@@ -306,6 +312,7 @@ class _ExamsScreenEState extends State<ExamsScreenE> {
     );
   }
 
+  //****************************************************************************** */
   Widget _buildExamCard(ExamModel exam) {
     Color statusColor;
     IconData statusIcon;
@@ -408,6 +415,7 @@ class _ExamsScreenEState extends State<ExamsScreenE> {
     );
   }
 
+  //****************************************************************************** */
   Widget _buildInfoRow(String text, IconData icon) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -426,6 +434,7 @@ class _ExamsScreenEState extends State<ExamsScreenE> {
     );
   }
 
+  //****************************************************************************** */
   Widget _buildSkeletonCard() {
     return Container(
       margin: EdgeInsets.only(bottom: 15.h),
@@ -437,6 +446,7 @@ class _ExamsScreenEState extends State<ExamsScreenE> {
     );
   }
 
+  //****************************************************************************** */
   Widget _buildEmptyState() {
     return Center(
       child: Column(

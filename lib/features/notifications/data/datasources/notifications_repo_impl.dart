@@ -11,6 +11,7 @@ class NotificationsRepositoryImpl implements NotificationsRepository {
   Future<NotificationListResponse> getNotifications({
     bool? unread,
     int page = 1,
+    int? studentId,
   }) async {
     try {
       final res = await _dio.get(
@@ -18,6 +19,7 @@ class NotificationsRepositoryImpl implements NotificationsRepository {
         queryParameters: {
           if (unread == true) 'unread': 'true',
           'page': page,
+          if (studentId != null) 'student_id': studentId,
         },
       );
       return NotificationListResponse.fromJson(res.data);

@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:familyapp/core/helper/local_storage.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class DioFactory {
   final AuthLocalStorage _storage = AuthLocalStorage();

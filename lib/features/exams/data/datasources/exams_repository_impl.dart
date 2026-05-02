@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:familyapp/features/exams/data/datasources/exams_repository_impl.dart';
 import 'package:familyapp/features/exams/domain/models/exams_model.dart';
 import 'package:familyapp/features/exams/data/repo/exams_repository.dart';
 
@@ -14,9 +13,7 @@ class ExamsRepositoryImpl implements ExamsRepository {
     required String date,
   }) async {
     try {
-      final res = await _dio.get(
-        '/exams/student/$studentId/date/$date',
-      );
+      final res = await _dio.get('/exams/student/$studentId/date/$date');
       return ExamsResponse.fromJson(res.data);
     } on DioException catch (e) {
       if (e.response?.statusCode == 404) {

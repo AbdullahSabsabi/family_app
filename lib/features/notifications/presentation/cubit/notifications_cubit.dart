@@ -10,7 +10,7 @@ class NotificationsCubit extends HydratedCubit<NotificationsState> {
 
   NotificationsCubit(this._repository) : super(NotificationsInitial());
 
-  Future<void> getNotifications({bool? unread, int page = 1}) async {
+  Future<void> getNotifications({bool? unread, int page = 1, int? studentId}) async {
     final hasData = state is NotificationsSuccess && (state as NotificationsSuccess).notifications.isNotEmpty;
     final isOnline = await InternetConnection().hasInternetAccess;
 
@@ -30,7 +30,7 @@ class NotificationsCubit extends HydratedCubit<NotificationsState> {
     }
 
     try {
-      final response = await _repository.getNotifications(unread: unread, page: page);
+      final response = await _repository.getNotifications(unread: unread, page: page, studentId: studentId);
       final count = await _repository.getUnreadCount();
 
       if (response.status) {
